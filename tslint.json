@@ -18,7 +18,6 @@
     "forin": true,
     "import-blacklist": [
       true,
-      "rxjs",
       "rxjs/Rx"
     ],
     "import-spacing": true,
@@ -120,13 +119,13 @@
     "directive-selector": [
       true,
       "attribute",
-      "app",
+      ["app","ui"],
       "camelCase"
     ],
     "component-selector": [
       true,
       "element",
-      "app",
+      ["app","ui"],
       "kebab-case"
     ],
     "no-output-on-prefix": true,

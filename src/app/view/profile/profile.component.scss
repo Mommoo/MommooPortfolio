@@ -1,0 +1,38 @@
+:host{
+  display : flex;
+  flex-wrap : wrap;
+  flex-direction : column;
+  padding-bottom : 1rem;
+  overflow : hidden;
+  justify-content: center;
+  align-content : center;
+}
+
+.flex-row {
+  display : flex;
+  flex-wrap : wrap;
+  flex-direction: row;
+  justify-content : center;
+  align-items : center;
+}
+
+#profile-guide {
+  display : block;
+  //flex-direction: column;
+
+  height : 100%;
+  margin : auto 0;
+}
+
+@media all and (min-width : 1025px) {
+
+}
+
+@media all and (max-width : 1025px) {
+  //IE 11 FlexBox TextWrapping Bug 때문에 어쩔 수 없이 block 으로 변환한다.
+  //IE 11 네임카드가 가리는 이슈는 못고침.
+  //IE Welcome 메세지의 Text Wrap을 위해 아래와 같은 코드를 작성
+  :host{
+    display : block;
+  }
+}

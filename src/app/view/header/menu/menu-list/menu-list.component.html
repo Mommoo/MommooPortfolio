@@ -1,0 +1,9 @@
+<nav *ngIf="isItemShown()" #nav>
+  <ul>
+    <ng-container *ngFor="let menuListItem of menuItems;">
+      <li class="nav-item" (click)="menuItemClickEvent(menuListItem)">
+        {{menuListItem.toName() | uppercase}}
+      </li>
+    </ng-container>
+  </ul>
+</nav>

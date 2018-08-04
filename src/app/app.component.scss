@@ -1,0 +1,51 @@
+#header {
+  position : fixed;
+  width : 300px;
+  z-index : 999;
+}
+
+#shadow-header {
+  display : none;
+}
+
+#content {
+  padding-left : 300px;
+}
+
+#footer {
+  padding-left : 300px;
+}
+// Desktop
+@media all and (min-width : 1025px) {
+  :host {
+    flex-direction : row;
+  }
+  #header {
+    width : 300px;
+    height : 100%;
+    z-index : 999;
+  }
+}
+
+//tablet and mobile
+@media all and (max-width:1024px) {
+  :host {
+    flex-direction : column;
+  }
+  #header {
+    display : inline-block;
+    width : 100%;
+  }
+
+  #shadow-header {
+    display : block;
+  }
+
+  #content {
+    padding-left : 0;
+  }
+
+  #footer {
+    padding-left : 0;
+  }
+}

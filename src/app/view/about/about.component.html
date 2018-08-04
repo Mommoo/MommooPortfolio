@@ -1,0 +1,50 @@
+<ui-label [title]="'About-Me'"></ui-label>
+<ui-guide [title]="'introduce me'">
+  <p>저는 2014년부터 개발 공부를 시작했습니다.</p>
+  <p>이론과 실습을 계속 병행하며, 꾸준히 실력을 쌓아 왔습니다.</p>
+  <p>저의 개발 공부 철학은 "그냥 넘어가지 말자" 입니다.</p>
+  <p>개인 프로젝트를 진행하다가, 궁금한 것이 나오면 꼭 해결을 하고 넘어갔습니다.</p>
+  <p>이러한 개발 철학을 바탕으로, 프로그래밍 기본기를 단단하게 쌓았습니다.</p>
+  <p>아래의 리스트는 제가 개발 가능한 언어와 환경을 나타냈습니다.</p>
+  <!--<div style="padding: 0 100px">-->
+    <!--<p>-->
+      <!--2014년부터 개발 공부를 시작하여, 이론과 실습을 병행한 프로젝트를 꾸준히 진행하여 실력을 쌓아 왔습니다.-->
+    <!--</p>-->
+    <!--<p>-->
+      <!--저의 개발 공부 철학은 "그냥 넘어가지 말자" 입니다. 프로젝트를 진행하다가, 공부해야할 개념이나, 기술들이 있다면,-->
+      <!--꼭 작은 서브 프로젝트를 통해, 그것들을 공부하고 넘어갔습니다. 이러한 개발 철학을 바탕으로, 프로그래밍 기본기를 단단히 쌓았습니다.-->
+    <!--</p>-->
+    <!--<p>-->
+      <!--아래의 리스트는 제가 개발 가능한 언어와 환경을 나타냈습니다.-->
+      <!--저는 이러한 언어와 환경을 통해 한번 이라도 개발을 진행하여 산출물을 만들어낸 경험이 있습니다.-->
+    <!--</p>-->
+  <!--</div>-->
+</ui-guide>
+<ui-guide [title]="'language'">
+  <mommoo-grid-list
+    [maxColumnNum]="maxColumnNum"
+    [rowHeight]="'1:1'"
+    [style.padding]="'50px'">
+    <mommoo-grid-tile *ngFor="let data of languageSkillSet"
+      [colSpan]="1"
+      [rowSpan]="1">
+      <ui-skill-card [skillCardData]="data"></ui-skill-card>
+    </mommoo-grid-tile>
+  </mommoo-grid-list>
+</ui-guide>
+<ui-guide [title]="'Expriance'">
+  <mommoo-grid-list
+    [maxColumnNum]="maxColumnNum"
+    [rowHeight]="'1:1'"
+    [style.padding]="'50px'">
+    <mommoo-grid-tile *ngFor="let data of frameworkSkillSet"
+      [colSpan]="1"
+      [rowSpan]="1">
+      <ui-skill-card [skillCardData]="data"></ui-skill-card>
+    </mommoo-grid-tile>
+  </mommoo-grid-list>
+</ui-guide>
+
+
+
+
