@@ -1,0 +1,14 @@
+:host {
+  display : inline-block;
+  color : white;
+  border-radius: 10px;
+  padding : 3px 5px;
+  font-size : 10px;
+  &:nth-child(n) {
+    margin-right : 5px;
+  }
+
+  &:nth-last-child(1) {
+    margin-right : 0;
+  }
+}

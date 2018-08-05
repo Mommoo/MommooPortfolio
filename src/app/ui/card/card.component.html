@@ -1,4 +1,28 @@
-<div id="shadow-box" [ngStyle]="boxStyle">
-  <ng-content></ng-content>
+<!--<div [ngStyle]="rootBoxStyle" id="root-box">-->
+  <!--<div id="shadow-box" [ngStyle]="shadowBoxStyle">-->
+    <!--<div id="main-content">-->
+      <!--<div *ngIf="cardImage" [ngStyle]="imageStyle" [style.background-image]="'url('+cardImage+')'" id="card-image"></div>-->
+      <!--<div id="card-content"><ng-content></ng-content></div>-->
+    <!--</div>-->
+    <!--<div *ngIf="hashTagMessages" id="hash-tag-container">-->
+      <!--<mommoo-hash-tag *ngFor="let message of hashTagMessages"-->
+                       <!--[message]="message"-->
+                       <!--[color]="hashTagColor"></mommoo-hash-tag>-->
+    <!--</div>-->
+  <!--</div>-->
+<!--</div>-->
+<div id="flex-card-box">
+  <div id="card-image-box" [ngStyle]="cardImageBoxStyle">
+    <div id="card-image" *ngIf="cardImage" [ngStyle]="imageStyle" [style.background-image]="'url('+cardImage+')'"></div>
+  </div>
+  <div id="card-content">
+    <ng-content></ng-content>
+  </div>
+  <div *ngIf="hashTagMessages" id="hash-tag-container">
+    <mommoo-hash-tag *ngFor="let message of hashTagMessages"
+                     [message]="message"
+                     [color]="hashTagColor"></mommoo-hash-tag>
+  </div>
 </div>
+
 

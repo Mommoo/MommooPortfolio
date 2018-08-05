@@ -28,10 +28,6 @@ export class InputValueChecker{
     return NumberUtils.isNumeric(this.width) && NumberUtils.isNumeric(this.height);
   }
 
-  public isAnyoneWrapValue() : boolean {
-    return this.isWidthWrapValue() || this.isHeightWrapValue();
-  }
-
   public isWidthWrapValue() : boolean {
     return InputValueChecker.isWrapValue(this.width);
   }

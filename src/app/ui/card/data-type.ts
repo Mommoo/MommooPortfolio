@@ -15,8 +15,6 @@ export class InputDimenType {
   }
 
   private static isFixValue(str : string) : boolean {
-    console.log(str);
-    console.log(!isNaN(Number(str.substring(0, str.length -2))));
     return str.substring(str.length -2, str.length) === 'px' && NumberUtils.isNumeric(str.substring(0, str.length -2));
   }
 
