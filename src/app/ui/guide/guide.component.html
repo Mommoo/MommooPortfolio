@@ -1,2 +1,4 @@
-<h3 id="title">{{title | uppercase}}</h3>
-<div id="content"><ng-content></ng-content></div>
+<div id="title">{{title | uppercase}}</div>
+<div id="content" [ngStyle]="contentStyle">
+  <ng-content></ng-content>
+</div>

@@ -1,25 +1,11 @@
 :host {
-  width : auto;
-  height : auto;
-  display : flex;
-  flex-direction: column;
-  flex-wrap : wrap;
-  align-items:center;
-  justify-items: center;
+  display : block;
 }
-
 #title {
   color : #e91e63;
   text-align : center;
-}
-
-#content {
-  width: 100%;
-  height: auto;
-  font-size : 14px;
-  line-height : 18px;
-  text-align:center;
-  margin : 0;
-  padding : 0 20px;
-  box-sizing : border-box;
+  font-weight: bold;
+  font-size : 25px;
+  padding-top : 15px;
+  padding-bottom : 15px;
 }

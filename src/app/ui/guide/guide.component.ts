@@ -7,7 +7,8 @@ import {Component, Input} from '@angular/core';
 })
 export class GuideComponent {
   @Input() title : string;
-  @Input() content :string;
+  @Input() contentStyle;
+
   constructor() { }
 
 }
