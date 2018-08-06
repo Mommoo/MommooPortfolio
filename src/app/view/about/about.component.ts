@@ -1,6 +1,11 @@
 import {AfterViewInit, ChangeDetectorRef, Component} from '@angular/core';
-import {SkillCard} from '../../ui/skill-card/skill-card';
 import {ViewportDimension, WindowEventService} from '../../common/window-event.service';
+
+interface CardProperty {
+  name : string
+  imagePath : string,
+  hashTagMessages : Array<string>,
+}
 
 @Component({
   selector: 'app-about',
@@ -8,92 +13,94 @@ import {ViewportDimension, WindowEventService} from '../../common/window-event.s
   styleUrls: ['./about.component.scss']
 })
 export class AboutComponent implements AfterViewInit {
+  private static readonly IMAGE_ROOT_PATH = '/assets/images/';
   public maxColumnNum = 4;
+  public cardTitleFontSize : string;
 
-  public languageSkillSet: Array<SkillCard> = [
+  public readonly programingLangCardProps : Array<CardProperty> = [
     {
-      baseSkillImgPaths: [],
-      mainSkillImgPath: '/assets/images/java.png',
-      mainSkillName: 'Java'
+      name : 'Java',
+      imagePath : `${AboutComponent.IMAGE_ROOT_PATH}java.png`,
+      hashTagMessages : ['Java를 제일 잘함']
     },
     {
-      baseSkillImgPaths: [],
-      mainSkillImgPath: '/assets/images/html-css.png',
-      mainSkillName: 'HTML-CSS'
+      name : 'HTML-CSS',
+      imagePath : `${AboutComponent.IMAGE_ROOT_PATH}html-css.png`,
+      hashTagMessages : ['FlexBox 잘 다룸']
     },
     {
-      baseSkillImgPaths: ['/assets/images/html-css.png'],
-      mainSkillImgPath: '/assets/images/sass.png',
-      mainSkillName: 'sass'
+      name : 'SASS',
+      imagePath : `${AboutComponent.IMAGE_ROOT_PATH}sass.png`,
+      hashTagMessages : ['변수 사용','문법 조금']
     },
     {
-      baseSkillImgPaths: [],
-      mainSkillImgPath: '/assets/images/javascript.jpg',
-      mainSkillName: 'javascript'
+      name : 'JavaScript',
+      imagePath : `${AboutComponent.IMAGE_ROOT_PATH}javascript.jpg`,
+      hashTagMessages : ['자바스크립트 2번째로 잘함', '표현에 신경']
     },
     {
-      baseSkillImgPaths: ['/assets/images/javascript.jpg'],
-      mainSkillImgPath: '/assets/images/typescript.png',
-      mainSkillName: 'typescript'
+      name : 'TypeScript',
+      imagePath : `${AboutComponent.IMAGE_ROOT_PATH}typescript.png`,
+      hashTagMessages : ['최고 관심사', '앞으로 계속 사용']
     },
     {
-      baseSkillImgPaths: [],
-      mainSkillImgPath: '/assets/images/c-shop.png',
-      mainSkillName: 'C#'
+      name : 'C#',
+      imagePath : `${AboutComponent.IMAGE_ROOT_PATH}c-shop.png`,
+      hashTagMessages : ['개발 경험 몇번 있음']
     },
     {
-      baseSkillImgPaths: [],
-      mainSkillImgPath: '/assets/images/c-shop.png',
-      mainSkillName: 'Python'
+      name : 'Python',
+      imagePath : `${AboutComponent.IMAGE_ROOT_PATH}python.png`,
+      hashTagMessages : ['크롤링 프로젝트 할 때 한번 써봄']
     },
     {
-      baseSkillImgPaths: [],
-      mainSkillImgPath: '/assets/images/c-plus-plus.png',
-      mainSkillName: 'C++'
-    }
+      name : 'C++',
+      imagePath : `${AboutComponent.IMAGE_ROOT_PATH}c-plus-plus.png`,
+      hashTagMessages : ['개발은 할 수 있음']
+    },
   ];
 
-  public frameworkSkillSet: Array<SkillCard> = [
+  public readonly environmentCardProps : Array<CardProperty> = [
     {
-      baseSkillImgPaths: ['/assets/images/java.png'],
-      mainSkillImgPath: '/assets/images/spring.png',
-      mainSkillName: 'Spring'
+      name : 'Spring',
+      imagePath : `${AboutComponent.IMAGE_ROOT_PATH}spring.png`,
+      hashTagMessages : ['개발 경험 있음']
     },
     {
-      baseSkillImgPaths: ['/assets/images/java.png', '/assets/images/spring.png'],
-      mainSkillImgPath: '/assets/images/spring-boot.png',
-      mainSkillName: 'Spring-Boot'
+      name : 'Spring-Boot',
+      imagePath : `${AboutComponent.IMAGE_ROOT_PATH}spring-boot.png`,
+      hashTagMessages : ['삼성 외주 프로젝트', '관심 많음']
     },
     {
-      baseSkillImgPaths: ['/assets/images/c-shop.png'],
-      mainSkillImgPath: '/assets/images/dot-net.png',
-      mainSkillName: '.NET'
+      name : '.NET',
+      imagePath : `${AboutComponent.IMAGE_ROOT_PATH}dot-net.png`,
+      hashTagMessages : ['LINC 사업단 연계 외주']
     },
     {
-      baseSkillImgPaths: ['/assets/images/c-plus-plus.png'],
-      mainSkillImgPath: '/assets/images/php.png',
-      mainSkillName: 'PHP'
+      name : 'PHP',
+      imagePath : `${AboutComponent.IMAGE_ROOT_PATH}php.png`,
+      hashTagMessages : ['빠르게 MY-SQL 연동 서버', '개인 서버 백앤드']
     },
     {
-      baseSkillImgPaths: ['/assets/images/javascript.jpg'],
-      mainSkillImgPath: '/assets/images/nodejs.png',
-      mainSkillName: 'PHP'
+      name : 'NodeJS',
+      imagePath : `${AboutComponent.IMAGE_ROOT_PATH}nodejs.png`,
+      hashTagMessages : ['express 서버']
     },
     {
-      baseSkillImgPaths: ['/assets/images/javascript.jpg', '/assets/images/typescript.png', '/assets/images/nodejs.png'],
-      mainSkillImgPath: '/assets/images/angular.png',
-      mainSkillName: 'Angular'
+      name : 'Angular',
+      imagePath : `${AboutComponent.IMAGE_ROOT_PATH}angular.png`,
+      hashTagMessages : ['해당 포트폴리오 페이지에 사용', '관심 많음']
     },
     {
-      baseSkillImgPaths: ['/assets/images/javascript.jpg'],
-      mainSkillImgPath: '/assets/images/j-query.png',
-      mainSkillName: 'J-Query'
+      name : 'J-Query',
+      imagePath : `${AboutComponent.IMAGE_ROOT_PATH}j-query.png`,
+      hashTagMessages : ['경험이 제일 많음', '바닐라 자바스크립트 선호']
     },
     {
-      baseSkillImgPaths: ['/assets/images/java.png'],
-      mainSkillImgPath: '/assets/images/android.png',
-      mainSkillName: 'android'
-    }
+      name : 'Android',
+      imagePath : `${AboutComponent.IMAGE_ROOT_PATH}android.png`,
+      hashTagMessages : ['개발 경험 다수', '커스텀 뷰', '자바로 개발']
+    },
   ];
 
   constructor(private cdr: ChangeDetectorRef,
@@ -105,15 +112,18 @@ export class AboutComponent implements AfterViewInit {
     this.windowEventService.addViewportDimensionDetectListener(viewportDimension => {
       switch (viewportDimension) {
         case ViewportDimension.MOBILE :
-          this.maxColumnNum = 2;
+          this.maxColumnNum = 1;
+          this.cardTitleFontSize = '4vmax';
           break;
 
         case ViewportDimension.TABLET :
           this.maxColumnNum = 3;
+          this.cardTitleFontSize = '3vmax';
           break;
 
         case ViewportDimension.DESKTOP :
           this.maxColumnNum = 4;
+          this.cardTitleFontSize = '2vmax';
           break;
       }
       this.cdr.detectChanges();

@@ -1,8 +1,11 @@
-.skill-card-group {
-  width : 100%;
-  display : flex;
-  flex-wrap : wrap;
-  justify-content: space-around;
-  align-self: stretch;
-  justify-self: stretch;
+.card-container {
+  width: 100%;
+  height : 100%;
+  padding : 5px;
+  box-sizing: border-box;
+}
+
+.card-title-name {
+  text-align : center;
+
 }
