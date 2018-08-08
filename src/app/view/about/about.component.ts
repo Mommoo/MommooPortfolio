@@ -14,10 +14,10 @@ interface CardProperty {
 })
 export class AboutComponent implements AfterViewInit {
   private static readonly IMAGE_ROOT_PATH = '/assets/images/';
-  public maxColumnNum = 4;
+  public maxColumnNum = 6;
   public cardTitleFontSize : string;
 
-  public readonly programingLangCardProps : Array<CardProperty> = [
+  public readonly cardProps : Array<CardProperty> = [
     {
       name : 'Java',
       imagePath : `${AboutComponent.IMAGE_ROOT_PATH}java.png`,
@@ -58,9 +58,6 @@ export class AboutComponent implements AfterViewInit {
       imagePath : `${AboutComponent.IMAGE_ROOT_PATH}c-plus-plus.png`,
       hashTagMessages : ['개발은 할 수 있음']
     },
-  ];
-
-  public readonly environmentCardProps : Array<CardProperty> = [
     {
       name : 'Spring',
       imagePath : `${AboutComponent.IMAGE_ROOT_PATH}spring.png`,
@@ -100,7 +97,7 @@ export class AboutComponent implements AfterViewInit {
       name : 'Android',
       imagePath : `${AboutComponent.IMAGE_ROOT_PATH}android.png`,
       hashTagMessages : ['개발 경험 다수', '커스텀 뷰', '자바로 개발']
-    },
+    }
   ];
 
   constructor(private cdr: ChangeDetectorRef,
@@ -112,17 +109,17 @@ export class AboutComponent implements AfterViewInit {
     this.windowEventService.addViewportDimensionDetectListener(viewportDimension => {
       switch (viewportDimension) {
         case ViewportDimension.MOBILE :
-          this.maxColumnNum = 1;
+          this.maxColumnNum = 2;
           this.cardTitleFontSize = '4vmax';
           break;
 
         case ViewportDimension.TABLET :
-          this.maxColumnNum = 3;
+          this.maxColumnNum = 4;
           this.cardTitleFontSize = '3vmax';
           break;
 
         case ViewportDimension.DESKTOP :
-          this.maxColumnNum = 4;
+          this.maxColumnNum = 6;
           this.cardTitleFontSize = '2vmax';
           break;
       }
