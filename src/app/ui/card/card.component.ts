@@ -24,12 +24,14 @@ export class MommooCard implements OnChanges {
   /** wrap or fit or ratio(number) or fixed name(100px) */
   @Input() private cardWidth  : string = InputDimenType.FIT.name();
   @Input() private cardHeight : string = InputDimenType.FIT.name();
+  @Input() cardBoxStyle : string = '';
   @Input() themeColor : string = 'green';
   @Input() cardTitle : string = '';
   @Input() cardTitleBoxStyle : string = '';
   @Input() cardImage : string = '';
   @Input() cardImageBoxStyle : string ='';
   @Input() hashTagMessages : Array<string>;
+  @Input() hashTagBoxStyle : string = '';
   @Output() private actionEventEmitter : EventEmitter<string> = new EventEmitter();
   @Input() set actionButtonNames(names : Array<string>) {
     this.computeProps(names, 'name');
@@ -38,9 +40,9 @@ export class MommooCard implements OnChanges {
     this.computeProps(styles, 'style');
   }
 
-  public actionButtonProps : Array<CardActionButtonProperty> = [];
-  public hashTagColor : string;
-  public imageStyle : {};
+  public _actionButtonProps : Array<CardActionButtonProperty> = [];
+  public _hashTagColor : string;
+  public _imageStyle : {};
 
   constructor(private hostElementRef : ElementRef, private renderer : Renderer2) {}
 
@@ -50,8 +52,8 @@ export class MommooCard implements OnChanges {
     }
 
     const cardStyleComputer = new CardStyleComputer(this.cardWidth, this.cardHeight, this.themeColor);
-    this.hashTagColor = cardStyleComputer.computeSubThemeColor();
-    this.imageStyle   = cardStyleComputer.computeImageStyle();
+    this._hashTagColor = cardStyleComputer.computeSubThemeColor();
+    this._imageStyle   = cardStyleComputer.computeImageStyle();
     this.applyStyleToHost(cardStyleComputer.computeRootBoxStyle());
   }
 
@@ -67,13 +69,13 @@ export class MommooCard implements OnChanges {
   }
 
   private computeProps(props : Array<any>, propName : string) : void {
-    const needToAppendSize = props.length - this.actionButtonProps.length;
+    const needToAppendSize = props.length - this._actionButtonProps.length;
     for ( let i = 0; i < needToAppendSize ; i ++ ) {
-      this.actionButtonProps.push({
+      this._actionButtonProps.push({
         name : '',
         style : {}
       })
     }
-    props.forEach((value, index) => this.actionButtonProps[index][propName] = value);
+    props.forEach((value, index) => this._actionButtonProps[index][propName] = value);
   }
 }

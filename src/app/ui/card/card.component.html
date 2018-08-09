@@ -1,18 +1,18 @@
-<div id="flex-card-box">
+<div id="flex-card-box" [ngStyle]="cardBoxStyle">
   <div *ngIf="cardTitle" id="card-title-box" [ngStyle]="cardTitleBoxStyle">{{cardTitle}}</div>
   <div *ngIf="cardImage" id="card-image-box" [ngStyle]="cardImageBoxStyle">
-    <div id="card-image" [ngStyle]="imageStyle" [style.background-image]="'url('+cardImage+')'"></div>
+    <div id="card-image" [ngStyle]="_imageStyle" [style.background-image]="'url('+cardImage+')'"></div>
   </div>
   <div id="card-content-box">
     <ng-content></ng-content>
   </div>
-  <div *ngIf="hashTagMessages.length > 0" id="hash-tag-container">
+  <div *ngIf="hashTagMessages.length > 0" id="hash-tag-container" [ngStyle]="hashTagBoxStyle">
     <mommoo-hash-tag *ngFor="let message of hashTagMessages"
                      [message]="message"
-                     [color]="hashTagColor"></mommoo-hash-tag>
+                     [color]="_hashTagColor"></mommoo-hash-tag>
   </div>
-  <div *ngIf="actionButtonProps.length > 0" id="action-view-container">
-    <mommoo-action-view [actionButtonProps]="actionButtonProps"
+  <div *ngIf="_actionButtonProps.length > 0" id="action-view-container">
+    <mommoo-action-view [actionButtonProps]="_actionButtonProps"
                         [themeColor]="themeColor"
                         (actionEventEmitter)="actionButtonClicks($event)"></mommoo-action-view>
   </div>
