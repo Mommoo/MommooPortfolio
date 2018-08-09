@@ -1,0 +1,23 @@
+:host {
+  display: block; }
+  :host .align, :host #divider, :host #flex-row-box {
+    width: 95%;
+    margin-left: 2.5%; }
+  :host #divider {
+    height: 1px;
+    background-color: #ededed; }
+  :host #flex-row-box {
+    display: flex;
+    padding-top: 6px;
+    font-size: 12px;
+    font-weight: 100;
+    align-items: center;
+    justify-content: flex-end; }
+    :host #flex-row-box .buttons {
+      cursor: pointer; }
+      :host #flex-row-box .buttons:nth-child(n) {
+        margin-left: 10px; }
+      :host #flex-row-box .buttons:nth-child(1) {
+        margin-left: 0; }
+
+/*# sourceMappingURL=action-view.component.css.map */

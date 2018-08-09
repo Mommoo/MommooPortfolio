@@ -1,7 +1,8 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {MommooCard} from './card.component';
-import { MommooHashTag } from './hash-tag/hash-tag.component';
+import {MommooHashTag} from './hash-tag/hash-tag.component';
+import {MommooActionView} from './action-view/action-view.component';
 
 @NgModule({
   imports: [
@@ -10,6 +11,6 @@ import { MommooHashTag } from './hash-tag/hash-tag.component';
   exports : [
     MommooCard
   ],
-  declarations: [MommooCard, MommooHashTag]
+  declarations: [MommooCard, MommooHashTag, MommooActionView]
 })
 export class MommooCardModule { }

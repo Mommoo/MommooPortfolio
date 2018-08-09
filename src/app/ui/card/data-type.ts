@@ -36,3 +36,8 @@ export class InputDimenType {
     }
   }
 }
+
+export interface CardActionButtonProperty {
+  name : string;
+  style : object;
+}

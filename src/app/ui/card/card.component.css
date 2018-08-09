@@ -1,0 +1,39 @@
+:host {
+  display: inline-block;
+  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+  border-radius: 5px; }
+
+#flex-card-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  padding-top: 10px; }
+  #flex-card-box #card-title-box {
+    align-self: start;
+    padding: 6px 16px;
+    font-size: 20px;
+    font-weight: bold;
+    color: black; }
+  #flex-card-box #card-image-box {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    flex-grow: 1;
+    overflow: hidden; }
+  #flex-card-box #card-image {
+    width: 100%;
+    flex-grow: 1;
+    background: center center no-repeat;
+    background-size: contain; }
+  #flex-card-box #hash-tag-container, #flex-card-box #action-view-container {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+    text-align: left; }
+
+/*# sourceMappingURL=card.component.css.map */

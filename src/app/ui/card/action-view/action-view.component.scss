@@ -1,0 +1,37 @@
+:host {
+  display : block;
+
+  .align {
+    $width : 95%;
+    width : $width;
+    margin-left : (100% - $width)/2;
+  }
+
+  #divider {
+    @extend .align;
+    height : 1px;
+    background-color : #ededed;
+  }
+
+  #flex-row-box {
+    @extend .align;
+    display : flex;
+    padding-top : 6px;
+    font-size : 12px;
+    font-weight : 100;
+    align-items : center;
+    justify-content : flex-end;
+
+    .buttons {
+      cursor : pointer;
+
+      &:nth-child(n) {
+        margin-left : 10px;
+      }
+
+      &:nth-child(1) {
+        margin-left : 0;
+      }
+    }
+  }
+}

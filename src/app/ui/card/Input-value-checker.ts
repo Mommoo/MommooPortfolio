@@ -4,10 +4,7 @@ import {NumberUtils} from '../common/NumberUtils';
 
 export class InputValueChecker{
 
-  public constructor(private width: string,
-                     private height : string){
-
-  }
+  public constructor(private width: string, private height : string){}
 
   private static isOneSideRatioValue(width : string, height : string) : boolean {
     return (!NumberUtils.isNumeric(width) && NumberUtils.isNumeric(height)) || (NumberUtils.isNumeric(width) && !NumberUtils.isNumeric(height));

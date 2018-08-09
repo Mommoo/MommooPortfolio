@@ -1,9 +1,10 @@
-import {Component, HostBinding, Input} from '@angular/core';
+import {ChangeDetectionStrategy, Component, HostBinding, Input} from '@angular/core';
 
 @Component({
   selector: 'mommoo-hash-tag',
   templateUrl: './hash-tag.component.html',
-  styleUrls: ['./hash-tag.component.scss']
+  styleUrls: ['./hash-tag.component.scss'],
+  changeDetection : ChangeDetectionStrategy.OnPush
 })
 export class MommooHashTag {
 
@@ -12,7 +13,7 @@ export class MommooHashTag {
 
   @HostBinding("style.backgroundColor")
   @Input()
-  private color : string = "rgb(0, 128, 0, 0.5)";
+  private color : string;
 
   constructor() { }
 
