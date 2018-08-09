@@ -6,12 +6,12 @@
   <div id="card-content-box">
     <ng-content></ng-content>
   </div>
-  <div *ngIf="hashTagMessages" id="hash-tag-container">
+  <div *ngIf="hashTagMessages.length > 0" id="hash-tag-container">
     <mommoo-hash-tag *ngFor="let message of hashTagMessages"
                      [message]="message"
                      [color]="hashTagColor"></mommoo-hash-tag>
   </div>
-  <div *ngIf="actionButtonProps" id="action-view-container">
+  <div *ngIf="actionButtonProps.length > 0" id="action-view-container">
     <mommoo-action-view [actionButtonProps]="actionButtonProps"
                         [themeColor]="themeColor"
                         (actionEventEmitter)="actionButtonClicks($event)"></mommoo-action-view>
