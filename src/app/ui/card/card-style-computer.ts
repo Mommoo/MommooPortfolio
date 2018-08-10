@@ -4,9 +4,25 @@ import {InputDimenType} from './data-type';
 
 export class CardStyleComputer {
   private inputValueChecker : InputValueChecker;
+  private readyListener = () => {};
+  private ratio : number = -1;
 
-  public constructor(private cardWidth, private cardHeight, private themeColor) {
+  public constructor(private cardWidth, private cardHeight, private cardImage, private themeColor) {
     this.inputValueChecker = new InputValueChecker(this.cardWidth, this.cardHeight);
+    const imgO = new Image();
+    imgO.src = this.cardImage;
+    imgO.onload = ()=> {
+      this.ratio = 100 * imgO.height / imgO.width;
+      this.readyListener();
+    }
+  }
+
+  public onReady(fn : ()=>void) {
+    if ( this.ratio !== -1 ) {
+      fn();
+    } else {
+      this.readyListener = fn;
+    }
   }
 
   public computeSubThemeColor() : string {
@@ -55,9 +71,16 @@ export class CardStyleComputer {
     }
   }
 
+  public computeShadowBoxStyle() : {} {
+    const anyoneWrap : boolean = this.inputValueChecker.isHeightWrapValue() || this.inputValueChecker.isWidthWrapValue();
+    return {
+      position : anyoneWrap ? "static" : "absolute"
+    }
+  }
+
   public computeImageStyle() : {} {
     return {
-      paddingBottom : this.inputValueChecker.isHeightWrapValue() ? "100%" : ''
+      paddingBottom : this.inputValueChecker.isHeightWrapValue() ? `${this.ratio}%` : ''
     }
   }
 }

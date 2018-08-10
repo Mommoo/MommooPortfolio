@@ -29,6 +29,7 @@ export class MommooCard implements OnChanges {
   @Input() cardTitle : string = '';
   @Input() cardTitleBoxStyle : string = '';
   @Input() cardImage : string = '';
+  @Input() cardImageAnim : boolean = false;
   @Input() cardImageBoxStyle : string ='';
   @Input() hashTagMessages : Array<string>;
   @Input() hashTagBoxStyle : string = '';
@@ -43,18 +44,29 @@ export class MommooCard implements OnChanges {
   public _actionButtonProps : Array<CardActionButtonProperty> = [];
   public _hashTagColor : string;
   public _imageStyle : {};
+  public _cardShadowBoxStyle : {};
 
-  constructor(private hostElementRef : ElementRef, private renderer : Renderer2) {}
+  constructor(private hostElementRef : ElementRef, private renderer : Renderer2, private cdr : ChangeDetectorRef) {}
 
   public ngOnChanges(changes: SimpleChanges): void {
     if ( new InputValueChecker(this.cardWidth, this.cardHeight).isNotValidate() ) {
       new Error(`dimen value you input is not fit the format[ "pair-ratio(1,1)" or "fix(100px)" or "fit" or "wrap"`);
     }
 
-    const cardStyleComputer = new CardStyleComputer(this.cardWidth, this.cardHeight, this.themeColor);
-    this._hashTagColor = cardStyleComputer.computeSubThemeColor();
-    this._imageStyle   = cardStyleComputer.computeImageStyle();
-    this.applyStyleToHost(cardStyleComputer.computeRootBoxStyle());
+    const cardStyleComputer = new CardStyleComputer(this.cardWidth, this.cardHeight, this.cardImage, this.themeColor);
+    cardStyleComputer.onReady(()=>{
+      this._hashTagColor = cardStyleComputer.computeSubThemeColor();
+      this._imageStyle   = cardStyleComputer.computeImageStyle();
+      this._cardShadowBoxStyle = cardStyleComputer.computeShadowBoxStyle();
+      this.applyStyleToHost(cardStyleComputer.computeRootBoxStyle());
+      this.applyStyleToHost({visibility: 'visible'});
+      this.cdr.detectChanges();
+    })
+    // this._hashTagColor = cardStyleComputer.computeSubThemeColor();
+    // this._imageStyle   = cardStyleComputer.computeImageStyle();
+    // this._cardShadowBoxStyle = cardStyleComputer.computeShadowBoxStyle();
+    // this.applyStyleToHost(cardStyleComputer.computeRootBoxStyle());
+    // this.applyStyleToHost({visibility: 'visible'});
   }
 
   public actionButtonClicks(buttonName) : void {
