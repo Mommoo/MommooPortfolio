@@ -8,6 +8,7 @@ import {Component, Input} from '@angular/core';
 export class LabelComponent {
 
   @Input() title : string;
+  @Input() markColor : string;
 
   constructor() { }
 

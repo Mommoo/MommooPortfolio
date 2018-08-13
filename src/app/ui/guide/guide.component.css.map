@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAAA,KAAM;EACJ,OAAO,EAAG,KAAK;;AAEjB,MAAO;EAEL,KAAK,EAAG,OAAO;EACf,UAAU,EAAG,MAAM;EACnB,WAAW,EAAE,IAAI;EACjB,SAAS,EAAG,IAAI;EAChB,WAAW,EAAG,IAAI;EAClB,cAAc,EAAG,IAAI",
+"sources": ["guide.component.scss"],
+"names": [],
+"file": "guide.component.css"
+}
