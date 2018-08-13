@@ -1,0 +1,11 @@
+:host {
+  display: block; }
+
+#padding-wrapper {
+  box-sizing: border-box; }
+
+#wrapper {
+  position: relative;
+  box-sizing: border-box; }
+
+/*# sourceMappingURL=masonry-layout.component.css.map */

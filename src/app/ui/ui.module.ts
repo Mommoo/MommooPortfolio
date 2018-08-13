@@ -4,18 +4,21 @@ import {LabelComponent} from './label/label.component';
 import { GuideComponent } from './guide/guide.component';
 import {MommooGridListModule} from './grid-list/grid-list.module';
 import {MommooCardModule} from './card/card.module';
+import {MommooMasonryModule} from './masonry-layout/mommoo-masonry.module';
 
 @NgModule({
   imports: [
     CommonModule,
     MommooGridListModule,
-    MommooCardModule
+    MommooCardModule,
+    MommooMasonryModule
   ],
   exports : [
     LabelComponent,
     GuideComponent,
     MommooGridListModule,
-    MommooCardModule
+    MommooCardModule,
+    MommooMasonryModule
   ],
   declarations: [LabelComponent, GuideComponent]
 })
