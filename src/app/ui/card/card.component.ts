@@ -54,19 +54,16 @@ export class MommooCard implements OnChanges {
     }
 
     const cardStyleComputer = new CardStyleComputer(this.cardWidth, this.cardHeight, this.cardImage, this.themeColor);
-    cardStyleComputer.onReady(()=>{
+    cardStyleComputer.onReady(isImageLoadSuccess => {
+      if ( isImageLoadSuccess ) {
+        this._imageStyle   = cardStyleComputer.computeImageStyle();
+      }
       this._hashTagColor = cardStyleComputer.computeSubThemeColor();
-      this._imageStyle   = cardStyleComputer.computeImageStyle();
       this._cardShadowBoxStyle = cardStyleComputer.computeShadowBoxStyle();
       this.applyStyleToHost(cardStyleComputer.computeRootBoxStyle());
       this.applyStyleToHost({visibility: 'visible'});
       this.cdr.detectChanges();
-    })
-    // this._hashTagColor = cardStyleComputer.computeSubThemeColor();
-    // this._imageStyle   = cardStyleComputer.computeImageStyle();
-    // this._cardShadowBoxStyle = cardStyleComputer.computeShadowBoxStyle();
-    // this.applyStyleToHost(cardStyleComputer.computeRootBoxStyle());
-    // this.applyStyleToHost({visibility: 'visible'});
+    });
   }
 
   public actionButtonClicks(buttonName) : void {

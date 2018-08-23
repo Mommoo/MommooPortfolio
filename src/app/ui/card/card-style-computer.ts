@@ -2,26 +2,45 @@ import {StyleUtils} from '../common/style/StyleUtils';
 import {InputValueChecker} from './Input-value-checker';
 import {InputDimenType} from './data-type';
 
+enum ImageLoadStatus {
+  SUCCESS,
+  FAIL,
+  READY
+}
+
 export class CardStyleComputer {
   private inputValueChecker : InputValueChecker;
-  private readyListener = () => {};
+  private readyListener = (isImageLoadSuccess : boolean) => {};
   private ratio : number = -1;
+  private imageLoadStatus : ImageLoadStatus = ImageLoadStatus.READY;
 
   public constructor(private cardWidth, private cardHeight, private cardImage, private themeColor) {
     this.inputValueChecker = new InputValueChecker(this.cardWidth, this.cardHeight);
     const imgO = new Image();
     imgO.src = this.cardImage;
-    imgO.onload = ()=> {
+    imgO.onload = () => {
+      this.imageLoadStatus = ImageLoadStatus.SUCCESS;
       this.ratio = 100 * imgO.height / imgO.width;
-      this.readyListener();
+      this.readyListener(true);
+    };
+
+    imgO.onerror = () => {
+      this.imageLoadStatus = ImageLoadStatus.FAIL;
+      this.readyListener(false);
     }
   }
 
-  public onReady(fn : ()=>void) {
-    if ( this.ratio !== -1 ) {
-      fn();
-    } else {
-      this.readyListener = fn;
+  public onReady(fn : (isImageLoadSuccess) => void) : void {
+    switch(this.imageLoadStatus) {
+      case ImageLoadStatus.READY :
+        this.readyListener = fn;
+        break;
+      case ImageLoadStatus.SUCCESS :
+        fn(true);
+        break;
+      case ImageLoadStatus.FAIL :
+        fn(false);
+        break;
     }
   }
 
@@ -30,7 +49,7 @@ export class CardStyleComputer {
     return `rgba(${rgba[0]},${rgba[1]},${rgba[2]},${0.7*rgba[3]/255})`;
   }
 
-  public computeRootBoxStyle() : {} {
+  public computeRootBoxStyle() : object {
     const hostStyle = {};
     if ( this.inputValueChecker.isPairRatioValue() ) {
       Object.assign(hostStyle, this.computeRootBoxStyleByRatio())
@@ -42,7 +61,7 @@ export class CardStyleComputer {
     return hostStyle;
   }
 
-  private computeRootBoxStyleByRatio() : {} {
+  private computeRootBoxStyleByRatio() : object {
     const intWidthRatio  = parseInt(this.cardWidth);
     const intHeightRatio = parseInt(this.cardHeight);
     return {
@@ -51,7 +70,7 @@ export class CardStyleComputer {
     }
   }
 
-  private computeRootBoxStyleExceptRatio() : {} {
+  private computeRootBoxStyleExceptRatio() : object {
     const convertStyleProperty = value => {
       switch( InputDimenType.isTypeOf(value) ){
         case InputDimenType.FIX :
@@ -71,14 +90,14 @@ export class CardStyleComputer {
     }
   }
 
-  public computeShadowBoxStyle() : {} {
+  public computeShadowBoxStyle() : object {
     const anyoneWrap : boolean = this.inputValueChecker.isHeightWrapValue() || this.inputValueChecker.isWidthWrapValue();
     return {
       position : anyoneWrap ? "static" : "absolute"
     }
   }
 
-  public computeImageStyle() : {} {
+  public computeImageStyle() : object {
     return {
       paddingBottom : this.inputValueChecker.isHeightWrapValue() ? `${this.ratio}%` : ''
     }

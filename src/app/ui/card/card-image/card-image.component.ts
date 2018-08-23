@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, HostListener, Input, ViewChild} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, HostListener, Input, Renderer2, ViewChild} from '@angular/core';
 import {animate, AnimationBuilder, AnimationPlayer, style} from '@angular/animations';
 
 @Component({
@@ -10,29 +10,42 @@ import {animate, AnimationBuilder, AnimationPlayer, style} from '@angular/animat
 export class MommooCardImage {
 
   @Input() imageStyle: string;
-  @Input() isAnimate: boolean = false;
   @Input() imagePath : string;
   @ViewChild('cardImage') cardImage: ElementRef;
 
   private animationPlayer: AnimationPlayer;
 
-  constructor(private animBuilder: AnimationBuilder) {}
-
-  @HostListener('mouseenter')
-  private onMouseEnter() {
-    this.playAnimation(1.5, 'ease-in');
-  }
-
-  @HostListener('mouseleave')
-  private onMouseLeave() {
-    this.playAnimation(1, 'ease-out');
-  }
-
-  private playAnimation(toScale: number, interpolate : string) {
-    if ( !this.isAnimate ) {
+  private hoverEvent = (event : Event) => {
+    if ( event.type === 'mouseenter' ) {
+      this.playAnimation(1.5, 'ease-in');
       return;
     }
 
+    if ( event.type === 'mouseleave' ) {
+      this.playAnimation(1, 'ease-out');
+      return;
+    }
+  };
+
+  constructor(private animBuilder: AnimationBuilder, private hostElement : ElementRef) {
+    this.isAnimate = false;
+  }
+
+  private nativeElement() : HTMLElement {
+    return this.hostElement.nativeElement;
+  }
+
+  @Input() set isAnimate(isAnim : boolean) {
+    ['mouseenter', 'mouseleave'].forEach(eventName =>{
+      if ( isAnim ){
+        this.nativeElement().addEventListener(eventName, this.hoverEvent);
+      } else {
+        this.nativeElement().removeEventListener(eventName, this.hoverEvent);
+      }
+    });
+  }
+
+  private playAnimation(toScale: number, interpolate : string) {
     if ( this.animationPlayer ) {
       this.animationPlayer.pause();
     }
