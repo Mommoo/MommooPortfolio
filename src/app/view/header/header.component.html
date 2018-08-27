@@ -2,11 +2,11 @@
   <div class="flex-column-line">
     <div id="title" #title>{{'mommoo portfolio' | uppercase}}</div>
 
-    <app-menu-button id="menu-button"
-                     (menuButtonEvent)="fireMenuButtonEvent($event)"></app-menu-button>
+    <view-menu-button id="menu-button"
+                     (menuButtonEvent)="fireMenuButtonEvent($event)"></view-menu-button>
   </div>
 
-  <app-menu-list id="menu-list"
-    (menuListItemClick)="fireMenuListItemClickEvent($event)"></app-menu-list>
+  <view-menu-list id="menu-list"
+    (menuListItemClick)="fireMenuListItemClickEvent($event)"></view-menu-list>
 </header>
 

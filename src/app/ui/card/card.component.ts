@@ -1,5 +1,5 @@
 import {
-  AfterContentChecked,
+  AfterContentChecked, AfterViewChecked,
   ChangeDetectionStrategy, ChangeDetectorRef,
   Component,
   ElementRef,
@@ -19,7 +19,7 @@ import {CardStyleComputer} from './card-style-computer';
   styleUrls: ['./card.component.scss'],
   changeDetection : ChangeDetectionStrategy.OnPush
 })
-export class MommooCard implements OnChanges {
+export class MommooCard implements OnChanges, AfterViewChecked {
 
   /** wrap or fit or ratio(number) or fixed name(100px) */
   @Input() private cardWidth  : string = InputDimenType.FIT.name();
@@ -49,6 +49,7 @@ export class MommooCard implements OnChanges {
   constructor(private hostElementRef : ElementRef, private renderer : Renderer2, private cdr : ChangeDetectorRef) {}
 
   public ngOnChanges(changes: SimpleChanges): void {
+    console.log('[card] ngOnChanges');
     if ( new InputValueChecker(this.cardWidth, this.cardHeight).isNotValidate() ) {
       new Error(`dimen value you input is not fit the format[ "pair-ratio(1,1)" or "fix(100px)" or "fit" or "wrap"`);
     }
@@ -62,8 +63,13 @@ export class MommooCard implements OnChanges {
       this._cardShadowBoxStyle = cardStyleComputer.computeShadowBoxStyle();
       this.applyStyleToHost(cardStyleComputer.computeRootBoxStyle());
       this.applyStyleToHost({visibility: 'visible'});
-      this.cdr.detectChanges();
+      this.cdr.markForCheck();
+      console.log('[card] detectChanges!!');
     });
+  }
+
+  ngAfterViewChecked(): void {
+    console.log('[card] ngAfterViewChecked');
   }
 
   public actionButtonClicks(buttonName) : void {

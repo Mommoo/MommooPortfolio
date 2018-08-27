@@ -1,6 +1,6 @@
 import {
   AfterViewChecked, AfterViewInit,
-  ChangeDetectionStrategy,
+  ChangeDetectionStrategy, ChangeDetectorRef,
   Component,
   ContentChildren,
   DoCheck,
@@ -33,8 +33,8 @@ export class MommooMasonryLayout implements AfterViewChecked, DoCheck, AfterView
 
   private readonly masonryStyler : MasonryStyler = new MasonryStyler(this.maxColumnNum, this.gutterSize);
 
-  constructor() {
-
+  constructor(private changeDetection : ChangeDetectorRef) {
+    changeDetection.markForCheck();
   }
 
   private nativePaddingWrapperElement() : HTMLElement {
@@ -52,20 +52,23 @@ export class MommooMasonryLayout implements AfterViewChecked, DoCheck, AfterView
 
     this.masonryStyler.setTiles(this.masonryTileQueryList.toArray());
 
-    WindowUtils.addDoneResizingEvent('masonryLayout', ()=> this.ngAfterViewChecked());
+    WindowUtils.addDoneResizingEvent('masonryLayout', ()=> this.layoutMasonryTiles());
   }
 
-  //TODO tile이 바뀌었는지를 어케 알것인가?
   ngAfterViewChecked(): void {
-    console.log('ngAfterViewChecked!');
+    console.log('[masonry-layout] ngAfterViewChecked!');
+    this.layoutMasonryTiles();
+  }
+
+  ngDoCheck(): void {
+    console.log("[masonry-layout] ngDoCheck");
+  }
+
+  private layoutMasonryTiles() : void {
+    this.masonryStyler.setTiles(this.masonryTileQueryList.toArray());
     this.masonryStyler.setProperty(this.maxColumnNum, this.gutterSize);
     const computedContainerHeight = this.masonryStyler.doMasonryLayout();
     const paddingValue = MommooMasonryLayout.paddingValue();
     this.nativePaddingWrapperElement().style.height = `${computedContainerHeight + (paddingValue*2)}px`;
   }
-
-  ngDoCheck(): void {
-    console.log("doCheck!!");
-  }
-
 }

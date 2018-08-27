@@ -1,14 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component, DoCheck,
-  ElementRef,
-  Input,
-  OnChanges,
-  OnInit, QueryList,
-  SimpleChanges,
-  ViewChild, ViewChildren
-} from '@angular/core';
+import {ChangeDetectionStrategy, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {HeaderComponent} from './view/header/header.component';
 import {ProfileComponent} from './view/profile/profile.component';
 import {AboutComponent} from './view/about/about.component';
@@ -16,7 +6,6 @@ import {PortfolioComponent} from './view/portfolio/portfolio.component';
 import {MenuListItem} from './view/header/menu/menu-list/menu-list.item';
 import {AnimationSetting} from './common/animationSetting';
 import {ViewportDimension, WindowEventService} from './common/window-event.service';
-import {TestComponent} from './test/test.component';
 
 @Component({
   selector: 'app-root',
@@ -24,7 +13,9 @@ import {TestComponent} from './test/test.component';
   styleUrls: ['./app.component.scss'],
   changeDetection : ChangeDetectionStrategy.OnPush
 })
-
+// export class AppComponent {
+//
+// }
 export class AppComponent implements OnInit {
   @ViewChild(HeaderComponent)
   private headerComponent: HeaderComponent;
@@ -127,6 +118,15 @@ export class AppComponent implements OnInit {
 
   private static easeInExpo(percent: number): number {
     return (Math.pow(2, 8 * percent) - 1) / 255;
+  }
+
+  public image = '/assets/images/test.jpg';
+  public test() {
+    if ( this.image === '/assets/images/test.jpg' ) {
+      this.image = '/assets/images/javascript.jpg';
+    } else {
+      this.image = '/assets/images/test.jpg';
+    }
   }
 }
 

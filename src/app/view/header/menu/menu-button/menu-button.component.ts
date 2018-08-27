@@ -13,7 +13,7 @@ export const enum MenuButtonEvent {
 }
 
 @Component({
-  selector: 'app-menu-button',
+  selector: 'view-menu-button',
   templateUrl: './menu-button.component.html',
   styleUrls: ['./menu-button.component.scss']
 })

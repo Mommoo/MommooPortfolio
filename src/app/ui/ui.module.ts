@@ -22,4 +22,4 @@ import {MommooMasonryModule} from './masonry-layout/mommoo-masonry.module';
   ],
   declarations: [LabelComponent, GuideComponent]
 })
-export class UiModule { }
+export class MommooUIModule { }

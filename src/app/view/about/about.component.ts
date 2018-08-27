@@ -1,5 +1,6 @@
 import {AfterViewInit, ChangeDetectorRef, Component} from '@angular/core';
-import {ViewportDimension, WindowEventService} from '../../common/window-event.service';
+import {WindowEventService} from '../../common/window-event.service';
+import {CommonDataService} from '../../common/common-data.service';
 
 interface CardProperty {
   name : string
@@ -8,14 +9,16 @@ interface CardProperty {
 }
 
 @Component({
-  selector: 'app-about',
+  selector: 'view-about',
   templateUrl: './about.component.html',
   styleUrls: ['./about.component.scss']
 })
 export class AboutComponent implements AfterViewInit {
   private static readonly IMAGE_ROOT_PATH = '/assets/images/';
   public maxColumnNum = 6;
-  public cardTitleFontSize : string;
+  public gutterSize = 20;
+  public cardContentFontSize : string;
+  public themeColor : string;
 
   public readonly cardProps : Array<CardProperty> = [
     {
@@ -26,7 +29,7 @@ export class AboutComponent implements AfterViewInit {
     {
       name : 'HTML-CSS',
       imagePath : `${AboutComponent.IMAGE_ROOT_PATH}html-css.png`,
-      hashTagMessages : ['FlexBox 잘 다룸']
+      hashTagMessages : ['FlexBox 잘 다룸' ,'반응형 웹']
     },
     {
       name : 'SASS',
@@ -101,28 +104,60 @@ export class AboutComponent implements AfterViewInit {
   ];
 
   constructor(private cdr: ChangeDetectorRef,
-              private windowEventService: WindowEventService) {
-
+              private windowEventService: WindowEventService,
+              private commonDataService : CommonDataService) {
+    this.themeColor = commonDataService.getThemeColor();
   }
 
   ngAfterViewInit(): void {
-    this.windowEventService.addViewportDimensionDetectListener(viewportDimension => {
-      switch (viewportDimension) {
-        case ViewportDimension.MOBILE :
-          this.maxColumnNum = 2;
-          this.cardTitleFontSize = '4vmax';
-          break;
+    const checkWindowWidthRange = ()=> {
+      const innerWidth = window.innerWidth;
+      if ( innerWidth > 1400) {
+        return 'x-large';
+      } else if ( 1250 < innerWidth && innerWidth <= 1400 ) {
+        return 'large';
+      } else if ( 1025 < innerWidth && innerWidth <= 1250 ){
+        return 'x-medium';
+      } else if ( 768 < innerWidth && innerWidth <= 1025) {
+        return 'medium';
+      } else if ( innerWidth <= 768 ) {
+        return 'small';
+      }
+    };
 
-        case ViewportDimension.TABLET :
-          this.maxColumnNum = 4;
-          this.cardTitleFontSize = '3vmax';
-          break;
+    const setProperty = (colNum : number, contentFontSize : string, gutterSize : number) => {
+      this.maxColumnNum = colNum;
+      this.cardContentFontSize = contentFontSize;
+      this.gutterSize = gutterSize;
+    };
 
-        case ViewportDimension.DESKTOP :
-          this.maxColumnNum = 6;
-          this.cardTitleFontSize = '2vmax';
+    let windowWidthRange;
+
+    this.windowEventService.addViewportResizeListener(() => {
+      if ( windowWidthRange === checkWindowWidthRange() ) {
+        return;
+      }
+
+      windowWidthRange = checkWindowWidthRange();
+
+      switch ( windowWidthRange ) {
+        case 'x-large':
+          setProperty(6, '1vmax', 12);
+          break;
+        case 'large' :
+          setProperty(5, '1.2max', 10);
+          break;
+        case 'x-medium' :
+          setProperty(4, '1.4max', 8);
+          break;
+        case 'medium' :
+          setProperty(4, '1.5max', 6);
+          break;
+        case 'small' :
+          setProperty(2, '2vmax', 4);
           break;
       }
+      
       this.cdr.detectChanges();
     }, true);
   }

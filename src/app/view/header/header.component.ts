@@ -5,7 +5,7 @@ import {MenuListComponent} from './menu/menu-list/menu-list.component';
 import {ViewportDimension, WindowEventService} from '../../common/window-event.service';
 
 @Component({
-  selector: 'app-header',
+  selector: 'view-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })

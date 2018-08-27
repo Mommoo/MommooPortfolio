@@ -1,10 +1,10 @@
-import {AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, Output, ViewChild} from '@angular/core';
-import {MenuListItem} from "./menu-list.item";
-import {MenuListAnimator} from "./menu-list.animator";
-import {AnimationBuilder} from "@angular/animations";
+import {ChangeDetectorRef, Component, ElementRef, EventEmitter, Output, ViewChild} from '@angular/core';
+import {MenuListItem} from './menu-list.item';
+import {MenuListAnimator} from './menu-list.animator';
+import {AnimationBuilder} from '@angular/animations';
 
 @Component({
-  selector: 'app-menu-list',
+  selector: 'view-menu-list',
   templateUrl: './menu-list.component.html',
   styleUrls: ['./menu-list.component.scss']
 })
