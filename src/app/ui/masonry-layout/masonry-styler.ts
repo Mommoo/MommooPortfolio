@@ -29,7 +29,9 @@ export class MasonryStyler {
   }
 
   public setProperty(maxColumnNum : number, gutterSize : number) {
-    this.masonryLayoutPropsFinder.initialize(this.maxColumnNum, this.gutterSize);
+    this.maxColumnNum = maxColumnNum;
+    this.gutterSize = gutterSize;
+    this.masonryLayoutPropsFinder.initialize(maxColumnNum, gutterSize);
   }
 
   public doMasonryLayout() : number {
