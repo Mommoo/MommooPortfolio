@@ -12,6 +12,7 @@ import {MommooUIModule} from './ui/ui.module';
 import {WindowEventService} from './common/window-event.service';
 import {CommonDataService} from './common/common-data.service';
 import {ViewModule} from './view/view.module';
+import {fakeBackendProvider} from './mock-backend/MockBackEndService';
 
 
 @NgModule({
@@ -27,7 +28,7 @@ import {ViewModule} from './view/view.module';
     MommooUIModule,
     ViewModule
   ],
-  providers: [WindowEventService, CommonDataService],
+  providers: [WindowEventService, CommonDataService, fakeBackendProvider],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
