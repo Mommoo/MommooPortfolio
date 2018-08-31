@@ -1,82 +1,74 @@
-import {ChangeDetectionStrategy, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {HeaderComponent} from './view/header/header.component';
-import {ProfileComponent} from './view/profile/profile.component';
-import {AboutComponent} from './view/about/about.component';
-import {PortfolioComponent} from './view/portfolio/portfolio.component';
-import {MenuListItem} from './view/header/menu/menu-list/menu-list.item';
+import {AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {AnimationSetting} from './common/animationSetting';
 import {ViewportDimension, WindowEventService} from './common/window-event.service';
+
+/**
+ * naviationHeaderArea는 fixedHeader는 position fix 성질을 가진다.
+ * fixedHeader가 부모에게 크기 정보를 주지 못하여, navigationHeaderArea는 의도한 뷰 템플릿 구조를 유지하기 어렵다.
+ * 따라서, 페이지 레이아웃의 fixedHeader크기에 맞게 navigationHeaderArea에게 필요한 높이 값을 설정해야 한다.
+ */
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  changeDetection : ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-// export class AppComponent {
-//
-// }
-export class AppComponent implements OnInit {
-  @ViewChild(HeaderComponent)
-  private headerComponent: HeaderComponent;
+export class AppComponent implements OnInit, AfterViewInit {
+  @ViewChild('navigationHeaderArea')
+  private navigationHeaderAreaElementRef: ElementRef;
 
-  @ViewChild('shadowHeader')
-  private shadowHeaderElementRef: ElementRef;
-
-  @ViewChild(ProfileComponent, {read: ElementRef})
-  private profileElementRef: ElementRef;
-
-  @ViewChild(AboutComponent, {read: ElementRef})
-  private aboutElementRef: ElementRef;
-
-  @ViewChild(PortfolioComponent, {read: ElementRef})
-  private portfolioElementRef: ElementRef;
+  @ViewChild('fixedHeaderWrapper')
+  private fixedHeaderWrapper: ElementRef;
 
   public constructor(private windowEventService: WindowEventService) {
   }
 
   ngOnInit(): void {
-    setTimeout(()=>{
-      this.windowEventService.addViewportDimensionDetectListener(viewportDimension => {
-
-        switch (viewportDimension) {
-          case ViewportDimension.MOBILE :
-          case ViewportDimension.TABLET :
-            this.shadowHeaderElementRef.nativeElement.style.height = `${this.headerComponent.getHeaderHeight()}px`;
-            console.log(`height : ${this.headerComponent.getHeaderHeight()}`);
-            break;
-
-          case ViewportDimension.DESKTOP :
-            break;
-        }
-      }, true);
-    },0);
   }
 
-  public onMenuClick(menuItem: MenuListItem): void {
-    const offsetY : number = !WindowEventService.isDesktopViewport() ? this.headerComponent.getHeaderHeight() : 0;
-    switch (menuItem) {
-      case MenuListItem.PROFILE :
-        AppComponent.scrollToElement(this.profileElementRef, offsetY);
-        break;
+  ngAfterViewInit(): void {
+    this.windowEventService.addViewportDimensionDetectListener(viewportDimension => {
+      switch (viewportDimension) {
+        case ViewportDimension.MOBILE :
+        case ViewportDimension.TABLET :
+          this.windowEventService.addViewportResizeListener('trackingHeader', ()=> {
+            this.navigationHeaderAreaElementRef.nativeElement.style.height = `${this.fixedHeaderWrapper.nativeElement.offsetHeight}px`;
+          }, true);
+          break;
 
-      case MenuListItem.ABOUT :
-        AppComponent.scrollToElement(this.aboutElementRef, offsetY);
-        break;
-
-      case MenuListItem.PORTFOLIO :
-        AppComponent.scrollToElement(this.portfolioElementRef, offsetY);
-        break;
-
-      case MenuListItem.BLOG :
-        AppComponent.openNewWindow('https://mommoo.tistory.com');
-        break;
-
-      case MenuListItem.GITHUB :
-        AppComponent.openNewWindow('https://github.com/mommoo');
-        break;
-    }
+        case ViewportDimension.DESKTOP :
+          this.windowEventService.removeEvent('trackingHeader');
+          break;
+      }
+    }, true);
   }
+
+  // public onMenuClick(menuItem: MenuListItem): void {
+  //   //this.headerComponent.getHeaderHeight()
+  //   const offsetY : number = !WindowEventService.isDesktopViewport() ? 0: 0;
+  //   switch (menuItem) {
+  //     case MenuListItem.PROFILE :
+  //       AppComponent.scrollToElement(this.profileElementRef, offsetY);
+  //       break;
+  //
+  //     case MenuListItem.ABOUT :
+  //       AppComponent.scrollToElement(this.aboutElementRef, offsetY);
+  //       break;
+  //
+  //     case MenuListItem.PORTFOLIO :
+  //       AppComponent.scrollToElement(this.portfolioElementRef, offsetY);
+  //       break;
+  //
+  //     case MenuListItem.BLOG :
+  //       AppComponent.openNewWindow('https://mommoo.tistory.com');
+  //       break;
+  //
+  //     case MenuListItem.GITHUB :
+  //       AppComponent.openNewWindow('https://github.com/mommoo');
+  //       break;
+  //   }
+  // }
 
   //TODO 애니메이션 객체 만들기..!
   //TODO 스크롤 가는거 다시 만들기 ㅠㅠ...
@@ -121,8 +113,9 @@ export class AppComponent implements OnInit {
   }
 
   public image = '/assets/images/test.jpg';
+
   public test() {
-    if ( this.image === '/assets/images/test.jpg' ) {
+    if (this.image === '/assets/images/test.jpg') {
       this.image = '/assets/images/javascript.jpg';
     } else {
       this.image = '/assets/images/test.jpg';

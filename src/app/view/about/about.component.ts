@@ -94,7 +94,7 @@ export class AboutComponent implements AfterViewInit {
     {
       name : 'J-Query',
       imagePath : `${AboutComponent.IMAGE_ROOT_PATH}j-query.png`,
-      hashTagMessages : ['경험이 제일 많음', '바닐라 자바스크립트 선호']
+      hashTagMessages : ['개발 경험 많음', '바닐라 자바스크립트 선호']
     },
     {
       name : 'Android',
@@ -133,7 +133,7 @@ export class AboutComponent implements AfterViewInit {
 
     let windowWidthRange;
 
-    this.windowEventService.addViewportResizeListener(() => {
+    this.windowEventService.addViewportResizeListener('check', () => {
       if ( windowWidthRange === checkWindowWidthRange() ) {
         return;
       }

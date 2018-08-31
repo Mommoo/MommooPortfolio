@@ -1,29 +1,30 @@
-#header {
+$expandedHeaderWidth : 300px;
+
+:host {
+  display : flex;
+}
+
+#content-wrapper-area {
+  flex-grow : 1;
+}
+
+#fixed-header-wrapper {
   position : fixed;
-  width : 300px;
-  z-index : 999;
-}
-
-#shadow-header {
-  display : none;
-}
-
-#content {
-  padding-left : 300px;
-}
-
-#footer {
-  padding-left : 300px;
 }
 // Desktop
 @media all and (min-width : 1025px) {
   :host {
     flex-direction : row;
   }
-  #header {
-    width : 300px;
+
+  #navigation-header-area {
+    width : $expandedHeaderWidth;
+    justify-items: stretch;
+  }
+
+  #fixed-header-wrapper {
+    width: $expandedHeaderWidth;
     height : 100%;
-    z-index : 999;
   }
 }
 
@@ -32,20 +33,13 @@
   :host {
     flex-direction : column;
   }
-  #header {
-    display : inline-block;
+
+  #navigation-header-area {
     width : 100%;
   }
 
-  #shadow-header {
-    display : block;
-  }
-
-  #content {
-    padding-left : 0;
-  }
-
-  #footer {
-    padding-left : 0;
+  #fixed-header-wrapper {
+    width: 100%;
+    height : auto;
   }
 }

@@ -12,7 +12,11 @@ export interface ViewportChangedListener {
 
 @Injectable()
 export class WindowEventService {
-  constructor() {}
+  private eventFinder : Map<string, Map<string,any>> = new Map<string, Map<string,any>>();
+
+  constructor() {
+    this.eventFinder.set('resize', new Map<string, any>());
+  }
 
   public addViewportDimensionDetectListener(viewportChangedListener : ViewportChangedListener, firstTimeRun : boolean) : void {
     let currentViewportDimension : ViewportDimension = WindowEventService.getViewportDimension();
@@ -32,11 +36,35 @@ export class WindowEventService {
     window.addEventListener('resize', resizeListener);
   }
 
-  public addViewportResizeListener( resizeListener : (windowSize : number) => void , firstTimeRun : boolean ) : void {
-    if ( firstTimeRun ) {
-      resizeListener(window.innerWidth);
+  public addViewportResizeListener( eventID : string, resizeListener : (windowSize : number) => void , firstTimeRun : boolean ) : void {
+    const resizeEventFinder = this.eventFinder.get('resize');
+    if ( resizeEventFinder.has(eventID) ) {
+      return;
     }
-    window.addEventListener('resize', ()=> resizeListener(window.innerWidth));
+
+    const event = ()=> resizeListener(window.innerWidth);
+
+    if ( firstTimeRun ) {
+      event();
+    }
+    window.addEventListener('resize', event);
+    resizeEventFinder.set(eventID, event);
+  }
+
+  public removeEvent( eventID : string ) {
+    const iterator = this.eventFinder.keys();
+    while ( true ) {
+      const item = iterator.next();
+      if ( item.done ) {
+        break;
+      }
+
+      if ( this.eventFinder.get(item.value).has(eventID) ) {
+        window.removeEventListener(item.value, this.eventFinder.get(item.value).get(eventID));
+        this.eventFinder.get(item.value).delete(eventID);
+        break;
+      }
+    }
   }
 
   public static isDesktopViewport() : boolean {

@@ -1,62 +1,13 @@
-<view-header id="header" (menuListItemClick)="onMenuClick($event)"></view-header>
-<div #shadowHeader id="shadow-header"></div>
-<div id="content">
-  <view-profile></view-profile>
-  <view-about></view-about>
-  <view-portfolio></view-portfolio>
-  <view-footer id="footer"></view-footer>
+<!-- 본 HTML 파일은, 해당 어플리케이션의 뷰 구조가 어떻게 구성되는지 템플릿을 제공하는것이 목적입니다.
+뷰 템플릿은 크게 3가지로 구성됩니다. 첫번째로, 사용자의 서비스를 안내하고, 이동시킬 네비게이션 헤더 박스.
+두번째로, 사용자에게 서비스를 제공하기 위한 컨텐츠 박스. 마지막으로, 해당 어플리케이션의 메타정보를 제공하는 푸터 박스가 있습니다.
+반응형 웹을 지원하므로, 가변적으로 템플릿이 변합니다.-->
+<div id="navigation-header-area" #navigationHeaderArea>
+  <div id="fixed-header-wrapper" #fixedHeaderWrapper>
+    <view-header id="header"></view-header>
+  </div>
 </div>
-<!--<div style="height:400px; width: 300px; overflow : hidden">-->
-<!--<mommoo-card-->
-<!--[cardWidth]="'fit'"-->
-<!--[cardHeight]="'wrap'"-->
-<!--[cardTitle]="'Test!'"-->
-<!--[hashTagMessages]="['hello','mommoo','hello','mommoo','hello','mommoo','hello','mommoo','hello','hamzzi']"-->
-<!--[cardImageAnim]="'true'"-->
-<!--[actionButtonNames]="['Read More','Foo']">-->
-<!--<div style="text-align : center; line-break : auto">SpringBoot</div>-->
-<!--</mommoo-card>-->
-<!--</div>-->
-<!--[cardImage]="image"-->
-<!--<button (click)="test()">test</button>-->
-
-<!--<mommoo-masonry-layout [maxColumnNum]="6" [gutterSize]="100">-->
-<!--<mommoo-masonry-tile>-->
-<!--[1] Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!!Hamzzi 입니다-->
-<!--Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!!Hamzzi 입니다-->
-<!--Mommoo 입니다.!! Mommoo 입니다.!! Mommoo 입니다.!!Mommoo 입니다.!!Mommoo 입니다.!!Mommoo 입니다.!! Mommoo 입니다.!! Mommoo 입니다.!!Mommoo 입니다.!!-->
-<!--</mommoo-masonry-tile>-->
-<!--<mommoo-masonry-tile>-->
-<!--[2] Mommoo 입니다.!! Mommoo 입니다.!! Mommoo 입니다.!!Mommoo 입니다.!!Mommoo 입니다.!!Mommoo 입니다.!! Mommoo 입니다.!! Mommoo 입니다.!!Mommoo 입니다.!!-->
-<!--</mommoo-masonry-tile>-->
-<!--<mommoo-masonry-tile>-->
-<!--[3] Mommoo 입니다.!! Mommoo 입니다.!! Mommoo 입니다.!!Mommoo 입니다.!!Mommoo 입니다.!!Mommoo 입니다.!! Mommoo 입니다.!! Mommoo 입니다.!!Mommoo 입니다.!!-->
-<!--Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!!Hamzzi 입니다.!! Hamzzi 입니다.!!-->
-<!--Mommoo 입니다.!! Mommoo 입니다.!! Mommoo 입니다.!!Mommoo 입니다.!!Mommoo 입니다.!!Mommoo 입니다.!! Mommoo 입니다.!! Mommoo 입니다.!!Mommoo 입니다.!!-->
-<!--Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!!Hamzzi 입니다-->
-<!--Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!!Hamzzi 입니다-->
-<!--</mommoo-masonry-tile>-->
-<!--<mommoo-masonry-tile [colSpan]="2">-->
-<!--[4] Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!!Hamzzi 입니다.!! Hamzzi 입니다.!!-->
-<!--Mommoo 입니다.!! Mommoo 입니다.!! Mommoo 입니다.!!Mommoo 입니다.!!Mommoo 입니다.!!Mommoo 입니다.!! Mommoo 입니다.!! Mommoo 입니다.!!Mommoo 입니다.!!-->
-<!--Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!!Hamzzi 입니다.!! Hamzzi 입니다.!!-->
-<!--Mommoo 입니다.!! Mommoo 입니다.!! Mommoo 입니다.!!Mommoo 입니다.!!Mommoo 입니다.!!Mommoo 입니다.!! Mommoo 입니다.!! Mommoo 입니다.!!Mommoo 입니다.!!-->
-<!--</mommoo-masonry-tile>-->
-<!--<mommoo-masonry-tile>-->
-<!--[5] Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!!Hamzzi 입니다.!! Hamzzi 입니다.!!-->
-<!--Mommoo 입니다.!! Mommoo 입니다.!! Mommoo 입니다.!!Mommoo 입니다.!!Mommoo 입니다.!!Mommoo 입니다.!! Mommoo 입니다.!! Mommoo 입니다.!!Mommoo 입니다.!!-->
-<!--Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!!Hamzzi 입니다.!! Hamzzi 입니다.!!-->
-<!--</mommoo-masonry-tile>-->
-<!--<mommoo-masonry-tile>-->
-<!--[6] Mommoo 입니다.!! Mommoo 입니다.!! Mommoo 입니다.!!Mommoo 입니다.!!Mommoo 입니다.!!Mommoo 입니다.!! Mommoo 입니다.!! Mommoo 입니다.!!Mommoo 입니다.!!-->
-<!--Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!!Hamzzi 입니다.!! Hamzzi 입니다.!!-->
-<!--</mommoo-masonry-tile>-->
-<!--<mommoo-masonry-tile>-->
-<!--[7] Mommoo 입니다.!! Mommoo 입니다.!! Mommoo 입니다.!!Mommoo 입니다.!!Mommoo 입니다.!!Mommoo 입니다.!! Mommoo 입니다.!! Mommoo 입니다.!!Mommoo 입니다.!!-->
-<!--Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!!Hamzzi 입니다-->
-<!--Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!!Hamzzi 입니다-->
-<!--Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!!Hamzzi 입니다-->
-<!--Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!!Hamzzi 입니다-->
-<!--Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!! Hamzzi 입니다.!!Hamzzi 입니다-->
-<!--</mommoo-masonry-tile>-->
-<!--</mommoo-masonry-layout>-->
+<div id="content-wrapper-area">
+  <div>hi im content!!</div>
+  <div id="footer-area"></div>
+</div>
