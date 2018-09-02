@@ -1,6 +1,4 @@
-import {AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {AnimationSetting} from './common/animationSetting';
-import {WindowEventService} from './common/window-event.service';
+import {AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, ViewChild} from '@angular/core';
 
 /**
  * naviationHeaderArea는 fixedHeader는 position fix 성질을 가진다.

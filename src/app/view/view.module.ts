@@ -4,6 +4,7 @@ import {ProfileModule} from './profile/profile.module';
 import {AboutModule} from './about/about.module';
 import {HeaderModule} from './header/header.module';
 import {PortfolioModule} from './portfolio/portfolio.module';
+import { MainComponent } from './main.component';
 
 @NgModule({
   imports: [
@@ -19,7 +20,7 @@ import {PortfolioModule} from './portfolio/portfolio.module';
     HeaderModule,
     PortfolioModule
   ],
-  declarations: []
+  declarations: [MainComponent]
 })
 export class ViewModule {
 }
