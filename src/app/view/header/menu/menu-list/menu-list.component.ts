@@ -8,11 +8,12 @@ import {AnimationBuilder} from '@angular/animations';
   templateUrl: './menu-list.component.html',
   styleUrls: ['./menu-list.component.scss']
 })
+/** ngIf 기능을 쓰지 않고, css display style로 nav 숨김처리 하는 이유는 아래와 같다.
+ * App이 제공하는 템플릿이 가상으로 Header를 복사하는데, 이때, Angular Event로 처리한 요소가 제대로 반영되지 않는다.
+ * 뷰포트를 줄일때, ngIf가 제대로 반영되지 않아, nav가 펼쳐진채 작동하므로, css로 이를 처리함. */
 export class MenuListComponent {
 
   public readonly menuItems : Array<MenuListItem> = MenuListItem.values();
-
-  private isMenuItemShown : boolean = false;
 
   @Output('menuListItemClick')
   private readonly menuListItemClickEmitter : EventEmitter<MenuListItem> = new EventEmitter<MenuListItem>();
@@ -28,7 +29,6 @@ export class MenuListComponent {
 
   public showMenuItemList(animate : boolean) : void {
     this.showElement();
-    console.log(this.getNativeListElement());
     if ( animate ) {
       this.menuListAnimator.animateShowMenuList(this.getNativeListElement());
     }
@@ -42,21 +42,17 @@ export class MenuListComponent {
     }
   }
 
-  public isItemShown() : boolean {
-    return this.isMenuItemShown;
-  }
-
   public menuItemClickEvent(menuListItem : MenuListItem) : void {
     this.menuListItemClickEmitter.emit(menuListItem);
   }
 
   public showElement() : void {
-    this.isMenuItemShown = true;
+    this.getNativeListElement().style.display = 'block';
     this.changeDetector.detectChanges();
   }
 
   public hideElement() : void {
-    this.isMenuItemShown = false;
+    this.getNativeListElement().style.display = 'none';
     this.changeDetector.detectChanges();
   }
 

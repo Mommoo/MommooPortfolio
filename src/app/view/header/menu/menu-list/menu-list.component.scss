@@ -39,9 +39,8 @@ nav {
 
 // Desktop
 @media all and (min-width : 1025px) {
-
-  #menu-button {
-    display : none;
+  nav {
+    display : block;
   }
 }
 
@@ -49,6 +48,7 @@ nav {
 @media all and (max-width:1024px) {
 
   nav {
+    display : none;
     .nav-item {
       padding : 1rem 0;
     }

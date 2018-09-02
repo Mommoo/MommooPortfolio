@@ -1,6 +1,5 @@
-import {animate, AnimationBuilder, style} from "@angular/animations";
-import {AnimationSetting} from "../../../../common/animationSetting";
-import {ElementRef} from '@angular/core';
+import {animate, AnimationBuilder, style} from '@angular/animations';
+import {AnimationSetting} from '../../../../common/animationSetting';
 
 export class MenuListAnimator {
 
