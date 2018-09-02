@@ -12,7 +12,6 @@ import {WindowEventService} from './common/window-event.service';
 import {CommonDataService} from './common/common-data.service';
 import {ViewModule} from './view/view.module';
 import {fakeBackendProvider} from './mock-backend/MockBackEndService';
-import {AppRoutingModule} from './app-routing.module';
 
 
 @NgModule({
@@ -25,8 +24,7 @@ import {AppRoutingModule} from './app-routing.module';
     HttpClientModule,
     BrowserAnimationsModule,
     MommooUIModule,
-    ViewModule,
-    AppRoutingModule
+    ViewModule
   ],
   providers: [WindowEventService, CommonDataService, fakeBackendProvider],
   bootstrap: [AppComponent]
