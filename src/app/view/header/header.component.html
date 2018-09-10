@@ -1,12 +1,10 @@
-<header>
+<header id="header">
   <div class="flex-column-line">
-    <div id="title" #title>{{'mommoo portfolio' | uppercase}}</div>
+    <div class="title">{{'mommoo portfolio' | uppercase}}</div>
 
-    <view-menu-button id="menu-button"
+    <view-menu-button class="menu-button"
                      (menuButtonEvent)="fireMenuButtonEvent($event)"></view-menu-button>
   </div>
 
-  <view-menu-list id="menu-list"
-    (menuListItemClick)="fireMenuListItemClickEvent($event)"></view-menu-list>
+  <view-menu-list (menuListItemClick)="fireMenuListItemClickEvent()"></view-menu-list>
 </header>
-

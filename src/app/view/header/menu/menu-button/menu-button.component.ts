@@ -1,6 +1,6 @@
-import {Component, ElementRef, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
-import {AnimationBuilder} from "@angular/animations";
-import {MenuButtonAnimator} from "./menu-button.animator";
+import {ChangeDetectionStrategy, Component, ElementRef, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
+import {AnimationBuilder} from '@angular/animations';
+import {MenuButtonAnimator} from './menu-button.animator';
 
 export const enum MenuButtonState {
   OPENED,
@@ -15,7 +15,8 @@ export const enum MenuButtonEvent {
 @Component({
   selector: 'view-menu-button',
   templateUrl: './menu-button.component.html',
-  styleUrls: ['./menu-button.component.scss']
+  styleUrls: ['./menu-button.component.scss'],
+  changeDetection : ChangeDetectionStrategy.OnPush
 })
 export class MenuButtonComponent implements OnInit{
 

@@ -1,7 +1,15 @@
 import {ChangeDetectorRef, Component, ElementRef, EventEmitter, Output, ViewChild} from '@angular/core';
-import {MenuListItem} from './menu-list.item';
 import {MenuListAnimator} from './menu-list.animator';
 import {AnimationBuilder} from '@angular/animations';
+import {HeaderMenuListEventService} from '../../header-menu-list-event.service';
+
+export enum HeaderMenu {
+  PROFILE = 'profile',
+  ABOUT = 'about',
+  PORTFOLIO = 'portfolio',
+  BLOG = 'blog',
+  GITHUB = 'github'
+}
 
 @Component({
   selector: 'view-menu-list',
@@ -12,19 +20,20 @@ import {AnimationBuilder} from '@angular/animations';
  * App이 제공하는 템플릿이 가상으로 Header를 복사하는데, 이때, Angular Event로 처리한 요소가 제대로 반영되지 않는다.
  * 뷰포트를 줄일때, ngIf가 제대로 반영되지 않아, nav가 펼쳐진채 작동하므로, css로 이를 처리함. */
 export class MenuListComponent {
-
-  public readonly menuItems : Array<MenuListItem> = MenuListItem.values();
+  public readonly menuItemNames : string[] = Object.keys(HeaderMenu);
 
   @Output('menuListItemClick')
-  private readonly menuListItemClickEmitter : EventEmitter<MenuListItem> = new EventEmitter<MenuListItem>();
+  private readonly menuListItemClickEmitter : EventEmitter<HeaderMenu> = new EventEmitter<HeaderMenu>();
 
   @ViewChild('nav', {read:ElementRef})
   private readonly navElementRef : ElementRef;
 
   private readonly menuListAnimator : MenuListAnimator;
 
-  constructor(private animationBuilder : AnimationBuilder, private changeDetector : ChangeDetectorRef) {
-    this.menuListAnimator = new MenuListAnimator(this.animationBuilder);
+  constructor(private animBuilder    : AnimationBuilder,
+              private changeDetector : ChangeDetectorRef,
+              private eventService   : HeaderMenuListEventService) {
+    this.menuListAnimator = new MenuListAnimator(this.animBuilder);
   }
 
   public showMenuItemList(animate : boolean) : void {
@@ -42,8 +51,10 @@ export class MenuListComponent {
     }
   }
 
-  public menuItemClickEvent(menuListItem : MenuListItem) : void {
-    this.menuListItemClickEmitter.emit(menuListItem);
+  public menuItemClickEvent(menuName : string) : void {
+    const selectedHeaderMenu : HeaderMenu = HeaderMenu[menuName];
+    (this.eventService as any)._notifyEvent(selectedHeaderMenu);
+    this.menuListItemClickEmitter.emit(selectedHeaderMenu);
   }
 
   public showElement() : void {
