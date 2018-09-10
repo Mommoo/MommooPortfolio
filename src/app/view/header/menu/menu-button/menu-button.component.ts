@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, ElementRef, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
+import {ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Output, ViewChild} from '@angular/core';
 import {AnimationBuilder} from '@angular/animations';
 import {MenuButtonAnimator} from './menu-button.animator';
 
@@ -18,7 +18,7 @@ export const enum MenuButtonEvent {
   styleUrls: ['./menu-button.component.scss'],
   changeDetection : ChangeDetectionStrategy.OnPush
 })
-export class MenuButtonComponent implements OnInit{
+export class MenuButtonComponent {
 
   private menuButtonState : MenuButtonState = MenuButtonState.CLOSED;
   private isMenuButtonAnimStart : boolean = false;
@@ -37,9 +37,6 @@ export class MenuButtonComponent implements OnInit{
 
   constructor(private animationBuilder : AnimationBuilder) {
 
-  }
-
-  ngOnInit() {
   }
 
   public buttonAnimate(){

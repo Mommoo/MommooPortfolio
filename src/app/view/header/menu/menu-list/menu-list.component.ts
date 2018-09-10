@@ -25,8 +25,7 @@ export class MenuListComponent {
   @Output('menuListItemClick')
   private readonly menuListItemClickEmitter : EventEmitter<HeaderMenu> = new EventEmitter<HeaderMenu>();
 
-  @ViewChild('nav', {read:ElementRef})
-  private readonly navElementRef : ElementRef;
+  @ViewChild('nav') private readonly navElementRef : ElementRef;
 
   private readonly menuListAnimator : MenuListAnimator;
 

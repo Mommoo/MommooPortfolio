@@ -1,18 +1,18 @@
-import {AfterViewInit, ChangeDetectorRef, Component, ViewChild} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewChild} from '@angular/core';
 import {MenuButtonComponent, MenuButtonEvent, MenuButtonState} from './menu/menu-button/menu-button.component';
-import {MenuListComponent} from './menu/menu-list/menu-list.component';
 import {ViewportDimension, WindowEventService} from '../../common/window-event.service';
+import {MenuListComponent} from './menu/menu-list/menu-list.component';
 
 @Component({
   selector: 'view-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss']
+  styleUrls: ['./header.component.scss'],
+  changeDetection : ChangeDetectionStrategy.OnPush
 })
 
 export class HeaderComponent implements AfterViewInit{
-  @ViewChild(MenuButtonComponent) menuButtonComponent: MenuButtonComponent;
-  @ViewChild(MenuListComponent) menuListComponent: MenuListComponent;
-
+  @ViewChild(MenuButtonComponent) private menuButtonComponent: MenuButtonComponent;
+  @ViewChild(MenuListComponent)   private menuListComponent: MenuListComponent;
 
   constructor(private windowEventService: WindowEventService, private changeDetector : ChangeDetectorRef) {
 
@@ -33,7 +33,7 @@ export class HeaderComponent implements AfterViewInit{
 
       case ViewportDimension.TABLET :
       case ViewportDimension.MOBILE :
-        if (this.menuButtonComponent.getMenuButtonState() === MenuButtonState.OPENED) {
+        if ( this.menuButtonComponent.getMenuButtonState() === MenuButtonState.OPENED ) {
           this.menuListComponent.showMenuItemList(false);
         } else {
           this.menuListComponent.hideMenuItemList(false);

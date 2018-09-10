@@ -28,10 +28,10 @@ nav {
 
 @media all and (min-width: 1025px) {
   nav {
-    display: block !important; } }
+    display: block; } }
 @media all and (max-width: 1024px) {
   nav {
-    display: none !important; }
+    display: none; }
     nav .nav-item {
       padding: 1rem 0; } }
 

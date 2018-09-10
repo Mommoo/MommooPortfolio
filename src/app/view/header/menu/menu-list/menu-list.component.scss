@@ -40,7 +40,7 @@ nav {
 // Desktop
 @media all and (min-width : 1025px) {
   nav {
-    display : block !important;
+    display : block;
   }
 }
 
@@ -48,7 +48,7 @@ nav {
 @media all and (max-width:1024px) {
 
   nav {
-    display : none !important;
+    display : none;
     .nav-item {
       padding : 1rem 0;
     }
