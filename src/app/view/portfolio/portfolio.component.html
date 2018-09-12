@@ -1,15 +1,21 @@
 <ui-label [title]="'Portfolio'" [markColor]="themeColor"></ui-label>
-<mommoo-masonry-layout [maxColumnNum]="4">
-  <mommoo-masonry-tile *ngFor="let projectCardData of projectCardDatas">
+<mommoo-masonry-layout *ngIf="projectCardDataArray"
+                       [layoutTiles]="doLayout"
+                       [maxColumnNum]="masonryLayoutColumnCount">
+  <mommoo-masonry-tile *ngFor="let projectCardData of projectCardDataArray"
+                       [colSpan]="projectCardData.cardColSpan">
     <mommoo-card
       [cardImage]="projectCardData.imagePath"
       [cardImageAnim]="true"
       [cardWidth]="'fit'"
       [cardHeight]="'wrap'"
-      [hashTagMessages]="projectCardData.skillSets"
+      [hashTagMessages]="projectCardData.devSkills"
+      [cardBoxStyle]="{backgroundColor : 'white'}"
+      [themeColor]="themeColor"
       [cardTitle]="projectCardData.title"
       [actionButtonNames]="['Read More']"
-      (actionEventEmitter)="projectCardData.onClickEvent()">
+      (actionEventEmitter)="projectCardData.onClickListener()"
+      (imageLoadedEventEmitter)="projectCardData.onLoadCompleteListener()">
       <view-limited-textarea class="portfolio-card-content"
                              [text]="projectCardData.summary"
                              [limitNumber]="100"></view-limited-textarea>
