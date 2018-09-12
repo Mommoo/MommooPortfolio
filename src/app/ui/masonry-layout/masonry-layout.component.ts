@@ -1,11 +1,12 @@
 import {
-  AfterViewChecked, AfterViewInit,
-  ChangeDetectionStrategy, ChangeDetectorRef,
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ContentChildren,
-  DoCheck,
   ElementRef,
   Input,
+  OnDestroy,
   QueryList,
   ViewChild
 } from '@angular/core';
@@ -20,21 +21,31 @@ import {WindowUtils} from '../common/WindowUtils';
   styleUrls: ['./masonry-layout.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MommooMasonryLayout implements AfterViewChecked, DoCheck, AfterViewInit{
+export class MommooMasonryLayout implements AfterViewInit, OnDestroy {
+  private static ID_INDEX = 0;
+  private readonly WINDOW_DONE_EVENT_ID;
 
   @ViewChild('paddingWrapper')
-  private paddingWrapper : ElementRef;
+  private paddingWrapper : ElementRef<HTMLElement>;
 
   @ContentChildren(MommooMasonryTile)
   private masonryTileQueryList : QueryList<MommooMasonryTile>;
 
   @Input() private maxColumnNum : number = 4;
   @Input() private gutterSize   : number = 10;
+  @Input()
+  private set layoutTiles(isLayoutTiles : boolean) {
+    if ( isLayoutTiles ) {
+      this.layoutMasonryTiles();
+      this.changeDetector.detectChanges();
+    }
+  }
 
   private readonly masonryStyler : MasonryStyler = new MasonryStyler(this.maxColumnNum, this.gutterSize);
 
-  constructor(private changeDetection : ChangeDetectorRef) {
-    changeDetection.markForCheck();
+  constructor(private changeDetector : ChangeDetectorRef) {
+    MommooMasonryLayout.ID_INDEX++;
+    this.WINDOW_DONE_EVENT_ID = `'masonryLayout'${MommooMasonryLayout.ID_INDEX}`;
   }
 
   private nativePaddingWrapperElement() : HTMLElement {
@@ -50,18 +61,7 @@ export class MommooMasonryLayout implements AfterViewChecked, DoCheck, AfterView
       padding : `${MommooMasonryLayout.paddingValue()}px`
     });
 
-    this.masonryStyler.setTiles(this.masonryTileQueryList.toArray());
-
-    WindowUtils.addDoneResizingEvent('masonryLayout', ()=> this.layoutMasonryTiles());
-  }
-
-  ngAfterViewChecked(): void {
-    console.log('[masonry-layout] ngAfterViewChecked!');
-    this.layoutMasonryTiles();
-  }
-
-  ngDoCheck(): void {
-    console.log("[masonry-layout] ngDoCheck");
+    WindowUtils.addDoneResizingEvent(this.WINDOW_DONE_EVENT_ID, ()=> this.layoutMasonryTiles());
   }
 
   private layoutMasonryTiles() : void {
@@ -70,5 +70,9 @@ export class MommooMasonryLayout implements AfterViewChecked, DoCheck, AfterView
     const computedContainerHeight = this.masonryStyler.doMasonryLayout();
     const paddingValue = MommooMasonryLayout.paddingValue();
     this.nativePaddingWrapperElement().style.height = `${computedContainerHeight + (paddingValue*2)}px`;
+  }
+
+  ngOnDestroy(): void {
+    WindowUtils.removeEvent(this.WINDOW_DONE_EVENT_ID);
   }
 }

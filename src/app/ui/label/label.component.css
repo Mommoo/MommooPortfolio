@@ -1,8 +1,6 @@
-@import url("https://fonts.googleapis.com/css?family=Noto+Sans");
 #label-title {
   display: flex;
   padding: 1.5rem 0;
-  font-family: 'Noto Sans', sans-serif;
   font-size: 3rem;
   text-align: center;
   background-color: #dbdbdb;

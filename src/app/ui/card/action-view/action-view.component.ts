@@ -17,7 +17,7 @@ import {CardActionButtonProperty} from '../data-type';
   styleUrls: ['./action-view.component.scss'],
   changeDetection : ChangeDetectionStrategy.OnPush
 })
-export class MommooActionView implements AfterViewChecked {
+export class MommooActionView {
 
   @Input() actionButtonProps : Array<CardActionButtonProperty>;
 
@@ -32,9 +32,4 @@ export class MommooActionView implements AfterViewChecked {
   buttonClicks(buttonName) : void {
     this.actionEventEmitter.emit(buttonName);
   }
-
-  ngAfterViewChecked(): void {
-    console.log('[mommoo-action-view] ngAfterViewChecked');
-  }
-
 }

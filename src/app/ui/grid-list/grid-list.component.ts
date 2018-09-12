@@ -89,7 +89,7 @@ export class MommooGridList implements AfterViewInit, DoCheck, OnChanges, AfterV
       next : value => {
         const [tile, position] = value;
         const tileElementStyle = styleProvider.getTileLayoutStyle(tile.getColSpan(), tile.getRowSpan(), position);
-        Object.assign(value[0].nativeElement().style, tileElementStyle);
+        Object.assign(tile.nativeElement().style, tileElementStyle);
       }
     });
   }

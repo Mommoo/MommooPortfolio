@@ -82,7 +82,7 @@ class MasonryLayoutPropsFinder {
   public computeTilePosition(tile : MommooMasonryTile) : [number, number] {
     const columnIndex = this.findProperColumnIndex(tile.colSpan);
     const top = this.tracker[columnIndex];
-    const needToFillValue = this.tracker[columnIndex] + tile.getHeight() + this.gutterSize;
+    const needToFillValue = this.tracker[columnIndex] + tile.getOffsetHeight() + this.gutterSize;
     this.tracker.fill(needToFillValue, columnIndex, columnIndex + tile.colSpan);
     return [columnIndex, top];
   }

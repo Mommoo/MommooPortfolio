@@ -1,13 +1,15 @@
 import {
-  AfterContentChecked, AfterViewChecked,
-  ChangeDetectionStrategy, ChangeDetectorRef,
+  AfterViewChecked,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter,
   Input,
   OnChanges,
   Output,
-  Renderer2, SimpleChanges
+  Renderer2,
+  SimpleChanges
 } from '@angular/core';
 import {InputValueChecker} from './Input-value-checker';
 import {CardActionButtonProperty, InputDimenType} from './data-type';
@@ -19,7 +21,7 @@ import {CardStyleComputer} from './card-style-computer';
   styleUrls: ['./card.component.scss'],
   changeDetection : ChangeDetectionStrategy.OnPush
 })
-export class MommooCard implements OnChanges, AfterViewChecked {
+export class MommooCard implements OnChanges {
 
   /** wrap or fit or ratio(number) or fixed name(100px) */
   @Input() private cardWidth  : string = InputDimenType.FIT.name();
@@ -34,6 +36,7 @@ export class MommooCard implements OnChanges, AfterViewChecked {
   @Input() hashTagMessages : Array<string>;
   @Input() hashTagBoxStyle : string = '';
   @Output() private actionEventEmitter : EventEmitter<string> = new EventEmitter();
+  @Output() private imageLoadedEventEmitter : EventEmitter<string> = new EventEmitter();
   @Input() set actionButtonNames(names : Array<string>) {
     this.computeProps(names, 'name');
   }
@@ -49,27 +52,23 @@ export class MommooCard implements OnChanges, AfterViewChecked {
   constructor(private hostElementRef : ElementRef, private renderer : Renderer2, private cdr : ChangeDetectorRef) {}
 
   public ngOnChanges(changes: SimpleChanges): void {
-    console.log('[card] ngOnChanges');
     if ( new InputValueChecker(this.cardWidth, this.cardHeight).isNotValidate() ) {
-      new Error(`dimen value you input is not fit the format[ "pair-ratio(1,1)" or "fix(100px)" or "fit" or "wrap"`);
+      throw new Error(`dimen value you input is not fit the format[ "pair-ratio(1,1)" or "fix(100px)" or "fit" or "wrap"`);
     }
-
     const cardStyleComputer = new CardStyleComputer(this.cardWidth, this.cardHeight, this.cardImage, this.themeColor);
+    this._hashTagColor = cardStyleComputer.computeSubThemeColor();
+    this._cardShadowBoxStyle = cardStyleComputer.computeShadowBoxStyle();
+    this.applyStyleToHost(cardStyleComputer.computeRootBoxStyle());
+    this.applyStyleToHost({visibility: 'visible'});
+
     cardStyleComputer.onReady(isImageLoadSuccess => {
       if ( isImageLoadSuccess ) {
-        this._imageStyle   = cardStyleComputer.computeImageStyle();
+        this._imageStyle = cardStyleComputer.computeImageStyle();
       }
-      this._hashTagColor = cardStyleComputer.computeSubThemeColor();
-      this._cardShadowBoxStyle = cardStyleComputer.computeShadowBoxStyle();
-      this.applyStyleToHost(cardStyleComputer.computeRootBoxStyle());
-      this.applyStyleToHost({visibility: 'visible'});
-      this.cdr.markForCheck();
-      console.log('[card] detectChanges!!');
-    });
-  }
 
-  ngAfterViewChecked(): void {
-    console.log('[card] ngAfterViewChecked');
+      this.imageLoadedEventEmitter.emit();
+      this.cdr.detectChanges();
+    });
   }
 
   public actionButtonClicks(buttonName) : void {

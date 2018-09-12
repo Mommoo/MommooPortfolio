@@ -1,14 +1,4 @@
-import {
-  AfterViewChecked,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  Input,
-  OnChanges,
-  OnInit,
-  SimpleChanges
-} from '@angular/core';
+import {ChangeDetectionStrategy, Component, ElementRef, Input} from '@angular/core';
 
 @Component({
   selector: 'mommoo-masonry-tile',
@@ -16,14 +6,9 @@ import {
   styleUrls: ['./masonry-tile.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MommooMasonryTile implements AfterViewChecked, OnInit, OnChanges {
+export class MommooMasonryTile {
 
   private _colSpan : number = 1;
-
-  constructor(private hostElementRef : ElementRef) {
-
-  }
-
   @Input()
   public set colSpan(_colSpan : number) {
     this._colSpan = Math.max(1, _colSpan);
@@ -33,23 +18,15 @@ export class MommooMasonryTile implements AfterViewChecked, OnInit, OnChanges {
     return this._colSpan;
   }
 
+  public constructor(private hostElementRef : ElementRef) {
+
+  }
+
   public setStyles(style : {}) : void {
     Object.assign(this.hostElementRef.nativeElement.style, style);
   }
 
-  public getHeight() : number {
+  public getOffsetHeight() : number {
     return this.hostElementRef.nativeElement.offsetHeight;
-  }
-
-  ngOnInit(): void {
-    console.log('[masonry-tile] onInit');
-  }
-
-  ngAfterViewChecked(): void {
-    console.log('[masonry-tile] ngAfterViewChecked');
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    console.log('[masonry-tile] ngOnChanges');
   }
 }
