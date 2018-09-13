@@ -6,23 +6,12 @@ import {from} from 'rxjs/internal/observable/from';
 import {ProjectCardData} from './portfolio.component';
 import {Observable} from 'rxjs/internal/Observable';
 
-export interface SubscribeHandler {
-  notifyLoadComplete: () => void,
-  notifyLoadCancel: () => void,
-  unSubscribe: () => void
-}
-
-interface SubscriberInfo {
-  subscribeID: any,
-  isLoaded: boolean
-}
-
 @Injectable({
   providedIn: 'root'
 })
 export class CardAsyncLoaderService {
   private static readonly PORTFOLIO_DETAIL_URL = 'http://mommoo.co.kr/porfolio/project/detail';
-  private loadFinder: Map<any, boolean> = new Map<any, boolean>();
+  private loadConfirmArray : Array<boolean>;
   private loadCompleteLister: () => void = () => {
   };
   private isWatchStarted: boolean = false;
@@ -38,6 +27,9 @@ export class CardAsyncLoaderService {
       .get<Array<Project.Detail>>(CardAsyncLoaderService.PORTFOLIO_DETAIL_URL);
 
     projectCardDataArray$.subscribe({
+        next(dataArray){
+          self.loadConfirmArray = new Array(dataArray.length).fill(false, 0, dataArray.length);
+        },
         complete() {
           self.isDataDownLoaded = true;
         }
@@ -47,8 +39,7 @@ export class CardAsyncLoaderService {
     return projectCardDataArray$
       .pipe(
         flatMap(dataArray => from(dataArray)),
-        map(projectDetail => {
-          const subscribeHandler = self.subscribe(projectDetail);
+        map((projectDetail, index) => {
           return {
             title: projectDetail.title,
             imagePath: projectDetail.imagePath,
@@ -56,7 +47,7 @@ export class CardAsyncLoaderService {
             summary: projectDetail.summary,
             description: projectDetail.description,
             onClickListener: () => {},
-            onLoadCompleteListener: () => subscribeHandler.notifyLoadComplete(),
+            onLoadCompleteListener: () => self.notifyLoadComplete(index),
             cardColSpan: projectDetail.devLevel
           };
         }),
@@ -64,24 +55,11 @@ export class CardAsyncLoaderService {
       );
   }
 
-  private subscribe(subscribeID: any): SubscribeHandler {
-    this.loadFinder.set(subscribeID, false);
-    const serviceInstance = this;
-
-    return {
-      notifyLoadComplete() {
-        serviceInstance.loadFinder.set(subscribeID, true);
-        if (serviceInstance.isWatchStarted && serviceInstance.checkTileLoadAllDone()) {
-          serviceInstance.loadCompleteLister();
-        }
-      },
-      notifyLoadCancel() {
-        serviceInstance.loadFinder.set(subscribeID, false);
-      },
-      unSubscribe() {
-        serviceInstance.loadFinder.delete(subscribeID);
-      }
-    };
+  private notifyLoadComplete(index : number) {
+    this.loadConfirmArray[index] = true;
+    if (this.isWatchStarted && this.checkTileLoadAllDone()) {
+      this.loadCompleteLister();
+    }
   }
 
   public startWatch(loadCompleteLister: () => void) {
@@ -98,24 +76,6 @@ export class CardAsyncLoaderService {
     if (!this.isDataDownLoaded) {
       return false;
     }
-    return this.convertMapFinderToArrayFinder()
-      .every(value => value.isLoaded);
-  }
-
-  private convertMapFinderToArrayFinder(): SubscriberInfo[] {
-    const array: SubscriberInfo[] = [];
-    const iterator = this.loadFinder.entries();
-    while (true) {
-      const {value, done} = iterator.next();
-      if (done) {
-        break;
-      }
-      array.push({
-        subscribeID: value[0],
-        isLoaded: value[1]
-      });
-    }
-
-    return array;
+    return this.loadConfirmArray.every(bool => bool);
   }
 }
