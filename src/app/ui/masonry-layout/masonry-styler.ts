@@ -23,15 +23,12 @@ export class MasonryStyler {
 
   // this code line have to operate first than next code lines
   // because at next code lines, using element height that is changed when element width changing
-  public setTiles(masonryTileList : MommooMasonryTile[]) {
+  public initialize(masonryTileList : MommooMasonryTile[], maxColumnNum : number, gutterSize : number) {
     this.masonryTileList = masonryTileList;
-    masonryTileList.forEach(tile => tile.setStyles({width : this.computeColumnWidth(tile.colSpan)}));
-  }
-
-  public setProperty(maxColumnNum : number, gutterSize : number) {
     this.maxColumnNum = maxColumnNum;
     this.gutterSize = gutterSize;
     this.masonryLayoutPropsFinder.initialize(maxColumnNum, gutterSize);
+    masonryTileList.forEach(tile => tile.setStyles({width : this.computeColumnWidth(tile.colSpan)}));
   }
 
   public doMasonryLayout() : number {

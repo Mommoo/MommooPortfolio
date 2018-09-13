@@ -1,13 +1,14 @@
 import {
+  AfterViewChecked,
   AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   ContentChildren,
   ElementRef,
-  Input,
-  OnDestroy,
-  QueryList,
+  Input, OnChanges,
+  OnDestroy, OnInit,
+  QueryList, SimpleChanges,
   ViewChild
 } from '@angular/core';
 import {MommooMasonryTile} from './masonry-tile/masonry-tile.component';
@@ -21,8 +22,9 @@ import {WindowUtils} from '../common/WindowUtils';
   styleUrls: ['./masonry-layout.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MommooMasonryLayout implements AfterViewInit, OnDestroy {
+export class MommooMasonryLayout implements OnInit, AfterViewInit, OnChanges, OnDestroy {
   private static ID_INDEX = 0;
+  private static readonly DEFAULT_PADDING = StyleUtils.getScrollbarWidth();
   private readonly WINDOW_DONE_EVENT_ID;
 
   @ViewChild('paddingWrapper')
@@ -33,10 +35,12 @@ export class MommooMasonryLayout implements AfterViewInit, OnDestroy {
 
   @Input() private maxColumnNum : number = 4;
   @Input() private gutterSize   : number = 10;
+
   @Input()
   private set layoutTiles(isLayoutTiles : boolean) {
     if ( isLayoutTiles ) {
       this.layoutMasonryTiles();
+      this.setStyleToPaddingWrapperElem('opacity', '1');
       this.changeDetector.detectChanges();
     }
   }
@@ -45,34 +49,34 @@ export class MommooMasonryLayout implements AfterViewInit, OnDestroy {
 
   constructor(private changeDetector : ChangeDetectorRef) {
     MommooMasonryLayout.ID_INDEX++;
-    this.WINDOW_DONE_EVENT_ID = `'masonryLayout'${MommooMasonryLayout.ID_INDEX}`;
+    this.WINDOW_DONE_EVENT_ID = `masonryLayout${MommooMasonryLayout.ID_INDEX}`;
   }
 
-  private nativePaddingWrapperElement() : HTMLElement {
-    return this.paddingWrapper.nativeElement;
+  ngOnChanges(changes: SimpleChanges): void {
+    this.layoutMasonryTiles();
   }
 
-  private static paddingValue() : number {
-    return StyleUtils.getScrollbarWidth();
+  ngOnInit(): void {
+    this.setStyleToPaddingWrapperElem('opacity', '0');
   }
 
   ngAfterViewInit(): void {
-    Object.assign(this.nativePaddingWrapperElement().style, {
-      padding : `${MommooMasonryLayout.paddingValue()}px`
-    });
-
+    this.setStyleToPaddingWrapperElem('padding', `${MommooMasonryLayout.DEFAULT_PADDING}px`);
     WindowUtils.addDoneResizingEvent(this.WINDOW_DONE_EVENT_ID, ()=> this.layoutMasonryTiles());
-  }
-
-  private layoutMasonryTiles() : void {
-    this.masonryStyler.setTiles(this.masonryTileQueryList.toArray());
-    this.masonryStyler.setProperty(this.maxColumnNum, this.gutterSize);
-    const computedContainerHeight = this.masonryStyler.doMasonryLayout();
-    const paddingValue = MommooMasonryLayout.paddingValue();
-    this.nativePaddingWrapperElement().style.height = `${computedContainerHeight + (paddingValue*2)}px`;
   }
 
   ngOnDestroy(): void {
     WindowUtils.removeEvent(this.WINDOW_DONE_EVENT_ID);
+  }
+
+  private setStyleToPaddingWrapperElem(propName : string, propValue : string) {
+    this.paddingWrapper.nativeElement.style[propName] = propValue;
+  }
+
+  private layoutMasonryTiles() : void {
+    this.masonryStyler.initialize(this.masonryTileQueryList.toArray(), this.maxColumnNum, this.gutterSize);
+    const containerHeight = this.masonryStyler.doMasonryLayout();
+    const computedLayoutHeight = containerHeight + MommooMasonryLayout.DEFAULT_PADDING * 2;
+    this.setStyleToPaddingWrapperElem('height', `${computedLayoutHeight}px`);
   }
 }
