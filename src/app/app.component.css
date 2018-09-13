@@ -1,18 +1,21 @@
 :host {
   display: flex; }
 
-#content-wrapper-area {
+#contents-area {
   flex-grow: 1; }
 
 #fixed-header-wrapper {
   position: fixed;
-  z-index: 999; }
+  z-index: 100; }
+
+#footer-area {
+  z-index: 200; }
 
 @media all and (min-width: 1025px) {
   :host {
     flex-direction: row; }
 
-  #navigation-header-area {
+  #header-area {
     width: 300px;
     justify-items: stretch; }
 
@@ -23,7 +26,7 @@
   :host {
     flex-direction: column; }
 
-  #navigation-header-area {
+  #header-area {
     width: 100%; }
 
   #fixed-header-wrapper {

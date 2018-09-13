@@ -4,13 +4,17 @@ $expandedHeaderWidth : 300px;
   display : flex;
 }
 
-#content-wrapper-area {
+#contents-area {
   flex-grow : 1;
 }
 
 #fixed-header-wrapper {
   position : fixed;
-  z-index : 999;
+  z-index : 100;
+}
+
+#footer-area {
+  z-index : 200;
 }
 
 // Desktop
@@ -19,7 +23,7 @@ $expandedHeaderWidth : 300px;
     flex-direction : row;
   }
 
-  #navigation-header-area {
+  #header-area {
     width : $expandedHeaderWidth;
     justify-items: stretch;
   }
@@ -36,7 +40,7 @@ $expandedHeaderWidth : 300px;
     flex-direction : column;
   }
 
-  #navigation-header-area {
+  #header-area {
     width : 100%;
   }
 

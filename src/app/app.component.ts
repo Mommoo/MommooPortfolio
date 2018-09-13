@@ -1,4 +1,6 @@
-import {AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, ViewChild} from '@angular/core';
+import {AfterContentInit, ChangeDetectionStrategy, Component, ElementRef, ViewChild} from '@angular/core';
+import {StyleUtils} from './ui/common/style/StyleUtils';
+import {ViewportDimension, WindowEventService} from './common/window-event.service';
 
 /**
  * naviationHeaderArea는 fixedHeader는 position fix 성질을 가진다.
@@ -12,28 +14,67 @@ import {AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, ViewChild
   styleUrls: ['./app.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AppComponent implements AfterViewInit {
-  @ViewChild('navigationHeaderArea')
-  private navigationHeaderAreaElementRef: ElementRef;
+export class AppComponent implements AfterContentInit {
+  @ViewChild('headerArea')
+  private headerAreaElementRef: ElementRef<HTMLElement>;
 
   @ViewChild('fixedHeaderWrapper')
-  private fixedHeaderWrapper: ElementRef;
+  private fixedHeaderWrapper: ElementRef<HTMLElement>;
 
-  ngAfterViewInit(): void {
-    /** fixedHeader가 부모 영역을 벗어나기 때문에,
-     * Header를 복사한 후 fixed 성질을 지우고 부모창에 붙여 block 구조를 살린다. */
-    const fakeHeader = this.cloneHeader();
-    this.navigationHeaderAreaElementRef.nativeElement.appendChild(fakeHeader);
+  @ViewChild('contentsArea')
+  private contentsAreaElementRef : ElementRef<HTMLElement>;
+
+  @ViewChild('footerArea')
+  private footerAreaElementRef : ElementRef<HTMLElement>;
+
+  constructor(private windowEventService : WindowEventService) {}
+
+  ngAfterContentInit(): void {
+    this.attachFakeHeaderForBlockStructure();
+    this.registerChangeTemplateEventForFooter();
   }
 
-  private cloneHeader() : HTMLElement {
-    const cloneHeader = this.fixedHeaderWrapper.nativeElement.cloneNode(true);
-    Object.assign(cloneHeader.style, {
+  /** fixedHeader가 부모 영역을 벗어나기 때문에,
+   * Header를 복사한 후 fixed-header 성질을 지우고 부모창에 붙여 block 구조만 살린다. */
+  private attachFakeHeaderForBlockStructure() {
+    const clonedHeader = this.fixedHeaderWrapper.nativeElement.cloneNode(true) as HTMLElement;
+    const fakeHeader = StyleUtils.styledElement(clonedHeader, {
       position : 'static',
       zIndex : '1',
       boxShadow : 'none'
     });
-    return cloneHeader;
+    this.headerAreaElementRef.nativeElement.appendChild(fakeHeader);
+  }
+
+  private registerChangeTemplateEventForFooter() {
+    this.windowEventService.addViewportDimensionDetectListener(viewportDimension => {
+      switch(viewportDimension) {
+        case ViewportDimension.DESKTOP :
+          this.appendFixedFooterToHeader();
+          break;
+        case ViewportDimension.TABLET :
+        case ViewportDimension.MOBILE :
+          this.appendBlockFooterToContents();
+          break;
+      }
+    }, true)
+  }
+
+  private appendFixedFooterToHeader() {
+    Object.assign(this.footerAreaElementRef.nativeElement.style, {
+      width : `${this.headerAreaElementRef.nativeElement.offsetWidth}px`,
+      position : 'fixed',
+      bottom   : '0'
+    });
+    this.headerAreaElementRef.nativeElement.appendChild(this.footerAreaElementRef.nativeElement);
+  }
+
+  private appendBlockFooterToContents() {
+    Object.assign(this.footerAreaElementRef.nativeElement.style, {
+      width : `100%`,
+      position : 'static'
+    });
+    this.contentsAreaElementRef.nativeElement.appendChild(this.footerAreaElementRef.nativeElement);
   }
 }
 

@@ -1,13 +1,15 @@
 <!-- 본 HTML 파일은, 해당 어플리케이션의 뷰 구조가 어떻게 구성되는지 템플릿을 제공하는것이 목적입니다.
 뷰 템플릿은 크게 3가지로 구성됩니다. 첫번째로, 사용자의 서비스를 안내하고, 이동시킬 네비게이션 헤더 박스.
 두번째로, 사용자에게 서비스를 제공하기 위한 컨텐츠 박스. 마지막으로, 해당 어플리케이션의 메타정보를 제공하는 푸터 박스가 있습니다.
-반응형 웹을 지원하므로, 가변적으로 템플릿이 변합니다.-->
-<div id="navigation-header-area" #navigationHeaderArea>
+반응형 웹을 지원하므로, 가변적으로 템플릿이 변경 됩니다.-->
+<div id="header-area" #headerArea>
   <div id="fixed-header-wrapper" #fixedHeaderWrapper>
-    <view-header id="header"></view-header>
+    <view-header></view-header>
   </div>
 </div>
-<div id="content-wrapper-area">
+<div id="contents-area" #contentsArea>
   <view-contents></view-contents>
-  <div id="footer-area"><view-footer></view-footer></div>
+</div>
+<div id="footer-area" #footerArea>
+  <view-footer></view-footer>
 </div>
