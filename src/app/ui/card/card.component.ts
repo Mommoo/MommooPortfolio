@@ -66,8 +66,8 @@ export class MommooCard implements OnChanges {
         this._imageStyle = cardStyleComputer.computeImageStyle();
       }
 
-      this.imageLoadedEventEmitter.emit();
       this.cdr.detectChanges();
+      this.imageLoadedEventEmitter.emit();
     });
   }
 
