@@ -40,7 +40,8 @@
     flex-grow: 1;
     background: center center no-repeat;
     background-size: contain; }
-  #flex-card-box #hash-tag-container, #flex-card-box #action-view-container {
+  #flex-card-box .container {
+    display: block;
     width: 100%;
     box-sizing: border-box;
     padding: 10px;

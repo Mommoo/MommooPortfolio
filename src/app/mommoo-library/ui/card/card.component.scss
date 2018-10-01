@@ -47,7 +47,8 @@
     background-size: contain;
   }
 
-  #hash-tag-container, #action-view-container {
+  .container {
+    display : block;
     width: 100%;
     box-sizing: border-box;
     padding: 10px;

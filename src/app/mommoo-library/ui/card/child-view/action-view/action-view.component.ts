@@ -1,15 +1,5 @@
-import {
-  AfterViewChecked,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  EventEmitter,
-  Input,
-  Output,
-  QueryList,
-  ViewChildren
-} from '@angular/core';
-import {CardActionButtonProperty} from '../data-type';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output, QueryList, ViewChildren} from '@angular/core';
+import {StyledTextContentContainer} from '../../../common/component/styled-text-content-container.component';
 
 @Component({
   selector: 'mommoo-action-view',
@@ -17,17 +7,17 @@ import {CardActionButtonProperty} from '../data-type';
   styleUrls: ['./action-view.component.scss'],
   changeDetection : ChangeDetectionStrategy.OnPush
 })
-export class MommooActionView {
+export class MommooActionView extends StyledTextContentContainer {
 
-  @Input() actionButtonProps : Array<CardActionButtonProperty>;
-
-  @Input() themeColor : string;
+  @Input() textColor : string;
 
   @Output() actionEventEmitter : EventEmitter<string> = new EventEmitter();
 
   @ViewChildren('buttons') buttons : QueryList<HTMLDivElement>;
 
-  constructor() { }
+  constructor() {
+    super();
+  }
 
   buttonClicks(buttonName) : void {
     this.actionEventEmitter.emit(buttonName);

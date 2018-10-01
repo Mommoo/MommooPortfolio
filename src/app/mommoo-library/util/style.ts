@@ -1,3 +1,5 @@
+import {ElementRef} from '@angular/core';
+
 export class StyleUtils {
   private static SCROLL_BAR_WIDTH;
 
@@ -6,8 +8,12 @@ export class StyleUtils {
     return element;
   }
 
-  public static styledElementByTagName(tagName : string , style : {}) : HTMLElement {
-    return StyleUtils.styledElement(document.createElement(tagName), style);
+  public static styledElementByRef(elementRef : ElementRef, style : {}) : HTMLElement {
+    return this.styledElement(elementRef.nativeElement, style);
+  }
+
+  public static styledNewElement(elemName : string , style : {}) : HTMLElement {
+    return this.styledElement(document.createElement(elemName), style);
   }
 
   public static colorToRGBA(color : string) : [number, number, number, number] {
@@ -23,7 +29,7 @@ export class StyleUtils {
 
   public static getScrollbarWidth() : number {
     if ( StyleUtils.SCROLL_BAR_WIDTH === undefined ) {
-      const outerDiv = this.styledElementByTagName('div', {
+      const outerDiv = this.styledNewElement('div', {
         visibility : 'hidden',
         width : '100px',
         msOverflowStyle : 'scrollbar',
@@ -33,9 +39,7 @@ export class StyleUtils {
       document.body.appendChild(outerDiv);
       const widthWithScroll = outerDiv.offsetWidth;
 
-      const innerDiv = this.styledElementByTagName('div', {
-        width : '100%'
-      });
+      const innerDiv = this.styledNewElement('div', {width : '100%'});
       outerDiv.appendChild(innerDiv);
       const widthWithNoScroll = innerDiv.offsetWidth;
 
