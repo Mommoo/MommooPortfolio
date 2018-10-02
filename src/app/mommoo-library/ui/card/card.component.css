@@ -41,7 +41,7 @@
     background: center center no-repeat;
     background-size: contain; }
   #flex-card-box .container {
-    display: block;
+    display: flex;
     width: 100%;
     box-sizing: border-box;
     padding: 10px;

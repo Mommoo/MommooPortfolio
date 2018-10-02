@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output, QueryList, ViewChildren} from '@angular/core';
-import {StyledTextContentContainer} from '../../../common/component/styled-text-content-container.component';
+import {StyledTextContentContainer} from '../../common/component/styled-text-content-container.component';
 
 @Component({
   selector: 'mommoo-action-view',

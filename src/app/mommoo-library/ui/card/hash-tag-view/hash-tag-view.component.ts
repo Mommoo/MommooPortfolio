@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
-import {StyledTextContentContainer} from '../../../common/component/styled-text-content-container.component';
+import {StyledTextContentContainer} from '../../common/component/styled-text-content-container.component';
 
 @Component({
   selector: 'mommoo-hash-tag-view',

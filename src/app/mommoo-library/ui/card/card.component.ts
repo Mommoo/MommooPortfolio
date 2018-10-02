@@ -56,8 +56,8 @@ export class MommooCard implements OnChanges {
         self._cardShadowBoxStyle = styleComputer.computeShadowBoxStyle();
         self._subThemeColor = styleComputer.computeSubThemeColor();
         self._imageStyle = styleComputer.computeImageStyle();
-        self._imageOnLoadListener();
         self.cdr.detectChanges();
+        self._imageOnLoadListener();
       });
   }
 

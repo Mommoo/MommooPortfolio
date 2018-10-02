@@ -1,9 +1,9 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {MommooCard} from './card.component';
-import {MommooActionView} from './child-view/action-view/action-view.component';
-import {MommooCardImage} from './child-view/card-image/card-image.component';
-import {MommooHashTagView} from './child-view/hash-tag-view/hash-tag-view.component';
+import {MommooActionView} from './action-view/action-view.component';
+import {MommooCardImage} from './card-image-view/card-image.component';
+import {MommooHashTagView} from './hash-tag-view/hash-tag-view.component';
 
 @NgModule({
   imports: [

@@ -1,14 +1,14 @@
 :host {
-  display: block; }
+  width: 100%; }
   :host .align, :host #divider, :host #flex-row-box {
-    width: 95%;
-    margin-left: 2.5%; }
+    width: 90%;
+    margin-left: 5%; }
   :host #divider {
     height: 1px;
     background-color: #ededed; }
   :host #flex-row-box {
     display: flex;
-    padding-top: 6px;
+    padding: 6px 0;
     font-size: 12px;
     font-weight: 100;
     align-items: center;
@@ -16,8 +16,8 @@
     :host #flex-row-box .buttons {
       cursor: pointer; }
       :host #flex-row-box .buttons:nth-child(n) {
-        margin-left: 10px; }
-      :host #flex-row-box .buttons:nth-child(1) {
-        margin-left: 0; }
+        margin-right: 10px; }
+      :host #flex-row-box .buttons:nth-last-child(1) {
+        margin-right: 0; }
 
 /*# sourceMappingURL=action-view.component.css.map */

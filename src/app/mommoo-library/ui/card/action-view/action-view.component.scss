@@ -1,8 +1,8 @@
 :host {
-  display : block;
+  width: 100%;
 
   .align {
-    $width : 95%;
+    $width : 90%;
     width : $width;
     margin-left : (100% - $width)/2;
   }
@@ -16,7 +16,7 @@
   #flex-row-box {
     @extend .align;
     display : flex;
-    padding-top : 6px;
+    padding : 6px 0;
     font-size : 12px;
     font-weight : 100;
     align-items : center;
@@ -26,11 +26,11 @@
       cursor : pointer;
 
       &:nth-child(n) {
-        margin-left : 10px;
+        margin-right : 10px;
       }
 
-      &:nth-child(1) {
-        margin-left : 0;
+      &:nth-last-child(1) {
+        margin-right : 0;
       }
     }
   }

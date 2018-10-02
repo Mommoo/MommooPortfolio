@@ -1,7 +1,0 @@
-{
-"version": 3,
-"mappings": "AAAA,QAAQ;EACN,OAAO,EAAG,YAAY;EACtB,KAAK,EAAG,KAAK;EACb,aAAa,EAAE,IAAI;EACnB,OAAO,EAAG,OAAO;EACjB,SAAS,EAAG,IAAI;EAChB,qBAAe;IACb,YAAY,EAAG,GAAG;EAGpB,0BAAoB;IAClB,YAAY,EAAG,CAAC",
-"sources": ["hash-tag-view.component.scss"],
-"names": [],
-"file": "hash-tag-view.component.css"
-}
