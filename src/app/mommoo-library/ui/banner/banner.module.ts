@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {MommooBanner} from './banner.component';
+import {MommooBanner, MommooBannerSubtitle, MommooBannerTitle} from './banner.component';
 
 @NgModule({
   imports: [
     CommonModule
   ],
-  exports : [MommooBanner],
-  declarations: [MommooBanner]
+  exports : [MommooBanner, MommooBannerTitle, MommooBannerSubtitle],
+  declarations: [MommooBanner, MommooBannerTitle, MommooBannerSubtitle]
 })
 export class MommooBannerModule { }

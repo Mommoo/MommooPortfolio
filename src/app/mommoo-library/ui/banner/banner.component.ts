@@ -1,20 +1,30 @@
-import {Component, OnInit, ChangeDetectionStrategy, Input} from '@angular/core';
-import {COMMON_COLOR} from '../common/mommoo-common';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 
 @Component({
   selector: 'mommoo-banner',
-  templateUrl: './banner.component.html',
+  template: '<ng-content></ng-content>',
   styleUrls: ['./banner.component.scss'],
+  host : {'id' : 'banner'},
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MommooBanner implements OnInit {
-  @Input() public themeColor : string = COMMON_COLOR;
-  @Input() public title : string;
-  @Input() public subTitle : string;
+export class MommooBanner {}
 
-  constructor() { }
+@Component({
+  selector: 'mommoo-banner-title',
+  template: '<ng-content></ng-content>',
+  styleUrls: ['./banner.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host : {'id' : 'banner-title'}
+})
+export class MommooBannerTitle {}
 
-  ngOnInit() {
+@Component({
+  selector: 'mommoo-banner-sub-title',
+  template: '<ng-content></ng-content>',
+  styleUrls: ['./banner.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host : {
+    id : 'banner-sub-title'
   }
-
-}
+})
+export class MommooBannerSubtitle {}
