@@ -1,7 +1,7 @@
-<nav #nav>
+<nav #nav *ngIf="isVisible()">
   <ul>
     <ng-container *ngFor="let menuItemName of menuItemNames;">
-      <li class="nav-item" (click)="menuItemClickEvent(menuItemName)">
+      <li (click)="menuItemClickEvent(menuItemName)">
         {{menuItemName | uppercase}}
       </li>
     </ng-container>

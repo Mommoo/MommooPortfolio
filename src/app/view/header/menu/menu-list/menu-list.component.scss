@@ -13,7 +13,7 @@ nav {
     margin:0;
   }
 
-  .nav-item {
+  li {
     display : block;
     position : relative;
     font-size : 0.8rem;
@@ -24,34 +24,6 @@ nav {
     &:hover{
       font-weight : bold;
       color : #e91e63;
-      //text-decoration: underline;
     }
-  }
-
-  .divider {
-    padding : 0 0.7rem;
-    height: 100%;
-    font-size : 0.8rem;
-    //color : #828282;
-    color : white;
-  }
-}
-
-// Desktop
-@media all and (min-width : 1025px) {
-  nav {
-    display : block;
-  }
-}
-
-//tablet and mobile
-@media all and (max-width:1024px) {
-
-  nav {
-    display : none;
-    .nav-item {
-      padding : 1rem 0;
-    }
-
   }
 }

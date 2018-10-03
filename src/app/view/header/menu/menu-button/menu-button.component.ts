@@ -1,16 +1,7 @@
 import {ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Output, ViewChild} from '@angular/core';
 import {AnimationBuilder} from '@angular/animations';
 import {MenuButtonAnimator} from './menu-button.animator';
-
-export const enum MenuButtonState {
-  OPENED,
-  CLOSED
-}
-
-export const enum MenuButtonEvent {
-  OPEN,
-  CLOSE
-}
+import {MenuButtonEvent, MenuButtonState} from '../../types';
 
 @Component({
   selector: 'view-menu-button',

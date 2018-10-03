@@ -10,29 +10,15 @@ nav {
   nav ul {
     padding: 0;
     margin: 0; }
-  nav .nav-item {
+  nav li {
     display: block;
     position: relative;
     font-size: 0.8rem;
     text-align: center;
     cursor: pointer;
     padding: 10px 0; }
-    nav .nav-item:hover {
+    nav li:hover {
       font-weight: bold;
       color: #e91e63; }
-  nav .divider {
-    padding: 0 0.7rem;
-    height: 100%;
-    font-size: 0.8rem;
-    color: white; }
-
-@media all and (min-width: 1025px) {
-  nav {
-    display: block; } }
-@media all and (max-width: 1024px) {
-  nav {
-    display: none; }
-    nav .nav-item {
-      padding: 1rem 0; } }
 
 /*# sourceMappingURL=menu-list.component.css.map */

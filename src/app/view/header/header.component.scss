@@ -1,4 +1,5 @@
 :host {
+  background-color : #f3f3f3;
   display : block;
   width : 100%;
   height : 100%;
@@ -6,13 +7,12 @@
 #header{
   width : 100%;
   height : 100%;
-  background-color : #f3f3f3;
   color : black;
   display : flex;
   flex-direction: column;
   align-items: center;
 
-  .flex-column-line {
+  #flex-column-line {
     width : 100%;
     padding : 0 1.5rem;
     box-sizing: border-box;
@@ -22,7 +22,7 @@
     justify-content: space-between;
   }
 
-  .title {
+  #title {
     padding : 1rem 0;
     font-size   : 1.5rem;
     font-weight : bold;
@@ -39,11 +39,11 @@
 // Desktop
 @media all and (min-width : 1025px) {
   #header {
-    #title {
+    .title {
       padding : 4rem 0;
     }
   }
-  .menu-button {
+  #menu-button {
     display : none;
   }
 }

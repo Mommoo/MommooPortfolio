@@ -1,39 +1,44 @@
-import {AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewChild} from '@angular/core';
-import {MenuButtonComponent, MenuButtonEvent, MenuButtonState} from './menu/menu-button/menu-button.component';
-import {ViewportDimension, WindowEventService} from '../../common/window-event.service';
+import {AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, ViewChild} from '@angular/core';
+import {MenuButtonComponent} from './menu/menu-button/menu-button.component';
 import {MenuListComponent} from './menu/menu-list/menu-list.component';
+import {WindowEventHandler} from '../../mommoo-library/handler/window/window-event';
+import {ViewportSize} from '../../mommoo-library/handler/window/type';
+import {MenuButtonEvent, MenuButtonState} from './types';
 
 @Component({
   selector: 'view-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
-  changeDetection : ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class HeaderComponent implements AfterViewInit{
-  @ViewChild(MenuButtonComponent) private menuButtonComponent: MenuButtonComponent;
-  @ViewChild(MenuListComponent)   private menuListComponent: MenuListComponent;
+export class HeaderComponent implements AfterViewInit, OnDestroy {
+  private menuButtonStatusChangeEventID;
 
-  constructor(private windowEventService: WindowEventService, private changeDetector : ChangeDetectorRef) {
+  @ViewChild(MenuButtonComponent) private menuButtonComponent: MenuButtonComponent;
+  @ViewChild(MenuListComponent) private menuListComponent: MenuListComponent;
+
+  constructor(private changeDetector: ChangeDetectorRef) {
 
   }
 
   ngAfterViewInit(): void {
-    this.windowEventService.addViewportDimensionDetectListener(viewportDimension => {
-      this.buildMenuListStatus(viewportDimension);
-      this.changeDetector.detectChanges();
-    }, true);
+    this.menuButtonStatusChangeEventID = WindowEventHandler
+      .addViewportChangeEvent(viewportSize => {
+        this.buildMenuListStatus(viewportSize);
+        this.changeDetector.detectChanges();
+      }, true);
   }
 
-  private buildMenuListStatus(viewportDimen : ViewportDimension) : void {
-    switch (viewportDimen) {
-      case ViewportDimension.DESKTOP :
+  private buildMenuListStatus(viewportSize: ViewportSize): void {
+    switch (viewportSize) {
+      case ViewportSize.DESKTOP :
         this.menuListComponent.showMenuItemList(false);
         break;
 
-      case ViewportDimension.TABLET :
-      case ViewportDimension.MOBILE :
-        if ( this.menuButtonComponent.getMenuButtonState() === MenuButtonState.OPENED ) {
+      case ViewportSize.TABLET :
+      case ViewportSize.MOBILE :
+        if (this.menuButtonComponent.getMenuButtonState() === MenuButtonState.OPENED) {
           this.menuListComponent.showMenuItemList(false);
         } else {
           this.menuListComponent.hideMenuItemList(false);
@@ -54,9 +59,13 @@ export class HeaderComponent implements AfterViewInit{
   }
 
   public fireMenuListItemClickEvent(): void {
-    if ( !WindowEventService.isDesktopViewport() ) {
+    if ( WindowEventHandler.getViewportSize() === ViewportSize.DESKTOP ) {
       this.menuButtonComponent.buttonAnimate();
       this.menuListComponent.hideMenuItemList(true);
     }
+  }
+
+  ngOnDestroy(): void {
+    WindowEventHandler.removeEvent(this.menuButtonStatusChangeEventID);
   }
 }

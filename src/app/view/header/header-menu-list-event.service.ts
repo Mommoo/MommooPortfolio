@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HeaderMenu} from './menu/menu-list/menu-list.component';
+import {HeaderMenu} from './types';
 
 export interface HeaderMenuClickEvent {
   (menu : HeaderMenu) : void;
@@ -10,7 +10,7 @@ export class HeaderMenuListEventService {
 
   private readonly eventSubscribeList : HeaderMenuClickEvent[] = [];
 
-  private _notifyEvent(headerMenu : HeaderMenu) {
+  public notifyEvent(headerMenu : HeaderMenu) {
     this.eventSubscribeList.forEach(menuListEvent => menuListEvent(headerMenu));
   }
 

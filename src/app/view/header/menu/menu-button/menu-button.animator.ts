@@ -1,6 +1,6 @@
 import {animate, AnimationBuilder, AnimationPlayer, style} from "@angular/animations";
-import {AnimationSetting} from "../../../../common/animationSetting";
-import {MenuButtonState} from "./menu-button.component";
+import {MenuButtonState} from '../../types';
+import {EASE_IN_TIMING, EASE_OUT_TIMING} from '../../../../data/common/animation';
 
 export class MenuButtonAnimator{
   private onDoneListener : (buttonAnimator : MenuButtonAnimator)=>void = ()=>{};
@@ -42,7 +42,7 @@ export class MenuButtonAnimator{
       style({
         transform : this.menuButtonState === MenuButtonState.CLOSED ? 'rotate(0deg)' : 'rotate(-405deg)'
       }),
-      animate(this.menuButtonState === MenuButtonState.CLOSED ? AnimationSetting.EASE_IN_TIMING : AnimationSetting.EASE_OUT_TIMING,
+      animate(this.menuButtonState === MenuButtonState.CLOSED ? EASE_IN_TIMING : EASE_OUT_TIMING,
         style({
           transform : this.menuButtonState === MenuButtonState.CLOSED ? 'rotate(-405deg)' : 'rotate(0deg)',
           top : this.menuButtonState === MenuButtonState.CLOSED ? '10px' : '0px'
@@ -55,7 +55,7 @@ export class MenuButtonAnimator{
       style({
         opacity : this.menuButtonState === MenuButtonState.CLOSED ? 1 : 0
       }),
-      animate(this.menuButtonState === MenuButtonState.CLOSED ? AnimationSetting.EASE_IN_TIMING : AnimationSetting.EASE_OUT_TIMING,
+      animate(this.menuButtonState === MenuButtonState.CLOSED ? EASE_IN_TIMING : EASE_OUT_TIMING,
         style({
           opacity : this.menuButtonState === MenuButtonState.CLOSED ? 0 : 1,
         }))
@@ -67,7 +67,7 @@ export class MenuButtonAnimator{
       style({
         transform : this.menuButtonState === MenuButtonState.CLOSED ? 'rotate(0deg)' : 'rotate(405deg)'
       }),
-      animate(this.menuButtonState === MenuButtonState.CLOSED ? AnimationSetting.EASE_IN_TIMING : AnimationSetting.EASE_OUT_TIMING,
+      animate(this.menuButtonState === MenuButtonState.CLOSED ? EASE_IN_TIMING : EASE_OUT_TIMING,
         style({
           transform : this.menuButtonState === MenuButtonState.CLOSED ? 'rotate(405deg)' : 'rotate(0deg)',
           top : this.menuButtonState === MenuButtonState.CLOSED ? '10px' : '20px'
