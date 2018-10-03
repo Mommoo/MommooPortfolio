@@ -3,26 +3,24 @@ import {ViewportChangeListener, ViewportSize} from './type';
 export class WindowEventHandler {
   private static readonly RESIZING_HOLD_TIME = 400;
   private static readonly eventFinder = new Map<string, [string, any]>();
+  private static readonly eventIDSession = new Set<string>();
 
-  public static addDoneResizingEvent(eventID: string, eventListener) {
+  public static addDoneResizingEvent(eventListener, initRun: boolean = false) : string {
     let resizeID;
     const doneResizing = () => {
       clearTimeout(resizeID);
       resizeID = setTimeout(eventListener, WindowEventHandler.RESIZING_HOLD_TIME);
     };
 
-    WindowEventHandler.addEvent(eventID, 'resize', doneResizing);
+    return WindowEventHandler.addEvent('resize', doneResizing, initRun);
   }
 
-  public static addResizingEvent(eventID: string, eventListener, initRun: boolean = false) {
-    if (initRun) {
-      eventListener();
-    }
-    WindowEventHandler.addEvent(eventID, 'resize', eventListener);
+  public static addResizingEvent(eventListener, initRun: boolean = false) : string {
+    return WindowEventHandler.addEvent('resize', eventListener, initRun);
   }
 
-  public static addViewportChangeEvent(eventID: string, eventListener: ViewportChangeListener, initRun: boolean = false) {
-    let currentViewportSize: ViewportSize = WindowEventHandler.getViewportSize();
+  public static addViewportChangeEvent(eventListener: ViewportChangeListener, initRun: boolean = false) : string {
+    let currentViewportSize: ViewportSize;
 
     const viewportChangeEvent = () => {
       const viewportDimension = WindowEventHandler.getViewportSize();
@@ -32,11 +30,7 @@ export class WindowEventHandler {
       }
     };
 
-    if (initRun) {
-      eventListener(currentViewportSize);
-    }
-
-    WindowEventHandler.addEvent(eventID, 'resize', viewportChangeEvent);
+    return WindowEventHandler.addEvent('resize', viewportChangeEvent, initRun);
   }
 
   public static hasEventID(eventID: string): boolean {
@@ -73,12 +67,24 @@ export class WindowEventHandler {
     return eventList;
   }
 
-  private static addEvent(eventID: string, eventName: string, callback) {
-    if (WindowEventHandler.hasEventID(eventID)) {
-      console.error(`Event ID : '${eventID}' is already exist.`);
-      return;
-    }
+  private static addEvent(eventName: string, callback, initRun : boolean) : string {
     window.addEventListener(eventName, callback);
+    const eventID = WindowEventHandler.generateEventID();
     WindowEventHandler.eventFinder.set(eventID, [eventName, callback]);
+    if ( initRun ) {
+      callback();
+    }
+    return eventID;
+  }
+
+  private static generateEventID() : string {
+    const digitNumber = 6;
+    let eventID : string;
+    do{
+      eventID = Math.random().toString().substring(2,2+digitNumber);
+    } while(WindowEventHandler.eventIDSession.has(eventID));
+
+    WindowEventHandler.eventIDSession.add(eventID);
+    return eventID;
   }
 }
