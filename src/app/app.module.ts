@@ -7,12 +7,9 @@ import {AppComponent} from './app.component';
 import {FormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {MommooUIModule} from './ui/ui.module';
-import {WindowEventService} from './common/window-event.service';
-import {CommonDataService} from './common/common-data.service';
+import {MommooUIModule} from './mommoo-library/ui/ui.module';
 import {ViewModule} from './view/view.module';
 import {fakeBackendProvider} from './mock-backend/MockBackEndService';
-
 
 @NgModule({
   declarations: [
@@ -26,7 +23,7 @@ import {fakeBackendProvider} from './mock-backend/MockBackEndService';
     MommooUIModule,
     ViewModule
   ],
-  providers: [WindowEventService, CommonDataService, fakeBackendProvider],
+  providers: [fakeBackendProvider],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}
