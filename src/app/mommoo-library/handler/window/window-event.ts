@@ -1,9 +1,10 @@
 import {ViewportChangeListener, ViewportSize} from './type';
+import {NumberIdGenerator} from '../../util/number-id-generator';
 
 export class WindowEventHandler {
   private static readonly RESIZING_HOLD_TIME = 400;
   private static readonly eventFinder = new Map<string, [string, any]>();
-  private static readonly eventIDSession = new Set<string>();
+  private static readonly keyGenerator = new NumberIdGenerator();
 
   public static addDoneResizingEvent(eventListener, initRun: boolean = false) : string {
     let resizeID;
@@ -34,7 +35,7 @@ export class WindowEventHandler {
   }
 
   public static hasEventID(eventID: string): boolean {
-    return WindowEventHandler.eventFinder.has(eventID);
+    return WindowEventHandler.keyGenerator.hasID(eventID);
   }
 
   public static removeEvent(eventID: string) {
@@ -69,22 +70,11 @@ export class WindowEventHandler {
 
   private static addEvent(eventName: string, callback, initRun : boolean) : string {
     window.addEventListener(eventName, callback);
-    const eventID = WindowEventHandler.generateEventID();
+    const eventID = WindowEventHandler.keyGenerator.generate();
     WindowEventHandler.eventFinder.set(eventID, [eventName, callback]);
     if ( initRun ) {
       callback();
     }
-    return eventID;
-  }
-
-  private static generateEventID() : string {
-    const digitNumber = 6;
-    let eventID : string;
-    do{
-      eventID = Math.random().toString().substring(2,2+digitNumber);
-    } while(WindowEventHandler.eventIDSession.has(eventID));
-
-    WindowEventHandler.eventIDSession.add(eventID);
     return eventID;
   }
 }
