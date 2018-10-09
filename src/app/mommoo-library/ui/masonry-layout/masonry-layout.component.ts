@@ -15,7 +15,7 @@ import {
 } from '@angular/core';
 import {MommooMasonryTile} from './masonry-tile/masonry-tile.component';
 import {MasonryStyler} from './masonry-styler';
-import {StyleUtils} from '../../util/style';
+import {DomUtils} from '../../util/dom';
 import {WindowEventHandler} from '../../handler/window/window-event';
 
 @Component({
@@ -25,9 +25,8 @@ import {WindowEventHandler} from '../../handler/window/window-event';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MommooMasonryLayout implements OnInit, AfterViewInit, OnChanges, OnDestroy {
-  private static ID_INDEX = 0;
-  private static readonly DEFAULT_PADDING = StyleUtils.getScrollbarWidth();
-  private readonly WINDOW_DONE_EVENT_ID;
+  private static readonly DEFAULT_PADDING = DomUtils.getScrollbarWidth();
+  private masonryLayoutWindowDoneEventID;
 
   @ViewChild('paddingWrapper')
   private paddingWrapper : ElementRef<HTMLElement>;
@@ -49,10 +48,7 @@ export class MommooMasonryLayout implements OnInit, AfterViewInit, OnChanges, On
 
   private readonly masonryStyler : MasonryStyler = new MasonryStyler(this.maxColumnNum, this.gutterSize);
 
-  constructor(private changeDetector     : ChangeDetectorRef) {
-
-    MommooMasonryLayout.ID_INDEX++;
-    this.WINDOW_DONE_EVENT_ID = `masonryLayout${MommooMasonryLayout.ID_INDEX}`;
+  constructor(private changeDetector : ChangeDetectorRef) {
   }
 
   private isFirstChanged = true;
@@ -70,11 +66,11 @@ export class MommooMasonryLayout implements OnInit, AfterViewInit, OnChanges, On
 
   ngAfterViewInit(): void {
     this.setStyleToPaddingWrapperElem('padding', `${MommooMasonryLayout.DEFAULT_PADDING}px`);
-    WindowEventHandler.addDoneResizingEvent(this.WINDOW_DONE_EVENT_ID, ()=> this.layoutMasonryTiles());
+    this.masonryLayoutWindowDoneEventID = WindowEventHandler.addDoneResizingEvent(()=> this.layoutMasonryTiles());
   }
 
   ngOnDestroy(): void {
-    WindowEventHandler.removeEvent(this.WINDOW_DONE_EVENT_ID);
+    WindowEventHandler.removeEvent(this.masonryLayoutWindowDoneEventID);
   }
 
   private setStyleToPaddingWrapperElem(propName : string, propValue : string) {

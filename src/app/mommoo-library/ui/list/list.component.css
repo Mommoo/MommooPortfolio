@@ -1,0 +1,40 @@
+:host(#list) {
+  display: block;
+  position: relative;
+  padding: 3px 3px 5px 3px;
+  box-sizing: border-box; }
+
+#shadow-visible-rect {
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12); }
+
+:host(#list-title) {
+  background-color: #ececec;
+  padding: 16px;
+  font-size: 22px; }
+
+:host(#list-section) {
+  padding: 0 16px 0 22px; }
+  :host(#list-section) #section-title {
+    padding: 16px 16px 0 16px;
+    color: rgba(0, 0, 0, 0.54);
+    font-weight: 500;
+    font-size: 14px; }
+  :host(#list-section):after {
+    display: block;
+    content: '';
+    height: 1px;
+    width: calc(100% - 22px);
+    background-color: rgba(0, 0, 0, 0.36);
+    margin: 0 auto; }
+  :host(#list-section):last-child:after {
+    height: 0px; }
+  :host(#list-section) #section-content {
+    padding: 16px 16px 16px 22px; }
+
+:host(#list-item) {
+  display: block;
+  padding: 8px 0; }
+
+/*# sourceMappingURL=list.component.css.map */

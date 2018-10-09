@@ -5,6 +5,8 @@ import {MommooCardModule} from './card/card.module';
 import {MommooMasonryModule} from './masonry-layout/mommoo-masonry.module';
 import {MommooCommonModule} from './common/common.module';
 import {MommooBannerModule} from './banner/banner.module';
+import { MommooList } from './list/list.component';
+import {MommooListModule} from './list/list.module';
 
 @NgModule({
   imports: [
@@ -13,13 +15,15 @@ import {MommooBannerModule} from './banner/banner.module';
     MommooGridListModule,
     MommooCardModule,
     MommooMasonryModule,
-    MommooBannerModule
+    MommooBannerModule,
+    MommooListModule
   ],
   exports : [
     MommooGridListModule,
     MommooCardModule,
     MommooMasonryModule,
-    MommooBannerModule
+    MommooBannerModule,
+    MommooListModule
   ],
   declarations: []
 })

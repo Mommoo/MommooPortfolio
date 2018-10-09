@@ -1,6 +1,6 @@
 import {CardDimensionChecker} from './card-dimension-checker';
 import {CardDimensionProp, ImageLoadStatus} from './types';
-import {StyleUtils} from '../../util/style';
+import {DomUtils} from '../../util/dom';
 
 export class CardStyler {
   private cardDimensionChecker: CardDimensionChecker = new CardDimensionChecker();
@@ -41,7 +41,7 @@ export class StyleComputer {
   }
 
   public computeSubThemeColor() : string {
-    const rgba : number[] = StyleUtils.colorToRGBA(this.themeColor);
+    const rgba : number[] = DomUtils.colorToRGBA(this.themeColor);
     return `rgba(${rgba[0]},${rgba[1]},${rgba[2]},${0.7*rgba[3]/255})`;
   }
 

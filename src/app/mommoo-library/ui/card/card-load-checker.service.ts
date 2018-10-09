@@ -10,9 +10,7 @@ export class MommooCardsLoadCheckerService {
 
   public checkCardsLoaded(mommooCards : MommooCard[], onCompleteListener : ()=>void) {
     const checker : boolean[] = new Array(mommooCards.length).fill(false, 0, mommooCards.length);
-    console.log('checkCardsLoaded!!');
     const executeListenerIfAllLoaded = ()=> {
-      console.log('imageAllLoaded!!');
       const isAllLoaded = checker.every(isLoaded => isLoaded);
       if ( isAllLoaded ) {
         onCompleteListener();
