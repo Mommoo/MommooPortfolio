@@ -78,12 +78,28 @@ export class MommooMasonryLayout implements OnInit, AfterViewInit, OnChanges, On
   }
 
   private layoutMasonryTiles() : void {
-    if ( !this.masonryTileQueryList ) {
+    if ( this.isInValidCondition() ) {
       return;
     }
+
     this.masonryStyler.initialize(this.masonryTileQueryList.toArray(), this.maxColumnNum, this.gutterSize);
     const containerHeight = this.masonryStyler.doMasonryLayout();
     const computedLayoutHeight = containerHeight + (MommooMasonryLayout.DEFAULT_PADDING * 2);
     this.setStyleToPaddingWrapperElem('height', `${computedLayoutHeight}px`);
+  }
+
+  private isInValidCondition() {
+    if ( !this.masonryTileQueryList ) {
+      return true;
+    }
+
+    this.masonryTileQueryList
+      .toArray()
+      .filter(tile => tile.colSpan > this.maxColumnNum)
+      .forEach(tile => {
+        throw new Error(`tile span '${tile.colSpan}' is can not be longer than max column '${this.maxColumnNum}' `);
+      });
+
+    return false;
   }
 }
