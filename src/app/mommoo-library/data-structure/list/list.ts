@@ -25,7 +25,18 @@ export class List<T>{
     return this.repo[index];
   }
 
-  public remove(index : number) : boolean {
+  public remove(index : number) : boolean;
+
+  public remove(item : T) : boolean;
+
+  public remove(target : number | T): boolean {
+    let index;
+    if ( typeof target !== 'number' ) {
+      index = this.repo.findIndex(_item => _item === target);
+    } else {
+      index = target;
+    }
+
     if ( index < 0 || this.index < index ) {
       return false;
     }
@@ -38,11 +49,6 @@ export class List<T>{
 
     this.decreaseCapacityIfEnough();
     return true;
-  }
-
-  public removeByItem(item : T) : boolean {
-    const targetIndex = this.repo.findIndex(_item => _item === item);
-    return this.remove(targetIndex);
   }
 
   public forEach(fn : StreamCallback<T, void>) : void {

@@ -1,12 +1,16 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {StyledTextContentContainer} from './component/styled-text-content-container.component';
+import {MommooShadowBox} from './component/shadow-box/shadow-box.component';
+import {MommooRippleModule} from './ripple/ripple.module';
 
 @NgModule({
   imports: [
-    CommonModule
+    CommonModule,
+    MommooRippleModule
   ],
   providers : [],
-  declarations: [StyledTextContentContainer]
+  exports : [StyledTextContentContainer, MommooShadowBox, MommooRippleModule],
+  declarations: [StyledTextContentContainer, MommooShadowBox]
 })
 export class MommooCommonModule { }

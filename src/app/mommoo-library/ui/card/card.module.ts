@@ -4,10 +4,12 @@ import {MommooCard} from './card.component';
 import {MommooActionView} from './action-view/action-view.component';
 import {MommooCardImage} from './card-image-view/card-image.component';
 import {MommooHashTagView} from './hash-tag-view/hash-tag-view.component';
+import {MommooCommonModule} from '../common/common.module';
 
 @NgModule({
   imports: [
-    CommonModule
+    CommonModule,
+    MommooCommonModule
   ],
   exports : [
     MommooCard

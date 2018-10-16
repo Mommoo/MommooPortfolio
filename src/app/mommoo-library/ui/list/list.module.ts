@@ -4,10 +4,12 @@ import {MommooList} from './list.component';
 import { MommooListItem } from './list-item.component';
 import { MommooListTitle } from './list-title.component';
 import { MommooListSection } from './list-section.component';
+import {MommooCommonModule} from '../common/common.module';
 
 @NgModule({
   imports: [
-    CommonModule
+    CommonModule,
+    MommooCommonModule
   ],
   exports : [
     MommooList, MommooListItem, MommooListTitle, MommooListSection

@@ -55,17 +55,7 @@ export class WindowEventHandler {
   }
 
   public static getEventList(): string[] {
-    const eventIterator = WindowEventHandler.eventFinder.keys();
-    const eventList: string[] = [];
-    while (true) {
-      const {value, done} = eventIterator.next();
-      if (done) {
-        break;
-      }
-      eventList.push(value);
-    }
-
-    return eventList;
+    return Array.from(WindowEventHandler.eventFinder.keys());
   }
 
   private static addEvent(eventName: string, callback, initRun : boolean) : string {

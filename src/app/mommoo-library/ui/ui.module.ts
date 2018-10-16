@@ -7,24 +7,19 @@ import {MommooCommonModule} from './common/common.module';
 import {MommooBannerModule} from './banner/banner.module';
 import { MommooList } from './list/list.component';
 import {MommooListModule} from './list/list.module';
+import {MommooButtonModule} from './button/button.module';
+
+const UI_MODULE_LIST = [
+  MommooGridListModule,
+  MommooCardModule,
+  MommooMasonryModule,
+  MommooBannerModule,
+  MommooListModule,
+  MommooButtonModule
+];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    MommooCommonModule,
-    MommooGridListModule,
-    MommooCardModule,
-    MommooMasonryModule,
-    MommooBannerModule,
-    MommooListModule
-  ],
-  exports : [
-    MommooGridListModule,
-    MommooCardModule,
-    MommooMasonryModule,
-    MommooBannerModule,
-    MommooListModule
-  ],
-  declarations: []
+  imports: UI_MODULE_LIST,
+  exports : UI_MODULE_LIST
 })
 export class MommooUIModule { }

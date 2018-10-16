@@ -67,7 +67,8 @@ export class MommooCard implements OnChanges {
 
   private applyStyleToHost(CSSProps : {}) {
     Object
-      .entries(CSSProps)
+      .keys(CSSProps)
+      .map(propName => [propName, CSSProps[propName]])
       .forEach(entry => this.renderer.setStyle(this.hostElementRef.nativeElement, entry[0], entry[1]));
   }
 

@@ -1,0 +1,8 @@
+<mommoo-shadow-box>
+  <div mommooRipple id="flex-wrapper">
+    <img *ngIf="imgPath" [src]="imgPath" [style.width]="getImageSize()" [style.height]="getImageSize()" />
+    <div [style.paddingLeft]="'10px'" [style.fontSize]="size">
+      <ng-content></ng-content>
+    </div>
+  </div>
+</mommoo-shadow-box>

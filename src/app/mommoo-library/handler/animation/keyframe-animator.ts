@@ -1,4 +1,4 @@
-import {AnimationTarget, BasicKeyFrameAnimationConfig, KeyFrameAnimationConfig, KeyFrameAnimationListener, KeyFrames} from './types';
+import {AnimationTarget, BasicKeyframeAnimationConfig, KeyframeAnimationConfig, KeyframeAnimationListener, Keyframe} from './types';
 import {ElementRef} from '@angular/core';
 import {DomUtils} from '../../util/dom';
 import {KeyframesFinder} from './keyframes-finder';
@@ -6,6 +6,7 @@ import {KeyframesFinder} from './keyframes-finder';
 export class KeyframeAnimator {
   private styleElement : HTMLStyleElement;
   private keyFramesFinder = new KeyframesFinder();
+  private relatedElementSets = new Set<HTMLElement>();
 
   private writeStyle(cssString : string) {
     if ( this.styleElement === undefined ) {
@@ -16,39 +17,43 @@ export class KeyframeAnimator {
     this.styleElement.innerHTML = cssString;
   }
 
-  public addKeyFrames(animationName : string, keyFrames : KeyFrames) {
-    this.keyFramesFinder.addKeyFrames(animationName, keyFrames);
+  public addKeyframe(animationName : string, keyframe : Keyframe) {
+    this.keyFramesFinder.addKeyframes(animationName, keyframe);
     this.writeStyle(this.keyFramesFinder.wholeCssKeyFrames());
   }
 
-  public removeKeyFrames(animationName: string) {
-    this.keyFramesFinder.removeKeyFrames(animationName);
+  public removeKeyframe(animationName: string) {
+    this.keyFramesFinder.removeKeyframes(animationName);
     this.writeStyle(this.keyFramesFinder.wholeCssKeyFrames());
   }
 
-  public subscribeAnimationListener(animationName: string, animListener: KeyFrameAnimationListener) {
-    this.keyFramesFinder.addAnimationListener(animationName, animListener);
+  public subscribeAnimationListener(animationName: string, element: HTMLElement, animListener: KeyframeAnimationListener) {
+    this.keyFramesFinder.subscribeAnimationListener(animationName, element, animListener);
   }
 
-  public unSubscribeAnimationListener(animationName: string) {
-    this.keyFramesFinder.removeAnimationListener(animationName);
+  public unSubscribeAnimationListener(animationName: string, element: HTMLElement) {
+    this.keyFramesFinder.unSubscribeAnimationListener(animationName, element);
   }
 
-  public startAnimation(elementRef: ElementRef<HTMLElement>, config: KeyFrameAnimationConfig);
+  public clearAnimationListener(animationName: string) {
+    this.keyFramesFinder
+  }
 
-  public startAnimation(element: HTMLElement, config: KeyFrameAnimationConfig)
+  public startAnimation(elementRef: ElementRef<HTMLElement>, config: KeyframeAnimationConfig);
 
-  public startAnimation(target: AnimationTarget, config: KeyFrameAnimationConfig) {
+  public startAnimation(element: HTMLElement, config: KeyframeAnimationConfig)
+
+  public startAnimation(target: AnimationTarget, config: KeyframeAnimationConfig) {
     const targetElement = DomUtils.takeElementIfWrappedRef(target);
 
-    KeyframeAnimator.readyForAnimationStart(targetElement);
+    this.relatedElementSets.add(targetElement);
 
-    this.keyFramesFinder.addElementToListenerHandler(config.name, targetElement);
+    /** force redraw or reflow to start keyframes animation */
+    KeyframeAnimator.resetKeyframeAnimation(targetElement);
 
+    const animationConfig = Object.assign({...BasicKeyframeAnimationConfig}, config);
 
-    const animationConfig = Object.assign({...BasicKeyFrameAnimationConfig}, config);
-
-    KeyframeAnimator.setKeyFrameConfigToElement(targetElement, animationConfig);
+    KeyframeAnimator.setKeyframeConfigToElement(targetElement, animationConfig);
   }
 
   public pauseAnimation(elementRef: ElementRef<HTMLElement>);
@@ -72,43 +77,29 @@ export class KeyframeAnimator {
     DomUtils.applyStyle(targetElement, {animationPlayState: state})
   }
 
-  private static readyForAnimationStart(element: HTMLElement) {
-    /** clear animation css for re-start */
-    KeyframeAnimator.setKeyFrameConfigToElement(element, BasicKeyFrameAnimationConfig);
-    /** set animation state 'running' for re-start */
-    KeyframeAnimator.setAnimationPlayState(element, 'running');
-  }
-
-  private static setKeyFrameConfigToElement(element: HTMLElement, config: KeyFrameAnimationConfig) {
+  private static setKeyframeConfigToElement(element: HTMLElement, config: KeyframeAnimationConfig) {
     DomUtils.applyStyle(element, {
       animationName: config.name,
       animationDuration: config.duration,
       animationDelay: config.delay,
       animationTimingFunction: config.timingFunction,
       animationFillMode: config.fillMode,
-      animationIterationCount: config.iterationCount,
+      animationIterationCount: config.iterationCount.toString(),
       animationDirection: config.direction
     });
   }
 
-  private static removeAllAnimationCSS(element: HTMLElement) {
-    DomUtils.applyStyle(element, {
-      animationName: '',
-      animationDuration: '',
-      animationDelay: '',
-      animationTimingFunction: '',
-      animationFillMode: '',
-      animationIterationCount: '',
-      animationDirection: '',
-      animationPlayState: ''
-    });
+  private static resetKeyframeAnimation(element: HTMLElement) {
+    element.style.animation = null;
   }
 
   public clear() {
-    this.keyFramesFinder
-      .animationRelatedElements()
-      .forEach(element=> KeyframeAnimator.removeAllAnimationCSS(element));
+    this.relatedElementSets
+      .forEach(element=> KeyframeAnimator.resetKeyframeAnimation(element));
+    this.relatedElementSets.clear();
+
     this.keyFramesFinder.clear();
+
     if ( this.styleElement.parentElement ) {
       this.styleElement.parentElement.removeChild(this.styleElement);
       this.styleElement = null;

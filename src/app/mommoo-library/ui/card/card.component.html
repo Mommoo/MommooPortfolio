@@ -1,4 +1,4 @@
-<div id="shadow-visible-rect" [ngStyle]="_cardShadowBoxStyle">
+<mommoo-shadow-box [ngStyle]="_cardShadowBoxStyle" [radius]="'5px'">
   <div id="flex-card-box" [ngStyle]="cardBoxStyle">
 
     <div *ngIf="cardTitle" id="card-title-box" [ngStyle]="cardTitleBoxStyle">{{cardTitle}}</div>
@@ -29,4 +29,4 @@
                         (actionEventEmitter)="actionButtonClicks($event)">
     </mommoo-action-view>
   </div>
-</div>
+</mommoo-shadow-box>

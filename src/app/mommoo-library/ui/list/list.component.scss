@@ -1,24 +1,16 @@
-@import '../common/style/common-style';
 :host(#list) {
   display: block;
-  position : relative;
-  padding : 3px 3px 5px 3px;
-  box-sizing: border-box;
-}
-
-#shadow-visible-rect {
-  display : flex;
-  flex-direction: column;
-  @include box-shadow;
 }
 
 :host(#list-title){
+  display: block;
   background-color : #ececec;
   padding : 16px;
   font-size : 22px;
 }
 
 :host(#list-section) {
+  display: block;
   padding : 0 16px 0 22px;
 
   #section-title {

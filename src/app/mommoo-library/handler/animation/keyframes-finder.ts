@@ -1,4 +1,4 @@
-import {KeyFrameAnimationListener, KeyFrameAnimationType, KeyFrameAnimationTypes, KeyFramePrefix, KeyFrames} from './types';
+import {KeyframeAnimationListener, KeyframeAnimationType, KeyframeAnimationTypes, KeyframePrefix, Keyframe} from './types';
 import {CssConverter} from './css-converter';
 import {List} from '../../data-structure/list/list';
 
@@ -6,13 +6,13 @@ export class KeyframesFinder {
   /** animationName, [ keyFramesString, elementListenerHandler] */
   private finder = new Map<string, [string, ElementListenerHandler]>();
 
-  public addKeyFrames(animName:string, keyFrames : KeyFrames) {
+  public addKeyframes(animName: string, keyFrames : Keyframe) {
     const keyFramesCssString = CssConverter.convertKeyFramesToCssString(keyFrames);
-    const allBrowserKeyFrameCssString = KeyFramePrefix
+    const allBrowserKeyFrameCSS = KeyframePrefix
       .map(prefix => `${prefix}keyframes ${animName}`)
       .map(keyframePrefix => `${keyframePrefix}${keyFramesCssString}`)
       .join("");
-    this.finder.set(animName, [allBrowserKeyFrameCssString, undefined]);
+    this.finder.set(animName, [allBrowserKeyFrameCSS, new ElementListenerHandler()]);
   }
 
   public wholeCssKeyFrames() : string {
@@ -21,52 +21,27 @@ export class KeyframesFinder {
       .join("");
   }
 
-  public removeKeyFrames(animName: string) {
-    this.removeAnimationListener(animName);
+  public removeKeyframes(animName: string) {
+    this.finder.get(animName)[1].clear();
     this.finder.delete(animName);
   }
 
-  public addAnimationListener(animName: string, animListener: KeyFrameAnimationListener) {
-    const [keyFrames, handler] = this.finder.get(animName);
-    if ( handler === undefined ) {
-      this.finder.set(animName, [keyFrames, new ElementListenerHandler(animListener)]);
-    }
+  public subscribeAnimationListener(animName: string, element: HTMLElement, animationListener: KeyframeAnimationListener) {
+    this.finder.get(animName)[1].subscribeEvent(element, animationListener);
+  }
+
+  public unSubscribeAnimationListener(animName: string, element: HTMLElement) {
+    this.finder.get(animName)[1].unSubscribeEvent(element);
   }
 
   public removeAnimationListener(animName: string) {
-    const [keyFrames, handler] = this.finder.get(animName);
-    if ( handler !== undefined ) {
-      handler.clear();
-    }
-    this.finder.set(animName, [keyFrames, undefined]);
-  }
-
-  public addElementToListenerHandler(animName:string, element: HTMLElement) {
-    if ( this.finder.get(animName)[1] ) {
-      this.finder.get(animName)[1].subscribeEvent(element);
-    }
-  }
-
-  public removeElementToListenerHandler(animName: string, element: HTMLElement) {
-    if ( this.finder.get(animName)[1] ) {
-      this.finder.get(animName)[1].unSubscribeEvent(element);
-    }
-  }
-
-  public animationRelatedElements() : List<HTMLElement> {
-    const relatedElementList = new List<HTMLElement>();
-
-    Array.from(this.finder.values())
-      .map(frames => frames[1].elementList())
-      .forEach(elementList => relatedElementList.addAll(elementList));
-
-    return relatedElementList;
+    this.finder.get(animName)[1].clear();
   }
 
   /** clear all of object at memory */
   public clear() {
     Array.from(this.finder.keys())
-      .forEach(animationName => this.removeKeyFrames(animationName));
+      .forEach(animationName => this.removeKeyframes(animationName));
     this.finder.clear();
   }
 
@@ -78,55 +53,55 @@ export class KeyframesFinder {
 }
 
 class ElementListenerHandler {
-  private readonly elementSets = new Set<HTMLElement>();
-  private readonly callbackEvent;
+  private readonly elementEventFinder = new Map<HTMLElement, any>();
 
-  public constructor(listener: KeyFrameAnimationListener) {
-    this.callbackEvent = (event) => {
+  public static createKeyframesEventListener(element: HTMLElement, eventListener: KeyframeAnimationListener) {
+    return (event) => {
       switch(event.type) {
         case "animationstart":
-          listener(KeyFrameAnimationType.ANIMATION_START);
+          eventListener(KeyframeAnimationType.ANIMATION_START);
           break;
         case "animationend":
-          listener(KeyFrameAnimationType.ANIMATION_END);
+          eventListener(KeyframeAnimationType.ANIMATION_END);
           break;
         case "animationiteration":
-          listener(KeyFrameAnimationType.ANIMATION_ITERATION);
+          eventListener(KeyframeAnimationType.ANIMATION_ITERATION);
           break;
         default:
           break;
       }
-    };
+    }
   }
 
-  public subscribeEvent(element: HTMLElement) {
-    if ( this.elementSets.has(element) ){
+  public subscribeEvent(element: HTMLElement, eventListener: KeyframeAnimationListener) {
+    if ( this.elementEventFinder.has(element) ){
       return;
     }
-    this.elementSets.add(element);
-    KeyFrameAnimationTypes
-      .forEach(eventName => element.addEventListener(eventName, this.callbackEvent))
+    const keyframesEventListener = ElementListenerHandler.createKeyframesEventListener(element, eventListener);
+    this.elementEventFinder.set(element, keyframesEventListener);
+    KeyframeAnimationTypes
+      .forEach(eventName => element.addEventListener(eventName, keyframesEventListener));
   }
 
   public unSubscribeEvent(element: HTMLElement) {
-    if ( this.elementSets.has(element) ){
+    if ( this.elementEventFinder.has(element) ){
       this.removeAllListenerAt(element);
-      this.elementSets.delete(element);
+      this.elementEventFinder.delete(element);
     }
   }
 
   public elementList(): List<HTMLElement> {
-    return new List<HTMLElement>(...Array.from(this.elementSets));
+    return new List<HTMLElement>(...Array.from(this.elementEventFinder.keys()));
   }
 
   public clear() {
-    this.elementSets.forEach(element=> this.removeAllListenerAt(element))
-    this.elementSets.clear();
+    this.elementEventFinder.forEach(element=> this.removeAllListenerAt(element));
+    this.elementEventFinder.clear();
   }
 
   private removeAllListenerAt(element: HTMLElement) {
-    KeyFrameAnimationTypes
-      .forEach(eventName => element.removeEventListener(eventName, this.callbackEvent))
+    KeyframeAnimationTypes
+      .forEach(eventName => element.removeEventListener(eventName, this.elementEventFinder.get(element)));
   }
 
   public toString(): string {

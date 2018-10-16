@@ -2,6 +2,9 @@
   display : flex;
   flex-direction: column;
   justify-items: center;
+  // IE10 is not exist 'justify-items' property so,
+  // write 'text-align' property to align title and subtitle to center
+  text-align: center;
 }
 
 :host(#banner-title) {

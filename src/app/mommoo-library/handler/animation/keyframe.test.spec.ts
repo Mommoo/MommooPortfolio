@@ -38,14 +38,14 @@ describe('keyframes-finder test', ()=> {
   const keyframesFinder = new KeyframesFinder();
   beforeEach(()=>{
     [1, 2, 3].forEach(value=> {
-      keyframesFinder.addKeyFrames(`mommoo${value}`, mockKeyFrames)
+      keyframesFinder.addKeyframes(`mommoo${value}`, mockKeyFrames)
     })
   });
   it('keyframes-finder size test', ()=>{
     const finder = (keyframesFinder as any).finder;
     expect(finder.size).toEqual(3);
     keyframesFinder.addElementToListenerHandler('mommoo1', document.createElement('div'));
-    keyframesFinder.addAnimationListener('mommoo1', ()=>{
+    keyframesFinder.setAnimationListener('mommoo1', ()=>{
       console.log('foo!!');
     });
     keyframesFinder.addElementToListenerHandler('mommoo1', document.createElement('div'));
@@ -65,7 +65,7 @@ describe('keyframeAnimator test', ()=>{
     });
     mommooDiv.appendChild(document.createTextNode('Mommoo!!'));
     document.body.appendChild(mommooDiv);
-    keyframeAnimator.addKeyFrames('mommoo', mockKeyFrames2);
+    keyframeAnimator.addKeyframe('mommoo', mockKeyFrames2);
     keyframeAnimator.startAnimation(mommooDiv, {
       name: 'mommoo',
       duration: '3000ms',

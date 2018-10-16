@@ -1,7 +1,0 @@
-{
-"version": 3,
-"mappings": "AAAA,SAAS;EACP,OAAO,EAAG,IAAI;EACd,cAAc,EAAE,MAAM;EACtB,aAAa,EAAE,MAAM;;AAGvB,oBAAqB;EACnB,WAAW,EAAG,GAAG;EACjB,UAAU,EAAG,MAAM;EACnB,SAAS,EAAC,IAAI;;AAGhB,wBAAyB;EACvB,UAAU,EAAG,MAAM;EACnB,KAAK,EAAG,mBAAmB",
-"sources": ["banner.component.scss"],
-"names": [],
-"file": "banner.component.css"
-}

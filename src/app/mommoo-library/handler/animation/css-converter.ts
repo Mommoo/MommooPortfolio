@@ -1,4 +1,4 @@
-import {KeyFrames} from './types';
+import {Keyframe} from './types';
 
 export class CssConverter {
   private static readonly UPPERCASE_PATTERN = /[A-Z]/g;
@@ -13,7 +13,7 @@ export class CssConverter {
     return `{`+objectCssString+'}'
   }
 
-  public static convertKeyFramesToCssString(keyFrames : KeyFrames) {
+  public static convertKeyFramesToCssString(keyFrames : Keyframe) {
     const keyFrameCssString = Object.keys(keyFrames)
       .map(key => `${key}${this.convertObjectToCSS(keyFrames[key])}`)
       .join("");
