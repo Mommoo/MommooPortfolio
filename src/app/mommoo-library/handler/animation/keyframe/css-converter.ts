@@ -1,4 +1,4 @@
-import {Keyframe} from './types';
+import {Keyframe} from '../types';
 
 export class CssConverter {
   private static readonly UPPERCASE_PATTERN = /[A-Z]/g;

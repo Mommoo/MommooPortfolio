@@ -5,6 +5,8 @@
   // IE10 is not exist 'justify-items' property so,
   // write 'text-align' property to align title and subtitle to center
   text-align: center;
+
+  padding-bottom: 16px;
 }
 
 :host(#banner-title) {

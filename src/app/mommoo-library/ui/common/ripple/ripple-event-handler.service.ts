@@ -1,11 +1,12 @@
 import {ElementRef, Injectable} from '@angular/core';
-import {OnPressEventListener, OnReleaseEventListener, onRippleDoneEventListener, RippleRef} from './ripple-types';
+import {OnPressEventListener, OnReleaseEventListener, onRippleDoneEventListener, OnTriggerEventListener, RippleRef} from './ripple-types';
 import {DomUtils} from '../../../util/dom';
 
 @Injectable()
 export class RippleEventHandler{
   private eventMapper = new Map<string, any>();
   private isTouchStart = false;
+  private onTriggerEventListener: OnTriggerEventListener = DomUtils.emptyEventListener;
   private onPressEventListener: OnPressEventListener = DomUtils.emptyEventListener;
   private onReleaseEventListener: OnReleaseEventListener = DomUtils.emptyEventListener;
   private onRippleDoneEventListener: onRippleDoneEventListener = DomUtils.emptyEventListener;
@@ -37,7 +38,7 @@ export class RippleEventHandler{
     if ( this.isTouchStart ) {
       return;
     }
-
+    this.onTriggerEventListener(event);
     this.onPressEventListener(event.pageX, event.pageY);
   }
 
@@ -45,12 +46,19 @@ export class RippleEventHandler{
     event.preventDefault();
     this.isTouchStart = true;
 
+    this.onTriggerEventListener(event);
+
     Array.from(event.changedTouches)
       .forEach(touch=> this.onPressEventListener(touch.pageX, touch.pageY));
   }
 
   private onPointerUpEvent() {
     this.onReleaseEventListener();
+  }
+
+  public setOnTriggerEventListener(onTriggerEventListener: OnTriggerEventListener) {
+    this.onTriggerEventListener = onTriggerEventListener;
+    return this;
   }
 
   public setOnPressEventListener(onPressEventListener: OnPressEventListener) {

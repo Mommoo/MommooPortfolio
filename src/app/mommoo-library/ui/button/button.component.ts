@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, ElementRef, Input} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, HostListener, Input, Output} from '@angular/core';
 import {NumberUtils} from '../../util/number';
 
 @Component({
@@ -9,18 +9,21 @@ import {NumberUtils} from '../../util/number';
 })
 export class MommooButton {
   private static readonly DEFAULT_SIZE = 12;
-  public duration = 2000;
+  @Output() public rippleClick: EventEmitter<Event> = new EventEmitter();
   @Input() public imgPath : string = '';
   @Input() public size : string = `${MommooButton.DEFAULT_SIZE}px`;
+  @Input() public flat: boolean = false;
 
-  constructor() { }
+  constructor() {
+
+  }
+
+  public onRippleClick(event: Event){
+    this.rippleClick.emit(event);
+  }
 
   public getImageSize() : string {
     const imgNumSize = NumberUtils.changePxToNumber(this.size, MommooButton.DEFAULT_SIZE) * 2;
     return `${imgNumSize}px`;
-  }
-
-  public onClick(){
-    this.duration -= 500;
   }
 }

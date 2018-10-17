@@ -1,6 +1,6 @@
-import {AnimationTarget, BasicKeyframeAnimationConfig, KeyframeAnimationConfig, KeyframeAnimationListener, Keyframe} from './types';
+import {AnimationTarget, BasicKeyframeAnimationConfig, KeyframeAnimationConfig, KeyframeAnimationListener, Keyframe} from '../types';
 import {ElementRef} from '@angular/core';
-import {DomUtils} from '../../util/dom';
+import {DomUtils} from '../../../util/dom';
 import {KeyframesFinder} from './keyframes-finder';
 
 export class KeyframeAnimator {
@@ -36,7 +36,7 @@ export class KeyframeAnimator {
   }
 
   public clearAnimationListener(animationName: string) {
-    this.keyFramesFinder
+    this.keyFramesFinder.removeAnimationListener(animationName);
   }
 
   public startAnimation(elementRef: ElementRef<HTMLElement>, config: KeyframeAnimationConfig);

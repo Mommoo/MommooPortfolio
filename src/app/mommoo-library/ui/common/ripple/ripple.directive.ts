@@ -1,19 +1,19 @@
-import {Directive, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
+import {Directive, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges} from '@angular/core';
 import {RippleRenderer} from './ripple-renderer.service';
 import {List} from '../../../data-structure/list/list';
 import {RippleRef, RippleState} from './ripple-types';
 import {RippleEventHandler} from './ripple-event-handler.service';
 import {RippleAnimator} from './ripple-animator';
-import {DomUtils} from '../../../util/dom';
 import {RippleConfig} from './ripple-config';
 
+//TODO RIpple은 어쩔수 없다... 이걸 적용하는새끼는 그냥.. relative로 하는 수밖에..
 @Directive({
   selector: '[mommooRipple]',
   providers: [RippleEventHandler, RippleRenderer, RippleAnimator, RippleConfig]
 })
 export class MommooRipple implements OnInit, OnDestroy, OnChanges {
-  @Input()
-  private rippleDone: ()=>void = DomUtils.emptyEventListener;
+  @Output()
+  private rippleDone: EventEmitter<Event> = new EventEmitter<Event>();
 
   @Input()
   private rippleColor: string = 'rgba(0,0,0,0.25)';
@@ -25,6 +25,7 @@ export class MommooRipple implements OnInit, OnDestroy, OnChanges {
   private rippleFadeOutDuration: number = 350;
 
   private activityRipples = new List<RippleRef>();
+  private triggerEvent: Event;
 
   constructor(private rippleRenderer: RippleRenderer,
               private rippleEventHandler: RippleEventHandler,
@@ -34,6 +35,7 @@ export class MommooRipple implements OnInit, OnDestroy, OnChanges {
 
   ngOnInit(): void {
     this.rippleEventHandler
+      .setOnTriggerEventListener(event => this.triggerEvent = event)
       .setOnPressEventListener((pageX, pageY) => this.onPressEvent(pageX, pageY))
       .setOnReleaseEventListener(()=> this.onReleaseEvent())
       .setOnRippleDoneEventListener(rippleRef => this.onRippleDoneEvent(rippleRef));
@@ -52,8 +54,9 @@ export class MommooRipple implements OnInit, OnDestroy, OnChanges {
   }
 
   private onPressEvent(pageX: number, pageY: number) {
-    const rippleRef = this.rippleRenderer.renderRippleFadeIn(pageX, pageY);
+    const rippleRef = this.rippleRenderer.renderRippleFadeIn(this.triggerEvent, pageX, pageY);
     this.activityRipples.add(rippleRef);
+    this.triggerEvent = undefined;
   }
 
   private onReleaseEvent() {
@@ -68,9 +71,9 @@ export class MommooRipple implements OnInit, OnDestroy, OnChanges {
   }
 
   private onRippleDoneEvent(rippleRef: RippleRef) {
-    rippleRef.destroy();
     this.activityRipples.remove(rippleRef);
-    this.rippleDone();
+    this.rippleDone.emit(rippleRef.triggerEvent);
+    rippleRef.destroy();
   }
 
   ngOnDestroy(): void {

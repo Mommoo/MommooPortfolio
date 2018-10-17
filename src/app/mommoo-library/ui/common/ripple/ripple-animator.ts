@@ -1,4 +1,4 @@
-import {KeyframeAnimator} from '../../../handler/animation/keyframe-animator';
+import {KeyframeAnimator} from '../../../handler/animation/keyframe/keyframe-animator';
 import {KeyframeAnimationConfig, KeyframeAnimationListener, KeyframeAnimationType} from '../../../handler/animation/types';
 import {Injectable} from '@angular/core';
 import {RippleRef, RippleState} from './ripple-types';

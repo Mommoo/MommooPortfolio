@@ -1,6 +1,6 @@
-import {KeyframeAnimationListener, KeyframeAnimationType, KeyframeAnimationTypes, KeyframePrefix, Keyframe} from './types';
+import {KeyframeAnimationListener, KeyframeAnimationType, KeyframeAnimationTypes, KeyframePrefix, Keyframe} from '../types';
 import {CssConverter} from './css-converter';
-import {List} from '../../data-structure/list/list';
+import {List} from '../../../data-structure/list/list';
 
 export class KeyframesFinder {
   /** animationName, [ keyFramesString, elementListenerHandler] */
@@ -95,7 +95,7 @@ class ElementListenerHandler {
   }
 
   public clear() {
-    this.elementEventFinder.forEach(element=> this.removeAllListenerAt(element));
+    this.elementEventFinder.forEach((listener, element)=> this.removeAllListenerAt(element));
     this.elementEventFinder.clear();
   }
 

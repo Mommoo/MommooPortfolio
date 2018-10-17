@@ -13,10 +13,11 @@ export class RippleRenderer {
 
   }
 
-  public renderRippleFadeIn(pageX: number, pageY: number) : RippleRef {
+  public renderRippleFadeIn(triggerEvent: Event, pageX: number, pageY: number) : RippleRef {
     const rippleDomFragment = this.createRippleDomFragment(pageX, pageY);
     const rippleRef: RippleRef = {
       view: rippleDomFragment.rippleElement,
+      triggerEvent: triggerEvent,
       executeFadeOutNextFadeIn: false,
       status: RippleState.NONE,
       destroy: ()=> rippleDomFragment.destroy()

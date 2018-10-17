@@ -15,6 +15,7 @@ import {MommooGridTile} from './grid-tile/grid-tile.component';
 import {TileCoordinator} from './tile-coordinator';
 import {FixedStyleProvider, RatioStyleProvider, StyleProvider} from './style-provider';
 import {from, zip} from 'rxjs';
+import {DomUtils} from '../../util/dom';
 
 @Component({
   selector: 'mommoo-grid-list',
@@ -72,15 +73,11 @@ export class MommooGridList implements AfterViewInit, DoCheck, OnChanges, AfterV
     }
   }
 
-  private nativeElement() : HTMLElement {
-    return this.hostElementRef.nativeElement;
-  }
-
   private layoutTiles() : void {
     const computedResult = new TileCoordinator().compute(this.maxColumnNum, this.gridTileQueryList.toArray());
     const styleProvider  = this.getProperStyleProvider();
     const gridListElemStyle = styleProvider.getGridListLayoutStyle(computedResult.numRows);
-    Object.assign(this.nativeElement().style, gridListElemStyle);
+    DomUtils.applyStyle(this.hostElementRef, gridListElemStyle);
 
     const tile$ = from(this.gridTileQueryList.toArray());
     const tilePositions$ = from(computedResult.positions);

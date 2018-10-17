@@ -6,10 +6,11 @@ export class RippleDomFragment{
   private readonly _rippleElement: HTMLElement;
 
   public constructor(private rippleConfig: RippleConfig) {
-    this._wrapperElement = this.createRippleWrapper();
+    this.setRippleContainerStyle();
+    // this._wrapperElement = this.createRippleWrapper();
     this._rippleElement  = this.createRippleElement();
-    this._wrapperElement.appendChild(this.rippleElement);
-    document.body.appendChild(this._wrapperElement);
+    this.rippleConfig.container.appendChild(this._rippleElement);
+    // this._wrapperElement.appendChild(this.rippleElement);
   }
 
   public get rippleElement() {
@@ -17,8 +18,17 @@ export class RippleDomFragment{
   }
 
   public destroy() {
-    this._wrapperElement.removeChild(this._rippleElement);
-    this._wrapperElement.parentElement.removeChild(this._wrapperElement);
+    this._rippleElement.parentElement.removeChild(this._rippleElement);
+    // this._wrapperElement.removeChild(this._rippleElement);
+    // this._wrapperElement.parentElement.removeChild(this._wrapperElement);
+  }
+
+  /** ripple container have to be position 'relative' and  overflow 'hidden' */
+  private setRippleContainerStyle() {
+    DomUtils.applyStyle(this.rippleConfig.container, {
+      position: 'relative',
+      overflow: 'hidden'
+    })
   }
 
   private createRippleWrapper() : HTMLElement {
@@ -30,7 +40,7 @@ export class RippleDomFragment{
       height: `${containerPosition.height}px`,
       overflow : 'hidden',
       position : 'absolute',
-      zIndex : 99,
+      zIndex : 2,
       backgroundColor : 'rgba(0,0,0,0)',
       pointerEvents: 'none'
     });
@@ -48,9 +58,11 @@ export class RippleDomFragment{
     return DomUtils.styledNewElement({
       width: size,
       height: size,
+      position: 'absolute',
       backgroundColor: this.rippleConfig.color,
-      marginLeft: `-${radius - x}px`,
-      marginTop: `-${radius - y}px`,
+      left: `-${radius - x}px`,
+      top: `-${radius - y}px`,
+      zIndex:2,
       borderRadius: '50%',
       pointerEvents: 'none'
     });

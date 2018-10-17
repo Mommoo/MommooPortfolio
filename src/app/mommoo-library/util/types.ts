@@ -257,7 +257,7 @@ export interface DomCSSStyle {
   perspective?: string | null;
   perspectiveOrigin?: string | null;
   pointerEvents?: string | null;
-  position?: string | null;
+  position?: 'absolute' | 'fixed' | 'relative' | 'static' | string | null;
   quotes?: string | null;
   resize?: string | null;
   right?: string | null;
