@@ -46,6 +46,7 @@ export class MasonryStyler {
 }
 
 class MasonryLayoutPropsFinder {
+  private trackerSet = new Set<number>();
   private tracker;
 
   constructor(maxColumnNum: number, private gutterSize: number) {
@@ -72,7 +73,10 @@ class MasonryLayoutPropsFinder {
   }
 
   private computeAscendingDistinctTracker() {
-    const distinctTracker: Array<number> = Array.from(new Set(this.tracker)) as Array<number>;
+    /** remove duplicated value */
+    this.tracker.forEach(stockHeight=> this.trackerSet.add(stockHeight));
+    const distinctTracker: number[] = Array.from(this.trackerSet);
+    this.trackerSet.clear();
     return distinctTracker.sort((a, b) => a - b);
   }
 
@@ -83,12 +87,18 @@ class MasonryLayoutPropsFinder {
     const isNotOverEndColumn = () => startIndex + colSpan <= maxColumnSize;
 
     while (isNotOverEndColumn()) {
-      const isInterruptedToAnotherTile =
-        this.tracker.slice(startIndex, startIndex + colSpan)
-          .filter(value => value > stockHeight).length !== 0;
-
+      const needToCheckTrackerSlice = this.tracker.slice(startIndex, startIndex + colSpan);
+      let interruptedIndex = -1;
+      for (let index = 0; index < needToCheckTrackerSlice.length; index++) {
+        const checkStockHeight = needToCheckTrackerSlice[index];
+        if ( checkStockHeight > stockHeight ) {
+          interruptedIndex = index;
+          break;
+        }
+      }
+      const isInterruptedToAnotherTile = interruptedIndex !== -1;
       if ( isInterruptedToAnotherTile ) {
-        startIndex += colSpan;
+        startIndex += interruptedIndex + 1;
         continue;
       }
 
