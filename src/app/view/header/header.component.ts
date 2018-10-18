@@ -1,8 +1,8 @@
 import {AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, ViewChild} from '@angular/core';
 import {MenuButtonComponent} from './menu/menu-button/menu-button.component';
 import {MenuListComponent} from './menu/menu-list/menu-list.component';
-import {WindowEventHandler} from '../../mommoo-library/handler/window/window-event';
-import {ViewportSize} from '../../mommoo-library/handler/window/type';
+import {WindowEventHandler} from '../../../mommoo-library/handler/window/window-event';
+import {ViewportSize} from '../../../mommoo-library/handler/window/type';
 import {MenuButtonEvent, MenuButtonState} from './types';
 
 @Component({
@@ -13,10 +13,15 @@ import {MenuButtonEvent, MenuButtonState} from './types';
 })
 
 export class HeaderComponent implements AfterViewInit, OnDestroy {
+  public headerTitle : string = `Mommoo\nPortfolio`;
+
   private menuButtonStatusChangeEventID;
 
-  @ViewChild(MenuButtonComponent) private menuButtonComponent: MenuButtonComponent;
-  @ViewChild(MenuListComponent) private menuListComponent: MenuListComponent;
+  @ViewChild(MenuButtonComponent)
+  private menuButtonComponent: MenuButtonComponent;
+
+  @ViewChild(MenuListComponent)
+  private menuListComponent: MenuListComponent;
 
   constructor(private changeDetector: ChangeDetectorRef) {
 
@@ -31,19 +36,14 @@ export class HeaderComponent implements AfterViewInit, OnDestroy {
   }
 
   private buildMenuListStatus(viewportSize: ViewportSize): void {
-    switch (viewportSize) {
-      case ViewportSize.DESKTOP :
+    if ( viewportSize === ViewportSize.DESKTOP ) {
+      this.menuListComponent.showMenuItemList(false);
+    } else {
+      if (this.menuButtonComponent.getMenuButtonState() === MenuButtonState.OPENED) {
         this.menuListComponent.showMenuItemList(false);
-        break;
-
-      case ViewportSize.TABLET :
-      case ViewportSize.MOBILE :
-        if (this.menuButtonComponent.getMenuButtonState() === MenuButtonState.OPENED) {
-          this.menuListComponent.showMenuItemList(false);
-        } else {
-          this.menuListComponent.hideMenuItemList(false);
-        }
-        break;
+      } else {
+        this.menuListComponent.hideMenuItemList(false);
+      }
     }
   }
 
@@ -59,7 +59,7 @@ export class HeaderComponent implements AfterViewInit, OnDestroy {
   }
 
   public fireMenuListItemClickEvent(): void {
-    if ( WindowEventHandler.getViewportSize() === ViewportSize.DESKTOP ) {
+    if ( WindowEventHandler.getViewportSize() !== ViewportSize.DESKTOP ) {
       this.menuButtonComponent.buttonAnimate();
       this.menuListComponent.hideMenuItemList(true);
     }

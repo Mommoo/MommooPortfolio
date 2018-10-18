@@ -1,38 +1,23 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {ProfileModule} from './profile/profile.module';
-import {AboutModule} from './about/about.module';
 import {HeaderModule} from './header/header.module';
-import {PortfolioModule} from './portfolio/portfolio.module';
 import {FooterModule} from './footer/footer.module';
-import {RouterModule, Routes} from '@angular/router';
-import {ContentsComponent, MainComponent} from './template.component';
-
-const routes : Routes = [
-  {path : 'main', component : MainComponent},
-  {path : '', redirectTo : 'main', pathMatch:'full'}
-];
+import {ProjectDetailComponent} from './project-detail/project-detail.component';
+import {ContentsModule} from './contents/contents.module';
 
 @NgModule({
   imports: [
     CommonModule,
     HeaderModule,
-    ProfileModule,
-    AboutModule,
-    PortfolioModule,
-    FooterModule,
-    RouterModule.forRoot(routes)
+    ContentsModule,
+    FooterModule
   ],
   exports: [
     HeaderModule,
-    ProfileModule,
-    AboutModule,
-    PortfolioModule,
+    ContentsModule,
     FooterModule,
-    RouterModule,
-    ContentsComponent
+    ProjectDetailComponent
   ],
-  declarations: [ContentsComponent, MainComponent]
+  declarations: [ProjectDetailComponent]
 })
-export class ViewModule {
-}
+export class ViewModule {}

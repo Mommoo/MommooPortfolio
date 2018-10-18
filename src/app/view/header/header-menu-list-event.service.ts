@@ -1,20 +1,26 @@
 import {Injectable} from '@angular/core';
-import {HeaderMenu} from './types';
-
-export interface HeaderMenuClickEvent {
-  (menu : HeaderMenu) : void;
-}
+import {HeaderMenu, HeaderMenuClickListener} from './types';
+import {NumberIdGenerator} from '../../../mommoo-library/util/number-id-generator';
 
 @Injectable()
 export class HeaderMenuListEventService {
-
-  private readonly eventSubscribeList : HeaderMenuClickEvent[] = [];
+  private readonly eventMap = new Map<string, any>();
+  private readonly keyGenerator = new NumberIdGenerator();
 
   public notifyEvent(headerMenu : HeaderMenu) {
-    this.eventSubscribeList.forEach(menuListEvent => menuListEvent(headerMenu));
+    Array.from(this.eventMap.values())
+      .forEach(headerMenuClickListener => headerMenuClickListener(headerMenu));
   }
 
-  public subscribe(headerMenuClickEvent : HeaderMenuClickEvent) {
-    this.eventSubscribeList.push(headerMenuClickEvent);
+  public subscribe(headerMenuClickListener : HeaderMenuClickListener) {
+    const eventID = this.keyGenerator.generate();
+    this.eventMap.set(eventID, headerMenuClickListener);
+
+    return eventID;
+  }
+  
+  public unSubscribe(eventID : string) : boolean {
+    this.eventMap.delete(eventID);
+    return this.keyGenerator.removeID(eventID);
   }
 }

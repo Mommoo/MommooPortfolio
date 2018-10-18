@@ -23,10 +23,12 @@
             "styles": [
               "src/styles.scss"
             ],
-            "scripts": [
-              "node_modules/bowser/bowser.js",
-              "src/preprocessor.js"
-            ]
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src/app/view"
+              ]
+            },
+            "scripts": []
           },
           "configurations": {
             "production": {
@@ -72,10 +74,7 @@
             "karmaConfig": "./karma.conf.js",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.spec.json",
-            "scripts": [
-              "node_modules/bowser/bowser.js",
-              "src/preprocessor.js"
-            ],
+            "scripts": [],
             "styles": [
               "src/styles.scss"
             ],

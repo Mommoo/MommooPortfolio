@@ -1,0 +1,17 @@
+@import url('https://fonts.googleapis.com/css?family=Noto+Sans+KR|Nanum+Gothic|Teko:400,500,600,700|Exo+2:500');
+
+@mixin TekoFont {
+  font-family: 'Teko', 'sans-serif';
+}
+
+@mixin NanumGhothicFont {
+  font-family: 'Nanum Gothic', sans-serif;
+}
+
+@mixin NotoSansKRFont {
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+@mixin Exo2 {
+  font-family: 'Exo 2', cursive;
+}

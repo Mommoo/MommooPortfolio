@@ -1,8 +1,10 @@
 <nav #nav *ngIf="isVisible()">
   <ul>
     <ng-container *ngFor="let menuItemName of menuItemNames;">
-      <li (click)="menuItemClickEvent(menuItemName)">
-        {{menuItemName | uppercase}}
+      <li>
+        <mommoo-button (click)="menuItemClickEvent(menuItemName)" [flat]="true" style="width:100%">
+          <div class="li-text-contents">{{menuItemName | uppercase}}</div>
+        </mommoo-button>
       </li>
     </ng-container>
   </ul>

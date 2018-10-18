@@ -1,3 +1,5 @@
+@import 'font';
+
 :host {
   background-color : #f3f3f3;
   display : block;
@@ -18,32 +20,39 @@
     box-sizing: border-box;
     display : flex;
     align-items: center;
-    flex-direction: row;
     justify-content: space-between;
   }
 
   #title {
+    @include TekoFont;
     padding : 1rem 0;
     font-size   : 1.5rem;
     font-weight : bold;
     box-sizing : border-box;
     text-align : center;
-
-    &:before {
-      content : '#';
-      color : #e91e63;
-    }
   }
 }
 
 // Desktop
 @media all and (min-width : 1025px) {
   #header {
-    .title {
+    #title {
       padding : 4rem 0;
+      white-space: pre-line;
     }
   }
+
+  #flex-column-line {
+    flex-direction: column;
+  }
+
   #menu-button {
     display : none;
+  }
+}
+
+@media all and (max-width:1024px) {
+  #flex-column-line {
+    flex-direction: row;
   }
 }

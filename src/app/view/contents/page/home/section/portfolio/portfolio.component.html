@@ -1,0 +1,23 @@
+<ng-template #banner></ng-template>
+<mommoo-masonry-layout *ngIf="portfolioCards"
+                       [layoutTiles]="doLayout"
+                       [maxColumnNum]="masonryLayoutColumnLength">
+  <mommoo-masonry-tile *ngFor="let projectCard of portfolioCards"
+                       [colSpan]="projectCard.columnSpan">
+    <mommoo-card
+      [cardImagePath]="projectCard.imagePath"
+      [cardImageAnim]="true"
+      [cardWidth]="'fit'"
+      [cardHeight]="'wrap'"
+      [hashTagMessages]="projectCard.devSkills"
+      [cardBoxStyle]="{backgroundColor : 'white'}"
+      [themeColor]="themeColor"
+      [cardTitle]="projectCard.title"
+      [actionButtonNames]="['Read More']"
+      (actionEventEmitter)="onCardClickListener(projectCard.title)">
+      <view-limited-textarea class="portfolio-card-content"
+                             [text]="projectCard.summary"
+                             [limitNumber]="100"></view-limited-textarea>
+    </mommoo-card>
+  </mommoo-masonry-tile>
+</mommoo-masonry-layout>

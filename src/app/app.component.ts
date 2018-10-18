@@ -1,7 +1,16 @@
-import {AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, Injector, OnDestroy, ViewChild} from '@angular/core';
-import {DomUtils} from './mommoo-library/util/dom';
-import {WindowEventHandler} from './mommoo-library/handler/window/window-event';
-import {ViewportSize} from './mommoo-library/handler/window/type';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  Injector,
+  OnDestroy,
+  ViewChild
+} from '@angular/core';
+import {DomUtils} from '../mommoo-library/util/dom';
+import {WindowEventHandler} from '../mommoo-library/handler/window/window-event';
+import {ViewportSize} from '../mommoo-library/handler/window/type';
 import {AppToolkit} from './app-toolkit';
 
 /**
@@ -20,9 +29,6 @@ export class AppComponent implements AfterViewInit, OnDestroy {
 
   @ViewChild('headerArea')
   private headerAreaElementRef: ElementRef<HTMLElement>;
-
-  @ViewChild('fixedHeaderWrapper')
-  private fixedHeaderWrapper: ElementRef<HTMLElement>;
 
   @ViewChild('contentsArea')
   private contentsAreaElementRef: ElementRef<HTMLElement>;

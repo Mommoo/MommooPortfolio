@@ -15,3 +15,5 @@ export const enum MenuButtonEvent {
   OPEN,
   CLOSE
 }
+
+export type HeaderMenuClickListener = (menu : HeaderMenu) => void;

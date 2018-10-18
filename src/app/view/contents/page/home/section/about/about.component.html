@@ -1,0 +1,17 @@
+<ng-template #banner></ng-template>
+<mommoo-grid-list
+  [colGap]="gutterSize"
+  [rowGap]="gutterSize"
+  [maxColumnNum]="maxColumnNum"
+  [style.padding.px]="gutterSize"
+  [rowHeight]="'1:1'">
+  <mommoo-grid-tile *ngFor="let skill of skills" [colSpan]="1" [rowSpan]="1">
+    <mommoo-card
+      [hashTagMessages]="skill.hashTagMessages"
+      [hashTagBoxStyle]="{fontFamily : hashTagFontType}"
+      [cardImagePath]="skill.imagePath"
+      [themeColor]="themeColor">
+      <div class="card-content" [style.fontSize]="cardTextFontSize">{{skill.name}}</div>
+    </mommoo-card>
+  </mommoo-grid-tile>
+</mommoo-grid-list>

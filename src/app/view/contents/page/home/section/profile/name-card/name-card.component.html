@@ -1,0 +1,14 @@
+<div class="card">
+  <div class="card-title">
+    <div class="main">Mommoo</div>
+    <div class="sub">Developer</div>
+  </div>
+  <div class="'card-contents">
+    <div *ngFor="let nameCard of nameCards" class="card-content">
+      <img *ngIf="nameCard.imgPath" [src]="nameCard.imgPath" class="card-image"/>
+      <span *ngFor="let stringContent of nameCard.stringContents" class="card-text">
+        {{stringContent}}
+      </span>
+    </div>
+  </div>
+</div>

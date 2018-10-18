@@ -1,3 +1,5 @@
+@import 'font';
+
 :host {
   width : 100%;
   display : flex;
@@ -14,16 +16,21 @@ nav {
   }
 
   li {
+    @include Exo2;
     display : block;
     position : relative;
     font-size : 0.8rem;
-    text-align : center;
     cursor : pointer;
-    padding : 10px 0;
-
     &:hover{
-      font-weight : bold;
+      font-size : 0.9rem;
+      font-weight : 600;
       color : #e91e63;
+    }
+
+    .li-text-contents {
+      width: 100%;
+      text-align : center;
+      padding : 10px 0;
     }
   }
 }

@@ -34,7 +34,7 @@ export class MenuButtonAnimator{
   }
 
   public destroy() {
-    // this.animPlayers.forEach(animPlayer=> animPlayer.destroy());
+    // this.animPlayers.forEach(animPlayer=> animPlayer.clear());
   }
 
   private createTopMenuAnimPlayer(topMenuElem : HTMLElement) : AnimationPlayer {

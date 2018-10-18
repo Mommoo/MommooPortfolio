@@ -1,7 +1,0 @@
-{
-"version": 3,
-"mappings": "AAAA,KAAM;EACJ,OAAO,EAAG,KAAK;EACf,gBAAgB,EAAE,OAAO;;AAE3B,uBAAwB;EACtB,OAAO,EAAG,gBAAgB",
-"sources": ["portfolio.component.scss"],
-"names": [],
-"file": "portfolio.component.css"
-}

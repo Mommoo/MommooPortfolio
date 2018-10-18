@@ -1,6 +1,5 @@
 import {ChangeDetectorRef, Component, ElementRef, EventEmitter, Output, ViewChild} from '@angular/core';
 import {MenuListAnimator} from './menu-list.animator';
-import {AnimationBuilder} from '@angular/animations';
 import {HeaderMenuListEventService} from '../../header-menu-list-event.service';
 import {HeaderMenu} from '../../types';
 
@@ -40,8 +39,8 @@ export class MenuListComponent {
 
   public menuItemClickEvent(menuName : string) : void {
     const selectedHeaderMenu : HeaderMenu = HeaderMenu[menuName];
-    this.headerMenuEventEmitter.notifyEvent(selectedHeaderMenu);
     this.menuListItemClickEmitter.emit(selectedHeaderMenu);
+    this.headerMenuEventEmitter.notifyEvent(selectedHeaderMenu);
   }
 
   private getNativeListElement() : HTMLElement {
