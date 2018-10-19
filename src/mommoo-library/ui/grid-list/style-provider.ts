@@ -1,14 +1,9 @@
-import {MommooGridTile} from './grid-tile/grid-tile.component';
 import {TilePosition} from './tile-coordinator';
 
 export abstract class StyleProvider {
   protected constructor(private maxColumnNum : number,
                         private colGap : number,
                         private rowGap : number){
-  }
-
-  protected getMaxColumnNum() : number {
-    return this.maxColumnNum;
   }
 
   protected getRowGap() : number {
