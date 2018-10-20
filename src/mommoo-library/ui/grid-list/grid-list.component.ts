@@ -1,7 +1,8 @@
 import {
+  AfterContentInit,
   AfterViewChecked,
   AfterViewInit,
-  ChangeDetectionStrategy,
+  ChangeDetectionStrategy, ChangeDetectorRef,
   Component,
   ContentChildren,
   DoCheck,
@@ -9,7 +10,7 @@ import {
   Input,
   OnChanges,
   QueryList,
-  SimpleChanges
+  SimpleChanges, ViewChild
 } from '@angular/core';
 import {MommooGridTile} from './grid-tile/grid-tile.component';
 import {TileCoordinator} from './tile-coordinator';
@@ -23,7 +24,7 @@ import {DomUtils} from '../../util/dom';
   styleUrls: ['./grid-list.component.scss'],
   changeDetection : ChangeDetectionStrategy.OnPush
 })
-export class MommooGridList implements AfterViewInit, DoCheck, OnChanges, AfterViewChecked{
+export class MommooGridList implements AfterContentInit, OnChanges{
 
   @Input()
   private rowHeight : string = '100px';
@@ -37,28 +38,28 @@ export class MommooGridList implements AfterViewInit, DoCheck, OnChanges, AfterV
   @Input()
   private rowGap : number=  10;
 
-  @ContentChildren(MommooGridTile) gridTileQueryList : QueryList<MommooGridTile>;
+  @ContentChildren(MommooGridTile)
+  private gridTileQueryList : QueryList<MommooGridTile>;
 
-  constructor(private hostElementRef : ElementRef) {
+  @ViewChild('viewport', {read: ElementRef})
+  private viewport: ElementRef<HTMLElement>;
+
+  private isFirstChanged: boolean = true;
+
+  constructor() {
 
   }
 
-  ngAfterViewInit(): void {
-
+  public ngAfterContentInit(): void {
+    this.gridTileQueryList.changes.subscribe(()=>this.layoutTiles());
   }
 
-
-  ngDoCheck(): void {
-    console.log('doCheck');
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    console.log('onChanged');
-  }
-
-  ngAfterViewChecked(): void {
-    console.log('afterViewChecked');
-    this.layoutTiles();
+  public ngOnChanges(changes: SimpleChanges): void {
+    if ( this.isFirstChanged ) {
+      this.isFirstChanged = false;
+    } else {
+      this.layoutTiles();
+    }
   }
 
   private getProperStyleProvider() : StyleProvider {
@@ -76,8 +77,8 @@ export class MommooGridList implements AfterViewInit, DoCheck, OnChanges, AfterV
   private layoutTiles() : void {
     const computedResult = new TileCoordinator().compute(this.maxColumnNum, this.gridTileQueryList.toArray());
     const styleProvider  = this.getProperStyleProvider();
-    const gridListElemStyle = styleProvider.getGridListLayoutStyle(computedResult.numRows);
-    DomUtils.applyStyle(this.hostElementRef, gridListElemStyle);
+    const viewportStyle = styleProvider.getViewportStyle(computedResult.numRows);
+    DomUtils.applyStyle(this.viewport, viewportStyle);
 
     const tile$ = from(this.gridTileQueryList.toArray());
     const tilePositions$ = from(computedResult.positions);

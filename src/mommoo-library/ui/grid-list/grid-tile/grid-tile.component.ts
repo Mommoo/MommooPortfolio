@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, ElementRef, Input, ViewChild} from '@angular/core';
+import {ChangeDetectionStrategy, Component, ElementRef, Input} from '@angular/core';
 
 @Component({
   selector: 'mommoo-grid-tile',

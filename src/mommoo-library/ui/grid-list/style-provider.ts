@@ -28,7 +28,7 @@ export abstract class StyleProvider {
 
   public abstract getTileLayoutStyle(colspan : number, rowspan : number, position : TilePosition) : {}
 
-  public abstract getGridListLayoutStyle(numRows : number) : {};
+  public abstract getViewportStyle(numRows : number) : {};
 }
 
 export class FixedStyleProvider extends StyleProvider {
@@ -50,7 +50,7 @@ export class FixedStyleProvider extends StyleProvider {
     }
   }
 
-  getGridListLayoutStyle(numRows : number): {} {
+  getViewportStyle(numRows : number): {} {
     return {
       height : `${(this.rowHeight * numRows) + (this.getRowGap() * numRows - 1)}px`
     };
@@ -75,7 +75,7 @@ export class RatioStyleProvider extends StyleProvider {
     };
   }
 
-  getGridListLayoutStyle(numRows : number): {} {
+  getViewportStyle(numRows : number): {} {
     return {
       paddingBottom : StyleProvider.wrapCalc(`${this.get1x1TileHeight()} * ${numRows} + (${this.getRowGap() * (numRows - 1)}px)`)
     }
