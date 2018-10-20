@@ -2,15 +2,11 @@ import {DomUtils} from '../../../util/dom';
 import {RippleConfig} from './ripple-config';
 
 export class RippleDomFragment{
-  private readonly _wrapperElement: HTMLElement;
   private readonly _rippleElement: HTMLElement;
 
   public constructor(private rippleConfig: RippleConfig) {
-    this.setRippleContainerStyle();
-    // this._wrapperElement = this.createRippleWrapper();
     this._rippleElement  = this.createRippleElement();
     this.rippleConfig.container.appendChild(this._rippleElement);
-    // this._wrapperElement.appendChild(this.rippleElement);
   }
 
   public get rippleElement() {
@@ -19,31 +15,6 @@ export class RippleDomFragment{
 
   public destroy() {
     this._rippleElement.parentElement.removeChild(this._rippleElement);
-    // this._wrapperElement.removeChild(this._rippleElement);
-    // this._wrapperElement.parentElement.removeChild(this._wrapperElement);
-  }
-
-  /** ripple container have to be position 'relative' and  overflow 'hidden' */
-  private setRippleContainerStyle() {
-    DomUtils.applyStyle(this.rippleConfig.container, {
-      position: 'relative',
-      overflow: 'hidden'
-    })
-  }
-
-  private createRippleWrapper() : HTMLElement {
-    const containerPosition = DomUtils.position(this.rippleConfig.container);
-    return DomUtils.styledNewElement({
-      left: `${containerPosition.left}px`,
-      top: `${containerPosition.top}px`,
-      width: `${containerPosition.width}px`,
-      height: `${containerPosition.height}px`,
-      overflow : 'hidden',
-      position : 'absolute',
-      zIndex : 2,
-      backgroundColor : 'rgba(0,0,0,0)',
-      pointerEvents: 'none'
-    });
   }
 
   private createRippleElement(): HTMLElement {

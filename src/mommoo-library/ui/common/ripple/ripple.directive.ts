@@ -1,16 +1,28 @@
-import {Directive, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges} from '@angular/core';
+import {
+  AfterViewInit,
+  Directive,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Output,
+  SimpleChanges
+} from '@angular/core';
 import {RippleRenderer} from './ripple-renderer.service';
 import {List} from '../../../data-structure/list/list';
 import {RippleRef, RippleState} from './ripple-types';
 import {RippleEventHandler} from './ripple-event-handler.service';
 import {RippleAnimator} from './ripple-animator';
 import {RippleConfig} from './ripple-config';
+import {DomUtils} from '../../../util/dom';
 
 @Directive({
   selector: '[mommooRipple]',
   providers: [RippleEventHandler, RippleRenderer, RippleAnimator, RippleConfig]
 })
-export class MommooRipple implements OnInit, OnDestroy, OnChanges {
+export class MommooRipple implements OnInit, OnDestroy, OnChanges, AfterViewInit {
   @Output()
   private rippleDone: EventEmitter<Event> = new EventEmitter<Event>();
 
@@ -28,7 +40,8 @@ export class MommooRipple implements OnInit, OnDestroy, OnChanges {
 
   constructor(private rippleRenderer: RippleRenderer,
               private rippleEventHandler: RippleEventHandler,
-              private rippleConfig: RippleConfig) {
+              private rippleConfig: RippleConfig,
+              private hostElementRef: ElementRef<HTMLElement>) {
 
   }
 
@@ -42,7 +55,19 @@ export class MommooRipple implements OnInit, OnDestroy, OnChanges {
     this.buildRippleConfig();
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
+  public ngAfterViewInit(): void {
+    this.setRippleContainerStyle();
+  }
+
+  /** ripple container have to be position 'relative' and  overflow 'hidden' */
+  private setRippleContainerStyle() {
+    DomUtils.applyStyle(this.hostElementRef, {
+      position: 'relative',
+      overflow: 'hidden'
+    });
+  }
+
+  public ngOnChanges(changes: SimpleChanges): void {
     this.buildRippleConfig();
   }
 
