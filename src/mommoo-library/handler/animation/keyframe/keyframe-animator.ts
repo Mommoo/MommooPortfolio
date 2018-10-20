@@ -49,7 +49,12 @@ export class KeyframeAnimator {
 
     this.keyframeElementMonitor.monitorTo(targetElement);
 
-    const animationConfig = Object.assign({...BasicKeyframeAnimationConfig}, config);
+    KeyframeAnimator.triggerReflowForReStart(targetElement);
+
+    const animationConfig = {
+      ...BasicKeyframeAnimationConfig,
+      ...config
+    };
 
     KeyframeAnimator.setKeyframeConfigToElement(targetElement, animationConfig);
   }
@@ -68,6 +73,11 @@ export class KeyframeAnimator {
 
   public resumeAnimation(target: AnimationTarget) {
     KeyframeAnimator.setAnimationPlayState(target, 'running');
+  }
+
+  private static triggerReflowForReStart(element: HTMLElement) {
+    element.style.animationName='mommoo';
+    window.getComputedStyle(element).animationName;
   }
 
   private static setAnimationPlayState(target: AnimationTarget, state : 'paused' | 'running') {

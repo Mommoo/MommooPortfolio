@@ -1,20 +1,15 @@
 export class KeyframeElementMonitor {
-  private elementsToManage = new Map<HTMLElement, any>();
+  private elementsToManage = new Set<HTMLElement>();
 
   public monitorTo(targetElement: HTMLElement) {
     if ( this.elementsToManage.has(targetElement) ) {
       return;
     }
-    const animateNameDestroyListener = ()=> KeyframeElementMonitor.resetKeyframeAnimation(targetElement);
-    this.elementsToManage.set(targetElement, animateNameDestroyListener);
-    targetElement.addEventListener('animationend', animateNameDestroyListener);
   }
 
   public clear() {
-    this.elementsToManage.forEach((listener, element)=> {
-      KeyframeElementMonitor.resetKeyframeAnimation(element);
-      element.removeEventListener('animationend', listener);
-    });
+    this.elementsToManage.forEach((listener, element)=> KeyframeElementMonitor.resetKeyframeAnimation(element));
+    this.elementsToManage.clear();
   }
 
   private static resetKeyframeAnimation(element: HTMLElement) {
