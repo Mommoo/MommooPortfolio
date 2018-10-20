@@ -1,12 +1,13 @@
-import {AnimationTarget, BasicKeyframeAnimationConfig, KeyframeAnimationConfig, KeyframeAnimationListener, Keyframe} from '../types';
+import {AnimationTarget, BasicKeyframeAnimationConfig, Keyframe, KeyframeAnimationConfig, KeyframeAnimationListener} from '../types';
 import {ElementRef} from '@angular/core';
 import {DomUtils} from '../../../util/dom';
 import {KeyframesFinder} from './keyframes-finder';
+import {KeyframeElementMonitor} from './keyframe-element-monitor';
 
 export class KeyframeAnimator {
   private styleElement : HTMLStyleElement;
-  private keyFramesFinder = new KeyframesFinder();
-  private relatedElementSets = new Set<HTMLElement>();
+  private keyframesFinder = new KeyframesFinder();
+  private keyframeElementMonitor = new KeyframeElementMonitor();
 
   private writeStyle(cssString : string) {
     if ( this.styleElement === undefined ) {
@@ -18,25 +19,25 @@ export class KeyframeAnimator {
   }
 
   public addKeyframe(animationName : string, keyframe : Keyframe) {
-    this.keyFramesFinder.addKeyframes(animationName, keyframe);
-    this.writeStyle(this.keyFramesFinder.wholeCssKeyFrames());
+    this.keyframesFinder.addKeyframes(animationName, keyframe);
+    this.writeStyle(this.keyframesFinder.wholeCssKeyFrames());
   }
 
   public removeKeyframe(animationName: string) {
-    this.keyFramesFinder.removeKeyframes(animationName);
-    this.writeStyle(this.keyFramesFinder.wholeCssKeyFrames());
+    this.keyframesFinder.removeKeyframes(animationName);
+    this.writeStyle(this.keyframesFinder.wholeCssKeyFrames());
   }
 
   public subscribeAnimationListener(animationName: string, element: HTMLElement, animListener: KeyframeAnimationListener) {
-    this.keyFramesFinder.subscribeAnimationListener(animationName, element, animListener);
+    this.keyframesFinder.subscribeAnimationListener(animationName, element, animListener);
   }
 
   public unSubscribeAnimationListener(animationName: string, element: HTMLElement) {
-    this.keyFramesFinder.unSubscribeAnimationListener(animationName, element);
+    this.keyframesFinder.unSubscribeAnimationListener(animationName, element);
   }
 
   public clearAnimationListener(animationName: string) {
-    this.keyFramesFinder.removeAnimationListener(animationName);
+    this.keyframesFinder.removeAnimationListener(animationName);
   }
 
   public startAnimation(elementRef: ElementRef<HTMLElement>, config: KeyframeAnimationConfig);
@@ -46,10 +47,7 @@ export class KeyframeAnimator {
   public startAnimation(target: AnimationTarget, config: KeyframeAnimationConfig) {
     const targetElement = DomUtils.takeElementIfWrappedRef(target);
 
-    this.relatedElementSets.add(targetElement);
-
-    /** force redraw or reflow to start keyframes animation */
-    KeyframeAnimator.resetKeyframeAnimation(targetElement);
+    this.keyframeElementMonitor.monitorTo(targetElement);
 
     const animationConfig = Object.assign({...BasicKeyframeAnimationConfig}, config);
 
@@ -89,17 +87,9 @@ export class KeyframeAnimator {
     });
   }
 
-  private static resetKeyframeAnimation(element: HTMLElement) {
-    element.style.animation = null;
-  }
-
   public clear() {
-    this.relatedElementSets
-      .forEach(element=> KeyframeAnimator.resetKeyframeAnimation(element));
-    this.relatedElementSets.clear();
-
-    this.keyFramesFinder.clear();
-
+    this.keyframeElementMonitor.clear();
+    this.keyframesFinder.clear();
     if ( this.styleElement.parentElement ) {
       this.styleElement.parentElement.removeChild(this.styleElement);
       this.styleElement = null;
