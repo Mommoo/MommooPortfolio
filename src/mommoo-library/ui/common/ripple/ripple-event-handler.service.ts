@@ -21,7 +21,7 @@ export class RippleEventHandler{
       .set('touchend', () => this.onPointerUpEvent())
       .set('touchcancel', () => this.onPointerUpEvent());
 
-    /** for load element */
+    /** for promiseLoadImage element */
     setTimeout(()=>{
       this.eventMapper
         .forEach((event, eventName)=> this.hostElement().addEventListener(eventName, event))

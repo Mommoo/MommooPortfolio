@@ -1,32 +1,3 @@
-<mommoo-shadow-box [ngStyle]="_cardShadowBoxStyle" [radius]="'5px'">
-  <div id="flex-card-box" [ngStyle]="cardBoxStyle">
-
-    <div *ngIf="cardTitle" id="card-title-box" [ngStyle]="cardTitleBoxStyle">{{cardTitle}}</div>
-
-    <mommoo-card-image id="card-image-box"
-                       [ngStyle]="cardImageBoxStyle"
-                       [imagePath]="cardImagePath"
-                       [imageStyle]="_imageStyle"
-                       [isAnimate]="cardImageAnim">
-    </mommoo-card-image>
-
-    <!--<div *ngIf="cardTitle" id="card-title-box" [ngStyle]="cardTitleBoxStyle">{{cardTitle}}</div>-->
-
-    <div id="card-content-box">
-      <ng-content></ng-content>
-    </div>
-
-    <mommoo-hash-tag-view [backgroundColor]="_subThemeColor"
-                          [textContents]="hashTagMessages"
-                          [contentStyles]="hashTagMessageStyles"
-                          [ngStyle]="hashTagBoxStyle"
-                          class="container">
-    </mommoo-hash-tag-view>
-
-    <mommoo-action-view [textContents]="actionButtonNames"
-                        [contentStyles]="actionButtonStyles"
-                        [textColor]="themeColor"
-                        (actionEventEmitter)="actionButtonClicks($event)">
-    </mommoo-action-view>
-  </div>
+<mommoo-shadow-box [radius]="'5px'">
+  <ng-content></ng-content>
 </mommoo-shadow-box>

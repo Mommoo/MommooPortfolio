@@ -1,7 +1,7 @@
 import {
+  AfterContentChecked,
   AfterViewInit,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
+  ChangeDetectionStrategy, ChangeDetectorRef,
   Component,
   ContentChildren,
   ElementRef,
@@ -14,9 +14,9 @@ import {
   ViewChild
 } from '@angular/core';
 import {MommooMasonryTile} from './masonry-tile/masonry-tile.component';
-import {MasonryStyler} from './masonry-styler';
 import {DomUtils} from '../../util/dom';
 import {WindowEventHandler} from '../../handler/window/window-event';
+import {MasonryRenderer} from './masonry-renderer';
 
 @Component({
   selector: 'mommoo-masonry-layout',
@@ -24,7 +24,7 @@ import {WindowEventHandler} from '../../handler/window/window-event';
   styleUrls: ['./masonry-layout.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MommooMasonryLayout implements OnInit, AfterViewInit, OnChanges, OnDestroy {
+export class MommooMasonryLayout implements OnInit, AfterViewInit, AfterContentChecked, OnChanges, OnDestroy {
   private static readonly DEFAULT_PADDING = DomUtils.getScrollbarWidth();
   private masonryLayoutWindowDoneEventID;
 
@@ -37,69 +37,64 @@ export class MommooMasonryLayout implements OnInit, AfterViewInit, OnChanges, On
   @Input() private maxColumnNum : number = 4;
   @Input() private gutterSize   : number = 10;
 
-  @Input()
-  private set layoutTiles(isLayoutTiles : boolean) {
-    if ( isLayoutTiles ) {
-      this.layoutMasonryTiles();
-      this.setStyleToPaddingWrapperElem('opacity', '1');
-      this.changeDetector.detectChanges();
-    }
-  }
+  private readonly masonryRenderer : MasonryRenderer = new MasonryRenderer(this.maxColumnNum, this.gutterSize);
 
-  private readonly masonryStyler : MasonryStyler = new MasonryStyler(this.maxColumnNum, this.gutterSize);
+  public constructor() {
 
-  constructor(private changeDetector : ChangeDetectorRef) {
   }
 
   private isFirstChanged = true;
-  ngOnChanges(changes: SimpleChanges): void {
+
+  public ngOnChanges(changes: SimpleChanges): void {
     if ( this.isFirstChanged ) {
       this.isFirstChanged = false;
       return;
     }
+    this.paintMasonryTiles();
     this.layoutMasonryTiles();
   }
 
-  ngOnInit(): void {
-    this.setStyleToPaddingWrapperElem('opacity', '0');
+  public ngOnInit(): void {
+    DomUtils.applyStyle(this.paddingWrapper, {
+      padding: `${MommooMasonryLayout.DEFAULT_PADDING}px`,
+      opacity: 0
+    });
   }
 
-  ngAfterViewInit(): void {
-    this.setStyleToPaddingWrapperElem('padding', `${MommooMasonryLayout.DEFAULT_PADDING}px`);
-    this.masonryLayoutWindowDoneEventID = WindowEventHandler.addDoneResizingEvent(()=> this.layoutMasonryTiles());
+  public ngAfterViewInit(): void {
+    this.masonryLayoutWindowDoneEventID = WindowEventHandler.addDoneResizingEvent(()=> {
+      this.paintMasonryTiles();
+      this.layoutMasonryTiles();
+    }, true);
   }
 
-  ngOnDestroy(): void {
-    WindowEventHandler.removeEvent(this.masonryLayoutWindowDoneEventID);
-  }
-
-  private setStyleToPaddingWrapperElem(propName : string, propValue : string) {
-    this.paddingWrapper.nativeElement.style[propName] = propValue;
-  }
-
-  private layoutMasonryTiles() : void {
-    if ( this.isInValidCondition() ) {
+  public ngAfterContentChecked(): void {
+    if ( !this.masonryTileQueryList ) {
       return;
     }
-
-    this.masonryStyler.initialize(this.masonryTileQueryList.toArray(), this.maxColumnNum, this.gutterSize);
-    const containerHeight = this.masonryStyler.doMasonryLayout();
-    const computedLayoutHeight = containerHeight + (MommooMasonryLayout.DEFAULT_PADDING * 2);
-    this.setStyleToPaddingWrapperElem('height', `${computedLayoutHeight}px`);
-  }
-
-  private isInValidCondition() {
-    if ( !this.masonryTileQueryList ) {
-      return true;
-    }
-
+    this.masonryRenderer.initialize(this.masonryTileQueryList.toArray(), this.maxColumnNum, this.gutterSize);
     this.masonryTileQueryList
       .toArray()
       .filter(tile => tile.colSpan > this.maxColumnNum)
       .forEach(tile => {
         throw new Error(`tile span '${tile.colSpan}' is can not be longer than max column '${this.maxColumnNum}' `);
       });
+  }
 
-    return false;
+  public ngOnDestroy(): void {
+    WindowEventHandler.removeEvent(this.masonryLayoutWindowDoneEventID);
+  }
+
+  public paintMasonryTiles(): void {
+    this.masonryRenderer.paint();
+  }
+
+  public layoutMasonryTiles() : void {
+    const containerHeight = this.masonryRenderer.doMasonryLayout();
+    const computedLayoutHeight = containerHeight + (MommooMasonryLayout.DEFAULT_PADDING * 2);
+    DomUtils.applyStyle(this.paddingWrapper, {
+      height: `${computedLayoutHeight}px`,
+      opacity: 1
+    });
   }
 }

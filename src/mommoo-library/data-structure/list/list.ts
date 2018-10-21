@@ -13,8 +13,17 @@ export class List<T>{
       .forEach((item)=>this.add(item));
   }
 
-  public add(item : T) {
-    this.repo[++this.index] = item;
+  public add(item: T, index: number = this.index + 1) {
+    if ( index > this.index + 1 ) {
+      console.error(`index : ${index} is large than size of list`);
+      return;
+    }
+
+    if ( index !== this.index + 1 ) {
+      this.moveSlice(index, 'right');
+    }
+    this.repo[index] = item;
+    this.index++;
     this.increaseCapacityIfLack();
   }
 
@@ -41,14 +50,18 @@ export class List<T>{
       return false;
     }
 
-    const needToCopySlice = this.repo.slice(index + 1);
-    for ( let i = 0; i < needToCopySlice.length ; i++ ) {
-      this.repo[i + index] = needToCopySlice[i];
-    }
+    this.moveSlice(index + 1, 'left');
     this.repo[this.index--] = undefined;
-
     this.decreaseCapacityIfEnough();
     return true;
+  }
+  //TODO increare Area 버그 잡기.
+  private moveSlice(fromIndex: number, direction: 'left' | 'right') {
+    const needToCopySlice = this.repo.slice(fromIndex);
+    const directionValue = direction === 'left' ? -1 : +1;
+    for ( let i = 0; i < needToCopySlice.length ; i++ ) {
+      this.repo[fromIndex + directionValue + i] = needToCopySlice[i];
+    }
   }
 
   public forEach(fn : StreamCallback<T, void>) : void {

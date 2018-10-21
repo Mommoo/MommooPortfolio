@@ -1,8 +1,0 @@
-<ng-container *ngIf="isExistContents()">
-  <div *ngFor="let styledTextContent of computeStyledTextContents()"
-       [style.backgroundColor]="backgroundColor"
-       [ngStyle]="styledTextContent.style"
-       class="message">
-    {{styledTextContent.text}}
-  </div>
-</ng-container>

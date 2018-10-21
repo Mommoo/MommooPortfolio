@@ -387,3 +387,8 @@ export interface DomCSSStyle {
   zIndex?: string | number | null;
   zoom?: string | null;
 }
+
+export interface ImageDimension {
+  naturalWidth: number,
+  naturalHeight: number
+}

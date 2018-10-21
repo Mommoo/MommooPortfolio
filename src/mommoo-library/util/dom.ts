@@ -85,6 +85,30 @@ export class DomUtils {
     nativeParentElement.appendChild(fragment);
   }
 
+  public static clearChildren(element: HTMLElement);
+
+  public static clearChildren(elementRef: ElementRef<HTMLElement>);
+
+  public static clearChildren(target: HTMLElement | ElementRef<HTMLElement>) {
+    const element = this.takeElementIfWrappedRef(target);
+    if ( element ) {
+      Array.from(element.children).forEach(child=> element.removeChild(child))
+    }
+  }
+
+  public static parseElements<T>(type: T, fromElement: ElementRef<HTMLElement>): HTMLElement[];
+
+  public static parseElements<T>(type: T, fromElement: HTMLElement): HTMLElement[];
+
+  public static parseElements<T>(type: T, from: HTMLElement | ElementRef<HTMLElement>): HTMLElement[] {
+    let fromElement = this.takeElementIfWrappedRef(from);
+    if ( !fromElement ) {
+      fromElement = document.body;
+    }
+    const tagName = (<any>type).__annotations__[0].selector;
+    return Array.from(fromElement.getElementsByTagName(tagName));
+  }
+
   public static position(element: HTMLElement): Bounds;
 
   public static position(elementRef: ElementRef<HTMLElement>): Bounds;
@@ -128,9 +152,9 @@ export class DomUtils {
     }
   }
 
-  public static insideOffsets(elementRef : ElementRef<HTMLElement>);
+  public static insideOffsets(elementRef : ElementRef<HTMLElement>): Bounds;
 
-  public static insideOffsets(element : HTMLElement);
+  public static insideOffsets(element : HTMLElement): Bounds;
 
   public static insideOffsets(target : ElementRef<HTMLElement> | HTMLElement) : Bounds {
     if ( !target ) {

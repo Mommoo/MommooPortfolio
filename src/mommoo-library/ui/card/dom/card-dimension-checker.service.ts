@@ -1,11 +1,25 @@
-import {NumberUtils} from '../../util/number';
-import {CardDimensionProp} from './types';
+import {CardDimensionProp} from '../types';
+import {NumberUtils} from '../../../util/number';
+import {Injectable} from '@angular/core';
 
+@Injectable()
 export class CardDimensionChecker {
+  private cardW: string;
+  private cardH: string;
   private cardDimenProps : [CardDimensionProp, CardDimensionProp];
 
-  public init(cardW : string, cardH : string) {
+  public initialize(cardW: string, cardH: string){
+    this.cardW = cardW;
+    this.cardH = cardH;
     this.cardDimenProps = this.computeDimenProps(cardW, cardH);
+  }
+
+  public get cardWidth() {
+    return this.cardW;
+  }
+
+  public get cardHeight() {
+    return this.cardH;
   }
 
   private computeDimenProps(cardW : string, cardH) : [CardDimensionProp, CardDimensionProp] {
@@ -56,6 +70,10 @@ export class CardDimensionChecker {
 
   private isBoth(cardDimenProp : CardDimensionProp) : boolean {
     return this.cardDimenProps.every(prop => prop === cardDimenProp);
+  }
+
+  public isBothWrap(): boolean {
+    return this.isBoth(CardDimensionProp.WRAP);
   }
 
   public isBothRatio() : boolean {

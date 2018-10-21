@@ -1,6 +1,6 @@
 import {MommooMasonryTile} from './masonry-tile/masonry-tile.component';
 
-export class MasonryStyler {
+export class MasonryRenderer {
   private readonly masonryLayoutPropsFinder: MasonryLayoutPropsFinder;
   private masonryTileList: MommooMasonryTile[];
 
@@ -21,16 +21,18 @@ export class MasonryStyler {
     return `calc((${this.calcExpressOfUnitWidth()} * ${columnIndex}) + ${this.gutterSize * (columnIndex)}px)`;
   }
 
-  // this code line have to operate first than next code lines
-  // because at next code lines, using element height that is changed when element width changing
   public initialize(masonryTileList: MommooMasonryTile[], maxColumnNum: number, gutterSize: number) {
     this.masonryTileList = masonryTileList;
     this.maxColumnNum = maxColumnNum;
     this.gutterSize = gutterSize;
-    this.masonryLayoutPropsFinder.initialize(maxColumnNum, gutterSize);
-    masonryTileList.forEach(tile => tile.setStyles({width: this.computeColumnWidth(tile.colSpan)}));
   }
 
+  public paint() {
+    this.masonryLayoutPropsFinder.initialize(this.maxColumnNum, this.gutterSize);
+    this.masonryTileList.forEach(tile => tile.setStyles({width: this.computeColumnWidth(tile.colSpan)}));
+  }
+
+  /** Warning!! layout method is be affected paint method */
   public doMasonryLayout(): number {
     // this code lines use element height that is changed when element width changing
     this.masonryTileList.forEach(tile => {
@@ -111,7 +113,6 @@ class MasonryLayoutPropsFinder {
   public computeTilePosition(tile: MommooMasonryTile): [number, number] {
     const [columnIndex, top] = this.findProperPosition(tile.colSpan);
     const h = tile.getOffsetHeight();
-    // console.log(h);
     const needToFillValue = top + h + this.gutterSize;
     this.tracker.fill(needToFillValue, columnIndex, columnIndex + tile.colSpan);
     return [columnIndex, top];

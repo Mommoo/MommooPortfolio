@@ -5,7 +5,4 @@ export enum CardDimensionProp {
   WRAP  = 'wrap'
 }
 
-export enum ImageLoadStatus {
-  SUCCESS,
-  FAIL
-}
+export type CardLoadCompleteListener = ()=> void;

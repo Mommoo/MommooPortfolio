@@ -130,7 +130,7 @@ export interface KeyframeAnimationConfig {
   timingFunction?: 'linear' | 'ease' | 'ease-in' | 'ease-out' | 'ease-in-out' | any,
   fillMode?: 'none' | 'forwards' | 'backwards' | 'both'
   iterationCount?: number | 'infinite',
-  direction? : 'alternate' | 'alternate-reverse'
+  direction? : 'alternate' | 'alternate-reverse' | 'normal' | 'reserve'
 }
 
 export const BasicKeyframeAnimationConfig: KeyframeAnimationConfig = {

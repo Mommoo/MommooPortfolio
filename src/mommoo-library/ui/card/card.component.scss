@@ -1,48 +1,115 @@
 @import '../common/style/common-style';
-:host {
+
+:host(.mommoo-card) {
   display : inline-block;
   visibility: hidden;
 }
 
-#flex-card-box {
-  @include flex-column-center;
+:host(.mommoo-card-viewport) {
+  display: flex;
+  flex-direction: column;
   width : 100%;
   height : 100%;
   box-sizing: border-box;
-  padding-top: 10px;
   overflow: hidden;
-  align-items: stretch; //fix for IE10 flex item text node overflow issue
+  padding:16px;
+}
 
-  #card-title-box {
-    word-break : break-word;
-    word-wrap: break-word; // for IE
-    align-self : start;
-    padding : 6px 16px;
-    font-size : 20px;
-    font-weight: bold;
-    color : black;
-  }
+:host(.mommoo-card-title) {
+  display: block;
+  align-self : start;
+  font-size : 20px;
+  font-weight: bold;
+  color : black;
+}
 
-  #card-image-box {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    overflow: hidden;
-    flex-grow: 1;
-  }
+:host(.mommoo-card-image) {
+  display:block;
+  flex-grow:1;
+  justify-self: center;
+  align-self: center;
+  width:100%;
+  position: relative;
+  overflow:hidden;
 
-  #card-image {
-    width: 100%;
-    flex-grow: 1;
-    background : center center no-repeat;
+  #image-box {
+    display:block;
+    background-position: center;
     background-size: contain;
+    background-repeat: no-repeat;
+    position: absolute;
+    left:0;
+    top:0;
+    right:0;
+    bottom:0;
+  }
+}
+
+:host(.mommoo-card-contents) {
+  display: block;
+  font-size : 16px;
+}
+
+:host(.mommoo-card-hashtag) {
+  display : flex;
+  flex-wrap : wrap;
+  flex-direction: row;
+}
+
+:host(.mommoo-card-hashtag-contents) {
+  display:block;
+  width:auto;
+  background-color : rgba(255,0,0,.5);
+  color : white;
+  border-radius: 10px;
+  padding : 3px 5px;
+  font-size : 10px;
+
+  &:nth-child(n) {
+    margin-right : 5px;
+    margin-bottom : 5px;
   }
 
-  .container {
-    display : flex;
-    width: 100%;
-    box-sizing: border-box;
-    padding: 10px;
-    text-align: left;
+  &:nth-last-child(1) {
+    margin-right : 0;
+  }
+}
+
+:host(.mommoo-card-action){
+  display: block;
+  width: 100%;
+
+  .align {
+    $width : 100%;
+    width : $width;
+    margin-left : (100% - $width)/2;
+  }
+
+  #divider {
+    @extend .align;
+    height : 1px;
+    background-color : #ededed;
+  }
+
+  #flex-row-box {
+    display:block;
+    text-align: right;
+  }
+}
+
+:host(.mommoo-card-action-button) {
+  display: inline-block;
+  cursor : pointer;
+
+  &:nth-child(n) {
+    margin-right : 10px;
+  }
+
+  &:nth-last-child(1) {
+    margin-right : 0;
+  }
+
+  #button {
+    padding:8px;
   }
 }

@@ -8,6 +8,25 @@ export class MommooCardsLoadCheckerService {
 
   constructor() { }
 
+  public promiseLoadCards(mommooCards: MommooCard[]) {
+    const checker : boolean[] = new Array(mommooCards.length).fill(false, 0, mommooCards.length);
+
+    return new Promise(resolve => {
+      const executeListenerIfAllLoaded = ()=> {
+        const isAllLoaded = checker.every(isLoaded => isLoaded);
+        if ( isAllLoaded ) {
+          resolve();
+        }
+      };
+
+      mommooCards
+        .forEach((mommooCard, index) => mommooCard.addCardLoadCompleteListener(()=>{
+          checker[index] = true;
+          executeListenerIfAllLoaded();
+        }))
+    })
+  }
+
   public checkCardsLoaded(mommooCards : MommooCard[], onCompleteListener : ()=>void) {
     const checker : boolean[] = new Array(mommooCards.length).fill(false, 0, mommooCards.length);
     const executeListenerIfAllLoaded = ()=> {
@@ -18,8 +37,7 @@ export class MommooCardsLoadCheckerService {
     };
 
     mommooCards
-      .map(mommooCard => mommooCard as any)
-      .forEach((mommooCard, index) => mommooCard._watchImageLoaded(()=>{
+      .forEach((mommooCard, index) => mommooCard.addCardLoadCompleteListener(()=>{
         checker[index] = true;
         executeListenerIfAllLoaded();
       }))

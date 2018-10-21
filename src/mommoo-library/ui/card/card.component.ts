@@ -1,79 +1,118 @@
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  ContentChild,
   ElementRef,
-  EventEmitter,
   Input,
   OnChanges,
-  Output,
-  Renderer2,
+  OnInit,
   SimpleChanges
 } from '@angular/core';
-import {CardStyler} from './card-styler';
-import {CardDimensionProp} from './types';
+import {CardDimensionProp, CardLoadCompleteListener} from './types';
+import {CardDomHandler} from './dom/card-dom-handler.service';
+import {CardDimensionChecker} from './dom/card-dimension-checker.service';
+import {MommooCardImage, MommooCardTitle, MommooCardViewport} from './card-contents.component';
+import {DomUtils} from '../../util/dom';
+import {ImageLoader} from '../../util/image-loader';
 
 @Component({
   selector: 'mommoo-card',
   templateUrl: './card.component.html',
   styleUrls: ['./card.component.scss'],
-  changeDetection : ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [CardDomHandler, CardDimensionChecker],
+  host: {
+    class: 'mommoo-card'
+  }
 })
-export class MommooCard implements OnChanges {
-  @Input() private cardWidth  : string = CardDimensionProp.FIT;
-  @Input() private cardHeight : string = CardDimensionProp.FIT;
-  @Input() public cardBoxStyle : object;
-  @Input() public themeColor : string = 'green';
-  @Input() public cardTitle : string;
-  @Input() public cardTitleBoxStyle : object;
-  @Input() public cardImagePath : string;
-  @Input() public cardImageAnim : boolean = false;
-  @Input() public cardImageBoxStyle : object;
-  @Input() public hashTagMessages : Array<string>;
-  @Input() public hashTagMessageStyles : object[];
-  @Input() public hashTagBoxStyle : object;
-  @Input() public actionButtonNames  : string[];
-  @Input() public actionButtonStyles : object[];
-  @Output() private actionEventEmitter : EventEmitter<string> = new EventEmitter();
+export class MommooCard implements OnChanges, AfterViewInit, OnInit {
+  @Input() private cardWidth: string = CardDimensionProp.FIT;
+  @Input() private cardHeight: string = CardDimensionProp.FIT;
+  @Input() private cardContentsGutter: number = 10;
 
-  public _subThemeColor : string;
-  public _imageStyle : object;
-  public _cardShadowBoxStyle : object;
+  private isFirstChanged = true;
+  private cardLoadCompleteListeners: CardLoadCompleteListener[] = [];
 
-  private cardStyler = new CardStyler();
-  private _imageOnLoadListener = ()=>{};
+  @ContentChild(MommooCardViewport, {read: ElementRef})
+  private mommooCardViewport: ElementRef<HTMLElement>;
 
-  constructor(private hostElementRef : ElementRef, private renderer : Renderer2, private cdr : ChangeDetectorRef) {
+  @ContentChild(MommooCardImage)
+  private mommooCardImage: MommooCardImage;
 
+  @ContentChild(MommooCardImage, {read: ElementRef})
+  private mommooCardImageElementRef: ElementRef<HTMLElement>;
+
+  @ContentChild(MommooCardTitle, {read: ElementRef})
+  private mommooCardTitle: ElementRef<HTMLElement>;
+
+  public constructor(private cardDomHandler: CardDomHandler,
+                     private cardDimensionChecker: CardDimensionChecker,
+                     private hostElementRef: ElementRef<HTMLElement>,
+                     private changeDetector: ChangeDetectorRef) {
+  }
+
+  ngOnInit(): void {
+    this.cardDimensionChecker.initialize(this.cardWidth, this.cardHeight);
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
-    const self = this;
-    this.cardStyler
-      .init(this.cardWidth, this.cardHeight, this.cardImagePath, this.themeColor)
-      .then(styleComputer => {
-        self.applyStyleToHost(styleComputer.computeRootBoxStyle());
-        self._cardShadowBoxStyle = styleComputer.computeShadowBoxStyle();
-        self._subThemeColor = styleComputer.computeSubThemeColor();
-        self._imageStyle = styleComputer.computeImageStyle();
-        self.cdr.detectChanges();
-        self._imageOnLoadListener();
-      });
+    this.cardDimensionChecker.initialize(this.cardWidth, this.cardHeight);
+    if (this.isFirstChanged) {
+      this.isFirstChanged = false;
+    } else {
+      this.setStyles();
+    }
   }
 
-  public actionButtonClicks(buttonName) : void {
-    this.actionEventEmitter.emit(buttonName);
+  public ngAfterViewInit(): void {
+    this.setStyles();
   }
 
-  private applyStyleToHost(CSSProps : {}) {
-    Object
-      .keys(CSSProps)
-      .map(propName => [propName, CSSProps[propName]])
-      .forEach(entry => this.renderer.setStyle(this.hostElementRef.nativeElement, entry[0], entry[1]));
+  public async setStyles() {
+    this.setHostStyle();
+    this.setCardTitleStyle();
+    this.setCardViewportGiveGutterToContents();
+    await this.setCardImageStyle();
+    this.changeDetector.detectChanges();
+    this.cardLoadCompleteListeners.forEach(listener => listener());
   }
 
-  /** to checking for card-load-checker.service */
-  private _watchImageLoaded(onLoadListener : ()=>void) {
-    this._imageOnLoadListener = onLoadListener;
+  private setHostStyle() {
+    DomUtils.applyStyle(this.hostElementRef, this.cardDomHandler.getHostStyle());
+  }
+
+  private setCardTitleStyle() {
+    if (this.mommooCardTitle) {
+      DomUtils.applyStyle(this.mommooCardTitle, this.cardDomHandler.getTitleStyle());
+    }
+  }
+
+  private setCardViewportGiveGutterToContents() {
+    if (this.mommooCardViewport) {
+      Array.from(this.mommooCardViewport.nativeElement.children)
+        .slice(1)
+        .map(element=> <HTMLElement>element)
+        .forEach(element=> DomUtils.applyStyle(element, {marginTop:`${this.cardContentsGutter}px`}));
+    }
+  }
+
+  private async setCardImageStyle() {
+    const isNeedToStyle = this.mommooCardImage && this.cardDimensionChecker.isHeightWrap();
+    if ( !isNeedToStyle ){
+      return;
+    }
+
+    try {
+      const imagePath = this.mommooCardImage.imagePath;
+      const imageDimension = await ImageLoader.promiseLoadImage(imagePath);
+      const imageStyle = this.cardDomHandler.getHeightWrapImageStyle(imageDimension.naturalWidth, imageDimension.naturalHeight);
+      DomUtils.applyStyle(this.mommooCardImageElementRef, imageStyle);
+    } catch{}
+  }
+
+  public addCardLoadCompleteListener(cardLoadCompleteListener: CardLoadCompleteListener) {
+    this.cardLoadCompleteListeners.push(cardLoadCompleteListener);
   }
 }

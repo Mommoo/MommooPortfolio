@@ -1,6 +1,5 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {StyledTextContentContainer} from './component/styled-text-content-container.component';
 import {MommooShadowBox} from './shadow-box/shadow-box.component';
 import {MommooRippleModule} from './ripple/ripple.module';
 
@@ -10,7 +9,7 @@ import {MommooRippleModule} from './ripple/ripple.module';
     MommooRippleModule
   ],
   providers : [],
-  exports : [StyledTextContentContainer, MommooShadowBox, MommooRippleModule],
-  declarations: [StyledTextContentContainer, MommooShadowBox]
+  exports : [MommooShadowBox, MommooRippleModule],
+  declarations: [MommooShadowBox]
 })
 export class MommooCommonModule { }
