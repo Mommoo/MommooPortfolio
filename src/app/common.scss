@@ -12,6 +12,18 @@
   font-family: 'Noto Sans KR', sans-serif;
 }
 
-@mixin Exo2 {
+@mixin Exo2Font {
   font-family: 'Exo 2', cursive;
+}
+
+@mixin desktop-media-query {
+  @media all and (min-width : 1025px) {
+    @content;
+  }
+}
+
+@mixin tablet-and-mobile-media-query {
+  @media all and (max-width:1024px) {
+    @content;
+  }
 }
