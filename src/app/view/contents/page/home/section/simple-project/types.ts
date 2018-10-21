@@ -1,6 +1,6 @@
-import {Project} from '../../../../../../data/http/http-data-structure';
+import {Project} from '../../../../../../server/data-types';
 
-export interface PortfolioCard extends Project.Simple {
+export interface SimpleProjectCard extends Project.Simple{
   columnSpan:number;
 }
 

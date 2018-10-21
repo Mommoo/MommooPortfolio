@@ -5,24 +5,24 @@ import {DomUtils} from '../../../../../mommoo-library/util/dom';
 import {WindowScrollAnimator} from './window-scroll-animator';
 
 @Component({
-  selector: 'view-main',
+  selector: 'home-page',
   styles: [':host{display:block}'], //if not display block, this element can not proper find position-top
   template: '' +
-    '<view-welcome></view-welcome>' +
-    '<view-profile #profile></view-profile>' +
-    '<view-about #about></view-about>' +
-    '<view-portfolio #portfolio></view-portfolio>',
+    '<welcome-section></welcome-section>' +
+    '<profile-section #profile></profile-section>' +
+    '<about-section #about></about-section>' +
+    '<simple-project-section #simpleProject></simple-project-section>',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HomeComponent implements OnInit, OnDestroy {
+export class HomePage implements OnInit, OnDestroy {
   @ViewChild('profile', {read: ElementRef})
   private profileElementRef: ElementRef<HTMLElement>;
 
   @ViewChild('about', {read: ElementRef})
   private aboutElementRef: ElementRef<HTMLElement>;
 
-  @ViewChild('portfolio', {read: ElementRef})
-  private portfolioElementRef: ElementRef<HTMLElement>;
+  @ViewChild('simpleProject', {read: ElementRef})
+  private simpleProjectElementRef: ElementRef<HTMLElement>;
 
   private headerMenuEventID: string;
 
@@ -45,14 +45,14 @@ export class HomeComponent implements OnInit, OnDestroy {
       case HeaderMenu.ABOUT:
         this.scrollAnimate(this.aboutElementRef);
         break;
-      case HeaderMenu.PORTFOLIO:
-        this.scrollAnimate(this.portfolioElementRef);
+      case HeaderMenu.PROJECT:
+        this.scrollAnimate(this.simpleProjectElementRef);
         break;
       case HeaderMenu.BLOG:
-        HomeComponent.openNewPage('https://mommoo.tistory.com');
+        HomePage.openNewPage('https://mommoo.tistory.com');
         break;
       case HeaderMenu.GITHUB:
-        HomeComponent.openNewPage('https://github.com/Mommoo');
+        HomePage.openNewPage('https://github.com/Mommoo');
         break;
     }
   }

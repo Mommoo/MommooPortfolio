@@ -12,7 +12,7 @@ export class BannerPageTemplate {
   public subTitles: string[];
 }
 
-export abstract class BasicSectionComponent {
+export abstract class BasicSection {
   @ViewChild('banner', {read: ViewContainerRef})
   private bannerContainerRef: ViewContainerRef;
 

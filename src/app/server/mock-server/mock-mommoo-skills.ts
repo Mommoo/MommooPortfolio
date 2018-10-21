@@ -1,6 +1,6 @@
 const IMAGE_ROOT_PATH = '/assets/images/';
 
-export const skill : Array<object> = [
+export const MockMommooSkills : Array<object> = [
   {
     name : 'Java',
     imagePath : `${IMAGE_ROOT_PATH}java.png`,
@@ -81,4 +81,4 @@ export const skill : Array<object> = [
     imagePath : `${IMAGE_ROOT_PATH}android.png`,
     hashTagMessages : ['개발 경험 다수', '커스텀 뷰', '자바로 개발']
   }
-]
+];

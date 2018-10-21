@@ -1,8 +1,10 @@
 import {animate, AnimationBuilder, AnimationPlayer, style} from "@angular/animations";
 import {MenuButtonState} from '../../types';
-import {EASE_IN_TIMING, EASE_OUT_TIMING} from '../../../../data/common/animation';
 
 export class MenuButtonAnimator{
+  private static readonly DURATION : number = 300;
+  private static readonly EASE_IN_TIMING : string = `${MenuButtonAnimator.DURATION}ms ease-in`;
+  private static readonly EASE_OUT_TIMING : string = `${MenuButtonAnimator.DURATION}ms ease-out`;
   private onDoneListener : (buttonAnimator : MenuButtonAnimator)=>void = ()=>{};
 
   public constructor(private animationBuilder : AnimationBuilder, private menuButtonState : MenuButtonState){
@@ -37,12 +39,18 @@ export class MenuButtonAnimator{
     // this.animPlayers.forEach(animPlayer=> animPlayer.clear());
   }
 
+  private static getAnimationTiming(buttonState: MenuButtonState): string {
+    return buttonState === MenuButtonState.CLOSED ?
+      MenuButtonAnimator.EASE_IN_TIMING :
+      MenuButtonAnimator.EASE_OUT_TIMING
+  }
+
   private createTopMenuAnimPlayer(topMenuElem : HTMLElement) : AnimationPlayer {
     return this.animationBuilder.build([
       style({
         transform : this.menuButtonState === MenuButtonState.CLOSED ? 'rotate(0deg)' : 'rotate(-405deg)'
       }),
-      animate(this.menuButtonState === MenuButtonState.CLOSED ? EASE_IN_TIMING : EASE_OUT_TIMING,
+      animate(this.menuButtonState === MenuButtonState.CLOSED ? MenuButtonAnimator.EASE_IN_TIMING : MenuButtonAnimator.EASE_OUT_TIMING,
         style({
           transform : this.menuButtonState === MenuButtonState.CLOSED ? 'rotate(-405deg)' : 'rotate(0deg)',
           top : this.menuButtonState === MenuButtonState.CLOSED ? '10px' : '0px'
@@ -55,7 +63,7 @@ export class MenuButtonAnimator{
       style({
         opacity : this.menuButtonState === MenuButtonState.CLOSED ? 1 : 0
       }),
-      animate(this.menuButtonState === MenuButtonState.CLOSED ? EASE_IN_TIMING : EASE_OUT_TIMING,
+      animate(this.menuButtonState === MenuButtonState.CLOSED ? MenuButtonAnimator.EASE_IN_TIMING : MenuButtonAnimator.EASE_OUT_TIMING,
         style({
           opacity : this.menuButtonState === MenuButtonState.CLOSED ? 0 : 1,
         }))
@@ -67,7 +75,7 @@ export class MenuButtonAnimator{
       style({
         transform : this.menuButtonState === MenuButtonState.CLOSED ? 'rotate(0deg)' : 'rotate(405deg)'
       }),
-      animate(this.menuButtonState === MenuButtonState.CLOSED ? EASE_IN_TIMING : EASE_OUT_TIMING,
+      animate(this.menuButtonState === MenuButtonState.CLOSED ? MenuButtonAnimator.EASE_IN_TIMING : MenuButtonAnimator.EASE_OUT_TIMING,
         style({
           transform : this.menuButtonState === MenuButtonState.CLOSED ? 'rotate(405deg)' : 'rotate(0deg)',
           top : this.menuButtonState === MenuButtonState.CLOSED ? '10px' : '20px'

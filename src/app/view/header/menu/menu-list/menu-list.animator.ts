@@ -1,5 +1,4 @@
 import {animate, AnimationBuilder, style} from '@angular/animations';
-import {EASE_IN_TIMING} from '../../../../data/common/animation';
 import {Injectable} from '@angular/core';
 
 @Injectable({
@@ -25,7 +24,7 @@ export class MenuListAnimator {
   private doHeightChangeAnimate(nativeListElement : HTMLElement, fromHeight : number, toHeight : number, callback? : () => void) : void {
     const animator = this.animationBuilder.build([
         style({height : fromHeight}),
-        animate(EASE_IN_TIMING, style({
+        animate('300ms ease-in', style({
           height : toHeight
         }))
       ]).create(nativeListElement);

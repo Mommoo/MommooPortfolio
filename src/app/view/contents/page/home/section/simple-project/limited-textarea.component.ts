@@ -2,8 +2,8 @@ import {Component, Input, OnInit} from '@angular/core';
 
 @Component({
   selector: 'view-limited-textarea',
-  templateUrl: './limited-textarea.component.html',
-  styleUrls: ['./limited-textarea.component.scss']
+  template: '{{text}}',
+  styles: [':host { display : block;}']
 })
 export class LimitedTextareaComponent implements OnInit {
   private _text : string = "";

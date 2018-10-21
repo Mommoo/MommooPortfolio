@@ -8,7 +8,7 @@ import {HttpClientModule} from '@angular/common/http';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MommooUIModule} from '../mommoo-library/ui/ui.module';
 import {ViewModule} from './view/view.module';
-import {fakeBackendProvider} from './mock-backend/MockBackEndService';
+import {fakeBackendProvider} from './server/mock-server/mock-server.service';
 
 @NgModule({
   declarations: [

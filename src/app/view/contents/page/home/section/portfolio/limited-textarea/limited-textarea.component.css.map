@@ -1,7 +1,0 @@
-{
-"version": 3,
-"mappings": "AAAA,KAAM;EACJ,OAAO,EAAG,KAAK",
-"sources": ["limited-textarea.component.scss"],
-"names": [],
-"file": "limited-textarea.component.css"
-}

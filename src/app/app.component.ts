@@ -76,5 +76,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     WindowEventHandler.removeEvent(this.templateChangeEventID);
   }
 }
-
+// export class AppComponent{
+//
+// }
 

@@ -1,7 +1,7 @@
 export enum HeaderMenu {
   PROFILE = 'profile',
   ABOUT = 'about',
-  PORTFOLIO = 'portfolio',
+  PROJECT = 'project',
   BLOG = 'blog',
   GITHUB = 'github'
 }

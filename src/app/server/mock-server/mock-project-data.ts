@@ -1,4 +1,4 @@
-export module Project {
+export module MockProject {
   export const detail : Array<object> = [
     {
       projectNumber: 0,
@@ -74,7 +74,7 @@ export module Project {
       projectNumber: 8,
       title: 'JavaExample',
       imagePath: '/assets/images/portfolio/java-exam.png',
-      devSkills: ['Maven Project', 'JSP Server', 'JSTL','MariaDB', 'JQuery Core/Animation', 'SCSS', '반응형 페이지'],
+      devSkills: ['Maven MockProject', 'JSP Server', 'JSTL','MariaDB', 'JQuery Core/Animation', 'SCSS', '반응형 페이지'],
       summary: '자바 과외를 진행하면서, 학생들의 자바 공부를 위해 자바 퀴즈를 내곤 했다. 학생 수 가 많아지면서 자바 퀴즈 컨첸츠를 웹을 통해 서비스하면 좋을거 같다는 생각에 시작하게 되었다. 통상적인 DB + 웹서버 + 프론트 구조이다.  JSP로 백앤드를 구성하였으며, DB는 MariaDB이고, 프론트는 JavaScript(JQuery)이다. 페이지 이동시 form 태그를 통해 메시징 처리를 하였으며, JQuery를 이용하여 Dom Animation으로 효과를 더하였다.\n' +
         '미디어 쿼리를 통해 반응형 페이지로 구성하였다. CSS의 슈퍼셋인 SCSS를 도입하여, CSS의 약점인 공통코드 처리, 변수 처리 등을 해결하였다. JSTL 라이브러리를 통해 Model1의 서버랜더링 페이지로 구성하였다. ',
       description: 'Tomcat을 통해 JSP페이지를 띄우는 방법을 알게되었고, 클라이언트가 던져주는 메시지를 어떻게 받고 처리하는지의 메시징 처리 기술의 원리를 알게 되었다. 필요한 라이브러리를 일일이 다운받는 것이 아닌 Maven Project를 통해, 편리하게 의존성 관리를 할 수 있었으며 또한, 서버 페이지를 구성하면서 모르는 부분 공부를 틈틈히 진행하여 Http 통신의 지식이 더 풍부해졌다. Model1, Model2 방식을 공부하면서 스프링 프레임워크가 어떤 기반이며, 철학이 무엇인지 조금 알 수 있는 계기가 되었다. 또한 XML 선언 기반 데이터 처리를 처음 겪게 되었고 이 당시에는 이러한 방식이 크게 장점으로 다가 오지 않았다. JSTL을 통해, JSP의 데이터를 클라이언트 사이드에 전달 하는 방법에 대해 알게되었고, 원리를 공부했다. JSTL 덕분에 페이지 랜더링쪽 지식이 더 풍부해졌다. CSS를 구성할 때, 공통 값을 일일이 리터럴 값으로 채워 넣으니, 수정사항이 생기거나 추가적인 사항이 생길 때, 너무 불편했었다. 해결책을 찾기 위해 찾아본 결과 루비 엔진 기반의 SCSS을 알게되었고, 적용하여서 크게 만족했던 경험이 있다. 반응형 페이지를 위해 CSS 미디어 쿼리 뿐만 아니라 자바스크립트를 통해 미디어 쿼리를 동적으로 작성해보았다.'

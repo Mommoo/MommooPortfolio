@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {MommooUIModule} from '../../../../../../../mommoo-library/ui/ui.module';
-import {AboutComponent} from './about.component';
+import {AboutSection} from './about.component';
 
 @NgModule({
   imports: [
@@ -9,8 +9,8 @@ import {AboutComponent} from './about.component';
     MommooUIModule
   ],
   exports : [
-    AboutComponent
+    AboutSection
   ],
-  declarations: [AboutComponent]
+  declarations: [AboutSection]
 })
 export class AboutModule { }

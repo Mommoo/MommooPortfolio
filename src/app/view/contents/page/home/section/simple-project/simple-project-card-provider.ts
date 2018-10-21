@@ -1,29 +1,29 @@
-import {Project} from '../../../../../../data/http/http-data-structure';
-import {PortfolioCard, wideCardProjectNumberList} from './types';
+import {SimpleProjectCard, wideCardProjectNumberList} from './types';
+import {Project} from '../../../../../../server/data-types';
 
 /** for 4x4 gird array */
-export class PortfolioCardProvider {
+export class SimpleProjectCardProvider {
   private static WIDE_CARD_COLUMN_SPAN = 2;
   private static NORMAL_CARD_COLUMN_SPAN = 1;
   private wideCardIndexList = [];
   private currentIndex = 0;
 
-  private properOrderedCardList: PortfolioCard[] = [];
+  private readonly properOrderedCardList: SimpleProjectCard[] = [];
 
-  public setProjectSimples(projectSimples: Project.Simple[]) {
+  public constructor(projectSimples: Project.Simple[]) {
     this.initialize();
     this.properOrderedCardList = this.convertToProperOrderedCardList(projectSimples);
   }
 
-  public getBasicPortfolioCards() {
-    return this.buildColumnSpanToPortfolioCards(PortfolioCardProvider.NORMAL_CARD_COLUMN_SPAN);
+  public getBasicSimpleProjectCards() {
+    return this.buildColumnSpanToSimpleProjectCards(SimpleProjectCardProvider.NORMAL_CARD_COLUMN_SPAN);
   }
 
-  public getMixedPortfolioCards() {
-    return this.buildColumnSpanToPortfolioCards(PortfolioCardProvider.WIDE_CARD_COLUMN_SPAN);
+  public getMixedSimpleProjectCards() {
+    return this.buildColumnSpanToSimpleProjectCards(SimpleProjectCardProvider.WIDE_CARD_COLUMN_SPAN);
   }
 
-  private buildColumnSpanToPortfolioCards(wideCardColumnSpan: number) {
+  private buildColumnSpanToSimpleProjectCards(wideCardColumnSpan: number) {
     this.wideCardIndexList
       .forEach(index=> this.properOrderedCardList[index].columnSpan = wideCardColumnSpan);
     return this.properOrderedCardList;
@@ -34,53 +34,53 @@ export class PortfolioCardProvider {
     this.wideCardIndexList = [];
   }
 
-  private convertToProperOrderedCardList(projectSimples: Project.Simple[]): PortfolioCard[] {
-    const [widePortfolioCards, normalPortfolioCards]
-      = PortfolioCardProvider.divideWideAndNormalGroup(projectSimples);
+  private convertToProperOrderedCardList(projectSimples: Project.Simple[]): SimpleProjectCard[] {
+    const [wideSimpleProjectCards, normalSimpleProjectCards]
+      = SimpleProjectCardProvider.divideWideAndNormalGroup(projectSimples);
 
     const simpleCardCount = projectSimples.length;
-    const wideCardCount = widePortfolioCards.length;
+    const wideCardCount = wideSimpleProjectCards.length;
 
     if ( this.isInValidWideCount(simpleCardCount, wideCardCount) ) {
       throw new Error('count of wide-card is invalid');
     }
 
-    const portfolioCards: PortfolioCard[] = [];
+    const projectCards: SimpleProjectCard[] = [];
     let currentWideCardOrder = this.computeNextWideCardOrder();
 
     for ( let index = 0; index < projectSimples.length; index++ ) {
-      let portfolioCard: PortfolioCard;
+      let projectCard: SimpleProjectCard;
 
       if ( index === currentWideCardOrder ) {
-        portfolioCard = widePortfolioCards.pop();
+        projectCard = wideSimpleProjectCards.pop();
         this.wideCardIndexList.push(index);
         currentWideCardOrder = this.computeNextWideCardOrder();
       } else {
-        portfolioCard = normalPortfolioCards.pop();
+        projectCard = normalSimpleProjectCards.pop();
       }
 
-      portfolioCards.push(portfolioCard);
+      projectCards.push(projectCard);
     }
 
-    return portfolioCards;
+    return projectCards;
   }
 
-  private static divideWideAndNormalGroup(projectSimples: Project.Simple[]): [PortfolioCard[], PortfolioCard[]] {
-    const widePortfolioCards: PortfolioCard[] = [];
-    const normalPortfolioCards: PortfolioCard[] = [];
+  private static divideWideAndNormalGroup(projectSimples: Project.Simple[]): [SimpleProjectCard[], SimpleProjectCard[]] {
+    const wideSimpleProjectCards: SimpleProjectCard[] = [];
+    const normalSimpleProjectCards: SimpleProjectCard[] = [];
 
     projectSimples.forEach(simple=> {
-      const portfolioCard = this.convertSimpleToPortfolioCard(simple);
+      const portfolioCard = this.convertSimpleToSimpleProjectCard(simple);
 
       if ( this.isWideCardTargetProject(simple) ) {
-        widePortfolioCards.push(portfolioCard);
+        wideSimpleProjectCards.push(portfolioCard);
 
       } else {
-        normalPortfolioCards.push(portfolioCard);
+        normalSimpleProjectCards.push(portfolioCard);
       }
     });
 
-    return [widePortfolioCards, normalPortfolioCards];
+    return [wideSimpleProjectCards, normalSimpleProjectCards];
   }
 
   private static isWideCardTargetProject(simple: Project.Simple) {
@@ -88,7 +88,7 @@ export class PortfolioCardProvider {
       .some(projectNumber => projectNumber === simple.projectNumber);
   }
 
-  private static convertSimpleToPortfolioCard(simple: Project.Simple): PortfolioCard {
+  private static convertSimpleToSimpleProjectCard(simple: Project.Simple): SimpleProjectCard {
     return {
       ...simple,
       columnSpan: this.NORMAL_CARD_COLUMN_SPAN

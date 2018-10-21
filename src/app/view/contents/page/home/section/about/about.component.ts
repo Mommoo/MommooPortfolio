@@ -1,29 +1,28 @@
 import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
-import {BasicSectionComponent} from '../../common/basic/basic-section.component';
-import {DataLoaderService} from '../../../../../../data/http/data-loader.service';
-import {Skill} from '../../../../../../data/http/http-data-structure';
+import {BasicSection} from '../../common/basic/basic-section.component';
 import {ViewportChangeDetector} from './viewport-change-detector';
 import {ViewportState} from './types';
+import {Skill} from '../../../../../../server/data-types';
+import {PromiseDataLoader} from '../../../../../../server/promise-data-loader.service';
 
 @Component({
-  selector: 'view-about',
+  selector: 'about-section',
   templateUrl: './about.component.html',
   styleUrls: ['./about.component.scss']
 })
-export class AboutComponent extends BasicSectionComponent implements OnInit, OnDestroy {
+export class AboutSection extends BasicSection implements OnInit, OnDestroy {
   private _maxColumnNum = 6;
   private _gutterSize = 20;
-  private _hashTagFontType ='NotoSans-Thin, sans-serif';
   private _cardTextFontSize : string;
   private _skills : Skill[];
 
   private viewportChangeDetector = new ViewportChangeDetector();
 
-  constructor(private changeDetector: ChangeDetectorRef, private httpDataLoader : DataLoaderService) {
+  constructor(private changeDetector: ChangeDetectorRef, private promiseDataLoader : PromiseDataLoader) {
     super();
   }
 
-  private setProperty(colNum : number, contentFontSize : string, gutterSize : number) {
+  private setSkillCardProperty(colNum : number, contentFontSize : string, gutterSize : number) {
     this._maxColumnNum = colNum;
     this._cardTextFontSize = contentFontSize;
     this._gutterSize = gutterSize;
@@ -38,10 +37,6 @@ export class AboutComponent extends BasicSectionComponent implements OnInit, OnD
     return this._gutterSize;
   }
 
-  public get hashTagFontType(): string {
-    return this._hashTagFontType;
-  }
-
   public get cardTextFontSize(): string {
     return this._cardTextFontSize;
   }
@@ -50,33 +45,28 @@ export class AboutComponent extends BasicSectionComponent implements OnInit, OnD
     return this._skills;
   }
 
-  ngOnInit(): void {
-    this.httpDataLoader.getSkills().subscribe(skills=> this.buildAboutPage(skills));
-  }
-
-  private buildAboutPage(skills: Skill[]) {
-    this._skills = skills;
+  public async ngOnInit() {
+    this._skills = await this.promiseDataLoader.promiseSkills();
     this.setPropertyChangeListenerAccordingToViewportState();
-    console.log('foo!');
   }
 
   private setPropertyChangeListenerAccordingToViewportState(){
     this.viewportChangeDetector.setViewportStatusListener(status=> {
       switch(status) {
         case ViewportState.X_LARGE:
-          this.setProperty(6, '1vmax', 12);
+          this.setSkillCardProperty(6, '1vmax', 12);
           break;
         case ViewportState.LARGE:
-          this.setProperty(5, '1.2max', 10);
+          this.setSkillCardProperty(5, '1.2max', 10);
           break;
         case ViewportState.X_MEDIUM:
-          this.setProperty(4, '1.4max', 8);
+          this.setSkillCardProperty(4, '1.4max', 8);
           break;
         case ViewportState.MEDIUM:
-          this.setProperty(4, '1.5max', 6);
+          this.setSkillCardProperty(4, '1.5max', 6);
           break;
         case ViewportState.SMALL:
-          this.setProperty(2, '2vmax', 4);
+          this.setSkillCardProperty(2, '2vmax', 4);
           break;
       }
     });

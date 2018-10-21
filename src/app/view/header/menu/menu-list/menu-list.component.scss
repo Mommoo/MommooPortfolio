@@ -1,4 +1,4 @@
-@import 'font';
+@import '../../../../common';
 
 :host {
   width : 100%;
@@ -16,7 +16,7 @@ nav {
   }
 
   li {
-    @include Exo2;
+    @include Exo2Font;
     display : block;
     position : relative;
     font-size : 0.8rem;

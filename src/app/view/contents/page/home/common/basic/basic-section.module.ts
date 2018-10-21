@@ -8,7 +8,7 @@ import {MommooUIModule} from '../../../../../../../mommoo-library/ui/ui.module';
     CommonModule,
     MommooUIModule
   ],
-  /** To load specific component dynamically by using angular compiler
+  /** To promiseLoadImage specific component dynamically by using angular compiler
    * so, need to notify about what component will be loaded dynamically */
   entryComponents : [BannerPageTemplate],
   declarations: [BannerPageTemplate]

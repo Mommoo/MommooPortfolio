@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {ProfileComponent} from './profile.component';
-import {NameCardComponent} from './name-card/name-card.component';
+import {ProfileSection} from './profile.component';
 import {MommooUIModule} from '../../../../../../../mommoo-library/ui/ui.module';
 
 @NgModule({
@@ -9,7 +8,7 @@ import {MommooUIModule} from '../../../../../../../mommoo-library/ui/ui.module';
     CommonModule,
     MommooUIModule
   ],
-  exports : [ProfileComponent],
-  declarations: [ProfileComponent, NameCardComponent]
+  exports : [ProfileSection],
+  declarations: [ProfileSection]
 })
 export class ProfileModule { }

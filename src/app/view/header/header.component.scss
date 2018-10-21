@@ -1,7 +1,8 @@
-@import 'font';
+@import '../../common';
 
 :host {
   background-color : #f3f3f3;
+  user-select: none;
   display : block;
   width : 100%;
   height : 100%;
@@ -33,8 +34,7 @@
   }
 }
 
-// Desktop
-@media all and (min-width : 1025px) {
+@include desktop-media-query {
   #header {
     #title {
       padding : 4rem 0;
@@ -51,7 +51,7 @@
   }
 }
 
-@media all and (max-width:1024px) {
+@include tablet-and-mobile-media-query {
   #flex-column-line {
     flex-direction: row;
   }

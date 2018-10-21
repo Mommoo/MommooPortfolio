@@ -5,13 +5,16 @@
   [maxColumnNum]="maxColumnNum"
   [style.padding.px]="gutterSize"
   [rowHeight]="'1:1'">
-  <mommoo-grid-tile *ngFor="let skill of skills" [colSpan]="1" [rowSpan]="1">
-    <mommoo-card
-      [hashTagMessages]="skill.hashTagMessages"
-      [hashTagBoxStyle]="{fontFamily : hashTagFontType}"
-      [cardImagePath]="skill.imagePath"
-      [themeColor]="themeColor">
-      <div class="card-content" [style.fontSize]="cardTextFontSize">{{skill.name}}</div>
+  <mommoo-grid-tile *ngFor="let mockMommooSkill of skills" [colSpan]="1" [rowSpan]="1">
+    <mommoo-card>
+      <mommoo-card-viewport style="padding:16px">
+        <mommoo-card-image [imagePath]="mockMommooSkill.imagePath"></mommoo-card-image>
+        <mommoo-card-contents [style.fontSize]="cardTextFontSize" id="card-title">{{mockMommooSkill.name}}</mommoo-card-contents>
+        <mommoo-card-hashtag>
+          <mommoo-card-hashtag-contents
+            *ngFor="let message of mockMommooSkill.hashTagMessages">{{message}}</mommoo-card-hashtag-contents>
+        </mommoo-card-hashtag>
+      </mommoo-card-viewport>
     </mommoo-card>
   </mommoo-grid-tile>
 </mommoo-grid-list>

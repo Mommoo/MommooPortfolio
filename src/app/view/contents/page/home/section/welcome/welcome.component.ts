@@ -1,19 +1,16 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import {BasicSectionComponent} from '../../common/basic/basic-section.component';
+import {BasicSection} from '../../common/basic/basic-section.component';
 
 @Component({
-  selector: 'view-welcome',
+  selector: 'welcome-section',
   templateUrl: './welcome.component.html',
   styleUrls: ['./welcome.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class WelcomeComponent extends BasicSectionComponent implements OnInit {
+export class WelcomeSection extends BasicSection {
 
-  constructor() {
+  public constructor() {
     super();
-  }
-
-  ngOnInit() {
   }
 
   protected getPageSubTitle(): string[] {

@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {PortfolioComponent} from './portfolio.component';
 import {MommooUIModule} from '../../../../../../../mommoo-library/ui/ui.module';
-import { LimitedTextareaComponent } from './limited-textarea/limited-textarea.component';
 import {HttpClientModule} from '@angular/common/http';
+import {LimitedTextareaComponent} from './limited-textarea.component';
+import {SimpleProjectSection} from './simple-project.component';
 
 @NgModule({
   imports: [
@@ -12,8 +12,8 @@ import {HttpClientModule} from '@angular/common/http';
     HttpClientModule
   ],
   exports : [
-    PortfolioComponent
+    SimpleProjectSection
   ],
-  declarations: [PortfolioComponent, LimitedTextareaComponent]
+  declarations: [SimpleProjectSection, LimitedTextareaComponent]
 })
-export class PortfolioModule { }
+export class SimpleProjectModule { }

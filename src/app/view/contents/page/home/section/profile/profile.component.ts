@@ -1,12 +1,12 @@
 import {Component} from '@angular/core';
-import {BasicSectionComponent} from '../../common/basic/basic-section.component';
+import {BasicSection} from '../../common/basic/basic-section.component';
 
 @Component({
-  selector: 'view-profile',
+  selector: 'profile-section',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
 })
-export class ProfileComponent extends BasicSectionComponent {
+export class ProfileSection extends BasicSection {
   constructor() {
     super();
   }
