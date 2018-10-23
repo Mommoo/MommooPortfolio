@@ -6,6 +6,7 @@ import {MenuListComponent} from './menu/menu-list/menu-list.component';
 import {HeaderMenuListEventService} from './header-menu-list-event.service';
 import {MommooUIModule} from '../../../mommoo-library/ui/ui.module';
 import {MommooCommonModule} from '../../../mommoo-library/ui/common/common.module';
+import {MenuButtonAnimator} from './menu/menu-button/menu-button-animator.service';
 
 @NgModule({
   imports: [
@@ -17,6 +18,6 @@ import {MommooCommonModule} from '../../../mommoo-library/ui/common/common.modul
     HeaderComponent
   ],
   declarations: [HeaderComponent, MenuButtonComponent, MenuListComponent],
-  providers : [HeaderMenuListEventService]
+  providers : [HeaderMenuListEventService, MenuButtonAnimator]
 })
 export class HeaderModule { }
