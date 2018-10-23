@@ -106,6 +106,12 @@ export interface Keyframe {
   '99%'? : DomCSSStyle,
   '100%'? : DomCSSStyle
 }
+
+export interface AnimationKeyframe {
+  animationName: string,
+  keyframe: Keyframe
+}
+
 export const Vendors = ['moz', 'ms', 'webkit', 'o'];
 export const KeyframePrefix = ['@-moz-', '@-webkit-', '-o-', '-ms-', '@'];
 
@@ -130,7 +136,7 @@ export interface KeyframeAnimationConfig {
   timingFunction?: 'linear' | 'ease' | 'ease-in' | 'ease-out' | 'ease-in-out' | any,
   fillMode?: 'none' | 'forwards' | 'backwards' | 'both'
   iterationCount?: number | 'infinite',
-  direction? : 'alternate' | 'alternate-reverse' | 'normal' | 'reserve'
+  direction? : 'alternate' | 'alternate-reverse' | 'normal' | 'reverse'
 }
 
 export const BasicKeyframeAnimationConfig: KeyframeAnimationConfig = {

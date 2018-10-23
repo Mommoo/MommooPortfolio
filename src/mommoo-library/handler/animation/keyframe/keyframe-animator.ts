@@ -1,4 +1,11 @@
-import {AnimationTarget, BasicKeyframeAnimationConfig, Keyframe, KeyframeAnimationConfig, KeyframeAnimationListener} from '../types';
+import {
+  AnimationKeyframe,
+  AnimationTarget,
+  BasicKeyframeAnimationConfig,
+  Keyframe,
+  KeyframeAnimationConfig,
+  KeyframeAnimationListener
+} from '../types';
 import {ElementRef} from '@angular/core';
 import {DomUtils} from '../../../util/dom';
 import {KeyframesFinder} from './keyframes-finder';
@@ -20,6 +27,11 @@ export class KeyframeAnimator {
 
   public addKeyframe(animationName : string, keyframe : Keyframe) {
     this.keyframesFinder.addKeyframes(animationName, keyframe);
+    this.writeStyle(this.keyframesFinder.wholeCssKeyFrames());
+  }
+
+  public addKeyframes(frames: AnimationKeyframe[]){
+    frames.forEach(animKeyframe => this.keyframesFinder.addKeyframes(animKeyframe.animationName, animKeyframe.keyframe));
     this.writeStyle(this.keyframesFinder.wholeCssKeyFrames());
   }
 
