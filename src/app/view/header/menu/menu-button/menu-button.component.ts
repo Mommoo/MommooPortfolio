@@ -1,7 +1,6 @@
 import {ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Output, ViewChild} from '@angular/core';
-import {AnimationBuilder} from '@angular/animations';
-import {MenuButtonAnimator} from './menu-button.animator';
 import {MenuButtonEvent, MenuButtonState} from '../../types';
+import {MenuButtonAnimator} from './menu-button-animator.service';
 
 @Component({
   selector: 'view-menu-button',
@@ -10,9 +9,7 @@ import {MenuButtonEvent, MenuButtonState} from '../../types';
   changeDetection : ChangeDetectionStrategy.OnPush
 })
 export class MenuButtonComponent {
-
   private menuButtonState : MenuButtonState = MenuButtonState.CLOSED;
-  private isMenuButtonAnimStart : boolean = false;
 
   @ViewChild('menuTop')
   private menuTopElementRef : ElementRef;
@@ -26,28 +23,37 @@ export class MenuButtonComponent {
   @Output('menuButtonEvent')
   private menuButtonEventEmitter : EventEmitter<MenuButtonEvent> = new EventEmitter<MenuButtonEvent>();
 
-  constructor(private animationBuilder : AnimationBuilder) {
+  constructor(private menuButtonAnimator: MenuButtonAnimator) {
 
   }
 
   public buttonAnimate(){
-    if ( this.isMenuButtonAnimStart ) {
+    if ( this.menuButtonAnimator.isAnimationPending() ) {
       return ;
     }
 
-    this.isMenuButtonAnimStart = true;
-
     this.menuButtonEventEmitter.emit(this.menuButtonState === MenuButtonState.CLOSED ? MenuButtonEvent.OPEN : MenuButtonEvent.CLOSE);
 
-    new MenuButtonAnimator(this.animationBuilder, this.menuButtonState)
-      .onDone(()=> {
-        this.isMenuButtonAnimStart = false;
-        this.menuButtonState = this.menuButtonState === MenuButtonState.CLOSED ? MenuButtonState.OPENED : MenuButtonState.CLOSED;
-      })
-      .playTogether(this.menuTopElementRef.nativeElement, this.menuMiddleElementRef.nativeElement, this.menuBottomElementRef.nativeElement);
+    const updateState = () => {
+      this.menuButtonState = this.menuButtonState === MenuButtonState.CLOSED ? MenuButtonState.OPENED : MenuButtonState.CLOSED
+    };
+
+    if ( this.menuButtonState === MenuButtonState.CLOSED ) {
+      this.menuButtonAnimator.startNormalAnimation(this.menuLineElementRefs(), ()=> updateState());
+    } else {
+      this.menuButtonAnimator.startReverseAnimation(this.menuLineElementRefs(), ()=> updateState());
+    }
   }
 
   public getMenuButtonState() : MenuButtonState {
     return this.menuButtonState;
+  }
+
+  private menuLineElementRefs() {
+    return [
+      this.menuTopElementRef,
+      this.menuMiddleElementRef,
+      this.menuBottomElementRef
+    ]
   }
 }
