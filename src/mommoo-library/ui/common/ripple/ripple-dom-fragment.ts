@@ -6,7 +6,9 @@ export class RippleDomFragment{
 
   public constructor(private rippleConfig: RippleConfig) {
     this._rippleElement  = this.createRippleElement();
-    this.rippleConfig.container.appendChild(this._rippleElement);
+    const wrapper = this.createRippleWrapper();
+    wrapper.appendChild(this._rippleElement);
+    this.rippleConfig.container.appendChild(wrapper);
   }
 
   public get rippleElement() {
@@ -14,11 +16,27 @@ export class RippleDomFragment{
   }
 
   public destroy() {
-    this._rippleElement.parentElement.removeChild(this._rippleElement);
+    const wrapper = this._rippleElement.parentElement;
+    wrapper.removeChild(this._rippleElement);
+    wrapper.parentElement.removeChild(wrapper);
   }
 
+  private createRippleWrapper(): HTMLElement {
+    const containerPosition = DomUtils.position(this.rippleConfig.container);
+    return DomUtils.styledNewElement({
+      width: `${containerPosition.width}px`,
+      height: `${containerPosition.height}px`,
+      position: 'absolute',
+      backgroundColor: 'rgba(0,0,0,0)',
+      overflow: 'hidden',
+      left: `0`,
+      top: `0`,
+      zIndex:'2',
+      borderRadius: this.rippleConfig.radius,
+      pointerEvents: 'none'
+    });
+  }
   private createRippleElement(): HTMLElement {
-    DomUtils.applyStyle(this.rippleConfig.container, {borderRadius: this.rippleConfig.radius});
     const containerPosition = DomUtils.position(this.rippleConfig.container);
     const pageX = this.rippleConfig.positionX;
     const pageY = this.rippleConfig.positionY;

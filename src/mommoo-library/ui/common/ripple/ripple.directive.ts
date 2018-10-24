@@ -1,5 +1,5 @@
 import {
-  AfterViewInit,
+  AfterViewInit, ChangeDetectorRef,
   Directive,
   ElementRef,
   EventEmitter,
@@ -44,7 +44,7 @@ export class MommooRipple implements OnInit, OnDestroy, OnChanges, AfterViewInit
   constructor(private rippleRenderer: RippleRenderer,
               private rippleEventHandler: RippleEventHandler,
               private rippleConfig: RippleConfig,
-              private hostElementRef: ElementRef<HTMLElement>) {
+              private hostElementRef: ElementRef<HTMLElement>, private cdh: ChangeDetectorRef) {
 
   }
 
@@ -62,12 +62,9 @@ export class MommooRipple implements OnInit, OnDestroy, OnChanges, AfterViewInit
     this.setRippleContainerStyle();
   }
 
-  /** ripple container have to be position 'relative' and  overflow 'hidden' */
+  /** ripple container have to be position 'relative' */
   private setRippleContainerStyle() {
-    DomUtils.applyStyle(this.hostElementRef, {
-      position: 'relative',
-      overflow: 'hidden'
-    });
+    DomUtils.applyStyle(this.hostElementRef, {position: 'relative'});
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
