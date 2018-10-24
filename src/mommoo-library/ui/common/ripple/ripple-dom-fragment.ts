@@ -22,8 +22,8 @@ export class RippleDomFragment{
     const pageX = this.rippleConfig.positionX;
     const pageY = this.rippleConfig.positionY;
 
-    const x = pageX - containerPosition.left;
-    const y = pageY - containerPosition.top;
+    const x = pageX - containerPosition.left - pageXOffset;
+    const y = pageY - containerPosition.top - pageYOffset;
     const radius = RippleDomFragment.distanceToFurthestAtCorner(x, y, containerPosition.width, containerPosition.height);
     const size = `${radius *2}px`;
     return DomUtils.styledNewElement({
