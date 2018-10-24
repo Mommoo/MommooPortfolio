@@ -6,6 +6,7 @@ export class RippleConfig {
   private _positionX: number;
   private _positionY: number;
   private _color: string;
+  private _radius: string;
   private _fadeInDuration: number;
   private _fadeOutDuration: number;
 
@@ -55,5 +56,14 @@ export class RippleConfig {
 
   set fadeOutDuration(value: number) {
     this._fadeOutDuration = value;
+  }
+
+
+  get radius(): string {
+    return this._radius;
+  }
+
+  set radius(value: string) {
+    this._radius = value;
   }
 }

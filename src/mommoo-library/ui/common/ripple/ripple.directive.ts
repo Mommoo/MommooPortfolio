@@ -30,6 +30,9 @@ export class MommooRipple implements OnInit, OnDestroy, OnChanges, AfterViewInit
   private rippleColor: string = 'rgba(0,0,0,0.25)';
 
   @Input()
+  private rippleRadius: string ='';
+
+  @Input()
   private rippleFadeInDuration: number = 400;
 
   @Input()
@@ -73,6 +76,7 @@ export class MommooRipple implements OnInit, OnDestroy, OnChanges, AfterViewInit
 
   private buildRippleConfig() {
     this.rippleConfig.color = this.rippleColor;
+    this.rippleConfig.radius = this.rippleRadius;
     this.rippleConfig.fadeInDuration = this.rippleFadeInDuration;
     this.rippleConfig.fadeOutDuration = this.rippleFadeOutDuration;
   }

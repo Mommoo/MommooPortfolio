@@ -18,6 +18,7 @@ export class RippleDomFragment{
   }
 
   private createRippleElement(): HTMLElement {
+    DomUtils.applyStyle(this.rippleConfig.container, {borderRadius: this.rippleConfig.radius});
     const containerPosition = DomUtils.position(this.rippleConfig.container);
     const pageX = this.rippleConfig.positionX;
     const pageY = this.rippleConfig.positionY;
