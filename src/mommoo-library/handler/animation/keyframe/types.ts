@@ -1,5 +1,5 @@
+import {DomCSSStyle} from '../../../util/types';
 import {ElementRef} from '@angular/core';
-import {DomCSSStyle} from '../../util/types';
 
 export interface Keyframe {
   from? : DomCSSStyle,
@@ -109,10 +109,10 @@ export interface Keyframe {
 
 export interface AnimationKeyframe {
   animationName: string,
-  keyframe: Keyframe
+  keyframe: Keyframe,
+  commonConfig?: KeyframeAnimationConfig
 }
 
-export const Vendors = ['moz', 'ms', 'webkit', 'o'];
 export const KeyframePrefix = ['@-moz-', '@-webkit-', '-o-', '-ms-', '@'];
 
 export enum KeyframeAnimationType {
@@ -130,7 +130,6 @@ export const KeyframeAnimationTypes : KeyframeAnimationType[] = [
 export type KeyframeAnimationListener = (type : KeyframeAnimationType) => void;
 
 export interface KeyframeAnimationConfig {
-  name: string
   duration?: string,
   delay?: string,
   timingFunction?: 'linear' | 'ease' | 'ease-in' | 'ease-out' | 'ease-in-out' | any,
@@ -140,7 +139,6 @@ export interface KeyframeAnimationConfig {
 }
 
 export const BasicKeyframeAnimationConfig: KeyframeAnimationConfig = {
-  name: '',
   duration: '500ms',
   delay: '0s',
   timingFunction: 'ease',
@@ -149,69 +147,39 @@ export const BasicKeyframeAnimationConfig: KeyframeAnimationConfig = {
   direction: 'alternate'
 };
 
+export const convertConfigToVendorCSSObject = (config: KeyframeAnimationConfig): DomCSSStyle => {
+  const normalConfig = {
+    animationDuration: config.duration,
+    animationDelay: config.delay,
+    animationTimingFunction: config.timingFunction,
+    animationFillMode: config.fillMode,
+    animationIterationCount: config.iterationCount,
+    animationDirection: config.direction
+  };
+
+  const webkitConfig = {
+    webkitAnimationDuration: config.duration,
+    webkitAnimationDelay: config.delay,
+    webkitAnimationTimingFunction: config.timingFunction,
+    webkitAnimationFillMode: config.fillMode,
+    webkitAnimationIterationCount: config.iterationCount,
+    webkitAnimationDirection: config.direction
+  };
+  const vendorConfig = {
+    ...normalConfig,
+    ...webkitConfig
+  };
+  return Object.keys(vendorConfig).reduce((config, key)=> {
+    const value = vendorConfig[key];
+    if ( value ){
+      config[key] = vendorConfig[key];
+    }
+    return config;
+  },{});
+};
+
 export type AnimationTarget = HTMLElement | ElementRef<HTMLElement>
 
 Object.freeze(KeyframePrefix);
 Object.freeze(KeyframeAnimationTypes);
 Object.freeze(BasicKeyframeAnimationConfig);
-
-export type Easing = 'linear' | 'easeInQuad' | 'easeOutQuad' | 'easeInOutQuad'
-  | 'easeInCubic' | 'easeOutCubic' | 'easeInOutCubic' | 'easeInQuart' | 'easeOutQuart'
-  | 'easeInOutQuart' | 'easeInQuint' | 'easeOutQuint' | 'easeInOutQuint';
-
-export interface FrameAnimationConfig {
-  duration?: number,
-  easing?: Easing,
-}
-
-export interface EasingFunctionType {
-  linear,
-  easeInQuad,
-  easeOutQuad,
-  easeInOutQuad,
-  easeInCubic,
-  easeOutCubic,
-  easeInOutCubic,
-  easeInQuart,
-  easeOutQuart,
-  easeInOutQuart,
-  easeInQuint,
-  easeOutQuint,
-  easeInOutQuint
-}
-
-export const EasingFunctions: EasingFunctionType = {
-  // no easing, no acceleration
-  linear: (t: number) => t,
-  // accelerating from zero velocity
-  easeInQuad: (t :number) => t*t,
-  // decelerating to zero velocity
-  easeOutQuad: (t: number) =>  t*(2-t),
-  // acceleration until halfway, then deceleration
-  easeInOutQuad: (t: number) =>  t<.5 ? 2*t*t : -1+(4-2*t)*t,
-  // accelerating from zero velocity
-  easeInCubic: (t: number) =>  t*t*t,
-  // decelerating to zero velocity
-  easeOutCubic: (t: number) =>  (--t)*t*t+1,
-  // acceleration until halfway, then deceleration
-  easeInOutCubic: (t: number) =>  t<.5 ? 4*t*t*t : (t-1)*(2*t-2)*(2*t-2)+1,
-  // accelerating from zero velocity
-  easeInQuart: (t: number) =>  t*t*t*t,
-  // decelerating to zero velocity
-  easeOutQuart: (t: number) =>  1-(--t)*t*t*t,
-  // acceleration until halfway, then deceleration
-  easeInOutQuart: (t: number) =>  t<.5 ? 8*t*t*t*t : 1-8*(--t)*t*t*t,
-  // accelerating from zero velocity
-  easeInQuint: (t: number) =>  t*t*t*t*t,
-  // decelerating to zero velocity
-  easeOutQuint: (t: number) =>  1+(--t)*t*t*t*t,
-  // acceleration until halfway, then deceleration
-  easeInOutQuint: (t: number) => t<.5 ? 16*t*t*t*t*t : 1+16*(--t)*t*t*t*t
-};
-
-export interface FrameAnimationState {
-  progress:number,
-  elapsedTime: number
-}
-
-export type FrameAnimationStatusListener = (state: FrameAnimationState) => void;

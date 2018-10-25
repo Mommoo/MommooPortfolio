@@ -1,54 +1,78 @@
-import {KeyframeAnimationListener, KeyframeAnimationType, KeyframeAnimationTypes, KeyframePrefix, Keyframe} from '../types';
-import {CssConverter} from './css-converter';
+import {
+  AnimationKeyframe,
+  BasicKeyframeAnimationConfig, Keyframe,
+  KeyframeAnimationConfig,
+  KeyframeAnimationListener,
+  KeyframeAnimationType,
+  KeyframeAnimationTypes
+} from './types';
 import {List} from '../../../data-structure/list/list';
 
+interface KeyframesFinderValue extends AnimationKeyframe{
+  commonConfig: KeyframeAnimationConfig,
+  listenerHandler: ElementListenerHandler
+}
+
 export class KeyframesFinder {
-  /** animationName, [ keyFramesString, elementListenerHandler] */
-  private finder = new Map<string, [string, ElementListenerHandler]>();
+  private finder = new Map<string, KeyframesFinderValue>();
 
-  public addKeyframes(animName: string, keyFrames : Keyframe) {
-    const keyFramesCssString = CssConverter.convertKeyFramesToCssString(keyFrames);
-    const allBrowserKeyFrameCSS = KeyframePrefix
-      .map(prefix => `${prefix}keyframes ${animName}`)
-      .map(keyframePrefix => `${keyframePrefix}${keyFramesCssString}`)
-      .join("");
-    this.finder.set(animName, [allBrowserKeyFrameCSS, new ElementListenerHandler()]);
+  public addAnimationKeyframe(animationKeyframe: AnimationKeyframe) {
+    const finderValue: KeyframesFinderValue = {
+      animationName: animationKeyframe.animationName,
+      keyframe: animationKeyframe.keyframe,
+      commonConfig: KeyframesFinder.computeProperConfig(animationKeyframe.commonConfig),
+      listenerHandler: new ElementListenerHandler()
+    };
+    this.finder.set(animationKeyframe.animationName, finderValue);
   }
 
-  public wholeCssKeyFrames() : string {
-    return Array.from(this.finder.entries())
-      .map(entry => entry[1][0])
-      .join("");
+  private static computeProperConfig(config: KeyframeAnimationConfig): KeyframeAnimationConfig {
+    const basicConfig = {...BasicKeyframeAnimationConfig};
+    if ( !config ) {
+      return basicConfig;
+    }
+
+    return Object.assign(basicConfig, config);
   }
 
-  public removeKeyframes(animName: string) {
-    this.finder.get(animName)[1].clear();
+  public getWholeAnimationKeyframes(): AnimationKeyframe[] {
+    return Array.from(this.finder.values()).map(finderValue => ({
+      animationName: finderValue.animationName,
+      keyframe: finderValue.keyframe,
+      commonConfig: finderValue.commonConfig
+    }));
+  }
+
+  public getCommonConfig(animationName: string) {
+    return this.finder.get(animationName).commonConfig;
+  }
+
+  public removeKeyframe(animName: string) {
+    this.finder.get(animName).listenerHandler.clear();
     this.finder.delete(animName);
   }
 
   public subscribeAnimationListener(animName: string, element: HTMLElement, animationListener: KeyframeAnimationListener) {
-    this.finder.get(animName)[1].subscribeEvent(element, animationListener);
+    this.finder.get(animName).listenerHandler.subscribeEvent(element, animationListener);
   }
 
   public unSubscribeAnimationListener(animName: string, element: HTMLElement) {
-    this.finder.get(animName)[1].unSubscribeEvent(element);
+    this.finder.get(animName).listenerHandler.unSubscribeEvent(element);
+  }
+
+  public setAnimationConfig(animName: string, config: KeyframeAnimationConfig) {
+    this.finder.get(animName).commonConfig = config;
   }
 
   public removeAnimationListener(animName: string) {
-    this.finder.get(animName)[1].clear();
+    this.finder.get(animName).listenerHandler.clear();
   }
 
   /** clear all of object at memory */
   public clear() {
-    Array.from(this.finder.keys())
-      .forEach(animationName => this.removeKeyframes(animationName));
+    Array.from(this.finder.values())
+      .forEach(finderValue => finderValue.listenerHandler.clear());
     this.finder.clear();
-  }
-
-  public toString(): string {
-    return Array.from(this.finder)
-      .map(value => [value[0], value[1][0], value[1][1]])
-      .toString()
   }
 }
 

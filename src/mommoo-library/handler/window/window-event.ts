@@ -39,6 +39,10 @@ export class WindowEventHandler {
   }
 
   public static removeEvent(eventID: string) {
+    if ( eventID === undefined ) {
+      return;
+    }
+    // console.log(eventID);
     const [eventName, eventListener] = WindowEventHandler.eventFinder.get(eventID);
     window.removeEventListener(eventName, eventListener);
     WindowEventHandler.eventFinder.delete(eventID);

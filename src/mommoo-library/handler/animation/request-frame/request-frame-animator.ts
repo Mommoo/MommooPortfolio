@@ -1,4 +1,4 @@
-import {EasingFunctions, FrameAnimationStatusListener, FrameAnimationConfig, Vendors, Easing} from '../types';
+import {EasingFunctions, FrameAnimationStatusListener, FrameAnimationConfig, Vendors, Easing} from './types';
 
 export class RequestFrameAnimator {
   private static readonly defaultDuration = 600;

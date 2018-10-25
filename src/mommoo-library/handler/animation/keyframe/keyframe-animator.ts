@@ -1,43 +1,39 @@
 import {
   AnimationKeyframe,
   AnimationTarget,
-  BasicKeyframeAnimationConfig,
-  Keyframe,
+  convertConfigToVendorCSSObject,
   KeyframeAnimationConfig,
   KeyframeAnimationListener
-} from '../types';
+} from './types';
 import {ElementRef} from '@angular/core';
 import {DomUtils} from '../../../util/dom';
 import {KeyframesFinder} from './keyframes-finder';
 import {KeyframeElementMonitor} from './keyframe-element-monitor';
+import {KeyframeStyleWriter} from './keyframe-style-writer';
 
 export class KeyframeAnimator {
-  private styleElement : HTMLStyleElement;
+  private keyframeStyleWriter = new KeyframeStyleWriter();
   private keyframesFinder = new KeyframesFinder();
   private keyframeElementMonitor = new KeyframeElementMonitor();
 
-  private writeStyle(cssString : string) {
-    if ( this.styleElement === undefined ) {
-      this.styleElement = document.createElement('style');
-      this.styleElement.type ='text/css';
-      document.head.appendChild(this.styleElement);
-    }
-    this.styleElement.innerHTML = cssString;
-  }
-
-  public addKeyframe(animationName : string, keyframe : Keyframe) {
-    this.keyframesFinder.addKeyframes(animationName, keyframe);
-    this.writeStyle(this.keyframesFinder.wholeCssKeyFrames());
+  public addKeyframe(animationKeyFrame: AnimationKeyframe) {
+    this.keyframesFinder.addAnimationKeyframe(animationKeyFrame);
+    this.writeKeyframeToStyle();
   }
 
   public addKeyframes(frames: AnimationKeyframe[]){
-    frames.forEach(animKeyframe => this.keyframesFinder.addKeyframes(animKeyframe.animationName, animKeyframe.keyframe));
-    this.writeStyle(this.keyframesFinder.wholeCssKeyFrames());
+    frames
+      .forEach(animKeyframe => this.keyframesFinder.addAnimationKeyframe(animKeyframe));
+    this.writeKeyframeToStyle();
   }
 
   public removeKeyframe(animationName: string) {
-    this.keyframesFinder.removeKeyframes(animationName);
-    this.writeStyle(this.keyframesFinder.wholeCssKeyFrames());
+    this.keyframesFinder.removeKeyframe(animationName);
+    this.writeKeyframeToStyle();
+  }
+
+  public setCommonAnimationConfig(animationName: string, commonConfig: KeyframeAnimationConfig) {
+    this.keyframesFinder.setAnimationConfig(animationName, commonConfig);
   }
 
   public subscribeAnimationListener(animationName: string, element: HTMLElement, animListener: KeyframeAnimationListener) {
@@ -52,23 +48,18 @@ export class KeyframeAnimator {
     this.keyframesFinder.removeAnimationListener(animationName);
   }
 
-  public startAnimation(elementRef: ElementRef<HTMLElement>, config: KeyframeAnimationConfig);
+  public startAnimation(animationName: string, elementRef: ElementRef<HTMLElement>, independentConfig?: KeyframeAnimationConfig);
 
-  public startAnimation(element: HTMLElement, config: KeyframeAnimationConfig)
+  public startAnimation(animationName: string, element: HTMLElement, independentConfig?: KeyframeAnimationConfig)
 
-  public startAnimation(target: AnimationTarget, config: KeyframeAnimationConfig) {
-    const targetElement = DomUtils.takeElementIfWrappedRef(target);
+  public startAnimation(animationName: string, target: AnimationTarget, independentConfig?: KeyframeAnimationConfig) {
+    const element = DomUtils.takeElementIfWrappedRef(target);
+    const animationConfig = this.buildToConfig(animationName, independentConfig);
 
-    this.keyframeElementMonitor.monitorTo(targetElement);
+    this.keyframeElementMonitor.monitorTo(element);
 
-    KeyframeAnimator.triggerReflowForReStart(targetElement);
-
-    const animationConfig = {
-      ...BasicKeyframeAnimationConfig,
-      ...config
-    };
-
-    KeyframeAnimator.setKeyframeConfigToElement(targetElement, animationConfig);
+    KeyframeAnimator.clearAnimationName(element);
+    KeyframeAnimator.triggerAnimation(animationName, element, animationConfig);
   }
 
   public pauseAnimation(elementRef: ElementRef<HTMLElement>);
@@ -87,9 +78,35 @@ export class KeyframeAnimator {
     KeyframeAnimator.setAnimationPlayState(target, 'running');
   }
 
-  private static triggerReflowForReStart(element: HTMLElement) {
-    element.style.animationName='mommoo';
-    window.getComputedStyle(element).animationName;
+  private writeKeyframeToStyle() {
+    const animationKeyframes = this.keyframesFinder.getWholeAnimationKeyframes();
+    this.keyframeStyleWriter.writeKeyframes(animationKeyframes);
+  }
+
+  private static clearAnimationName(element: HTMLElement) {
+    element.style.animationName = null;
+    /** trigger reflow for ready to start animation that same to previous animation  */
+    getComputedStyle(element).animationName;
+  }
+
+  private static triggerAnimation(animationName: string, element: HTMLElement, animationConfig: KeyframeAnimationConfig) {
+    DomUtils.applyStyle(element, {
+      ...convertConfigToVendorCSSObject(animationConfig),
+      animationName: animationName
+    });
+  }
+
+  private buildToConfig(animationName: string, independentConfig?: KeyframeAnimationConfig) {
+    let animationConfig = this.keyframesFinder.getCommonConfig(animationName);
+
+    if ( independentConfig ) {
+      animationConfig = {
+        ...animationConfig,
+        ...independentConfig
+      }
+    }
+
+    return animationConfig;
   }
 
   private static setAnimationPlayState(target: AnimationTarget, state : 'paused' | 'running') {
@@ -97,24 +114,9 @@ export class KeyframeAnimator {
     DomUtils.applyStyle(targetElement, {animationPlayState: state})
   }
 
-  private static setKeyframeConfigToElement(element: HTMLElement, config: KeyframeAnimationConfig) {
-    DomUtils.applyStyle(element, {
-      animationName: config.name,
-      animationDuration: config.duration,
-      animationDelay: config.delay,
-      animationTimingFunction: config.timingFunction,
-      animationFillMode: config.fillMode,
-      animationIterationCount: config.iterationCount.toString(),
-      animationDirection: config.direction
-    });
-  }
-
   public clear() {
+    this.keyframeStyleWriter.clear();
     this.keyframeElementMonitor.clear();
     this.keyframesFinder.clear();
-    if ( this.styleElement.parentElement ) {
-      this.styleElement.parentElement.removeChild(this.styleElement);
-      this.styleElement = null;
-    }
   }
 }

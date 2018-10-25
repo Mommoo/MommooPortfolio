@@ -104,6 +104,10 @@ export class List<T>{
     return this.values().every(fn);
   }
 
+  public join(separator?: string): string {
+    return this.values().join(separator);
+  }
+
   public size() : number {
     return this.index + 1;
   }

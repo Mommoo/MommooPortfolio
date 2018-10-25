@@ -1,41 +1,55 @@
 import {KeyframeAnimator} from '../../../handler/animation/keyframe/keyframe-animator';
-import {KeyframeAnimationConfig, KeyframeAnimationListener, KeyframeAnimationType} from '../../../handler/animation/types';
 import {Injectable} from '@angular/core';
 import {RippleRef, RippleState} from './ripple-types';
 import {RippleEventHandler} from './ripple-event-handler.service';
 import {RippleConfig} from './ripple-config';
+import {
+  AnimationKeyframe,
+  KeyframeAnimationConfig,
+  KeyframeAnimationListener,
+  KeyframeAnimationType
+} from '../../../handler/animation/keyframe/types';
 
 @Injectable()
 export class RippleAnimator {
   private static readonly rippleFadeInName = 'mommoo-ui-rippleElement-fade-in';
   private static readonly rippleFadeOutName = 'mommoo-ui-rippleElement-fade-out';
-  private static readonly defaultConfig: KeyframeAnimationConfig = {
-    name: '',
-    fillMode: 'forwards',
-    timingFunction: 'cubic-bezier(0, 0, 0.2, 1)'
-  };
 
   private static readonly keyframeAnimator = RippleAnimator.createRippleKeyframeAnimator();
 
   private static createRippleKeyframeAnimator() {
     const rippleKeyframeAnimator = new KeyframeAnimator();
-    rippleKeyframeAnimator.addKeyframe(RippleAnimator.rippleFadeInName, {
-      from: {
-        transform: 'scale(0.2)'
+    const defaultConfig: KeyframeAnimationConfig = {
+      fillMode: 'forwards',
+      timingFunction: 'cubic-bezier(0, 0, 0.2, 1)'
+    };
+    const fadeInAnimationKeyframe: AnimationKeyframe = {
+      animationName: RippleAnimator.rippleFadeInName,
+      keyframe: {
+        from: {
+          transform: 'scale(0.2)'
+        },
+        to: {
+          transform: 'scale(1)'
+        }
       },
-      to: {
-        transform: 'scale(1)'
-      }
-    });
+      commonConfig: {...defaultConfig}
+    };
 
-    rippleKeyframeAnimator.addKeyframe(RippleAnimator.rippleFadeOutName, {
-      from: {
-        opacity: 1
+    const fadeOutAnimationKeyframe: AnimationKeyframe = {
+      animationName: RippleAnimator.rippleFadeOutName,
+      keyframe: {
+        from: {
+          opacity: 1
+        },
+        to: {
+          opacity: 0
+        }
       },
-      to: {
-        opacity: 0
-      }
-    });
+      commonConfig: {...defaultConfig}
+    };
+
+    rippleKeyframeAnimator.addKeyframes([fadeInAnimationKeyframe, fadeOutAnimationKeyframe]);
 
     return rippleKeyframeAnimator;
   }
@@ -57,9 +71,7 @@ export class RippleAnimator {
         RippleAnimator.keyframeAnimator.unSubscribeAnimationListener(RippleAnimator.rippleFadeInName, rippleRef.view);
       }
     };
-    const fadeInConfig = RippleAnimator
-      .createFadeConfig(RippleAnimator.rippleFadeInName, this.rippleConfig.fadeInDuration);
-    RippleAnimator.startFadeAnimation(rippleRef.view, fadeInConfig, animationListener);
+    this.startFadeAnimation(RippleAnimator.rippleFadeInName, rippleRef.view, animationListener);
   }
 
   public startFadeOut(rippleRef: RippleRef) {
@@ -71,22 +83,12 @@ export class RippleAnimator {
         this.rippleEventHandler.executeOnRippleDoneEvent(rippleRef);
       }
     };
-    const fadeOutConfig = RippleAnimator
-      .createFadeConfig(RippleAnimator.rippleFadeOutName, this.rippleConfig.fadeOutDuration);
-    RippleAnimator.startFadeAnimation(rippleRef.view, fadeOutConfig, animationListener);
+    this.startFadeAnimation(RippleAnimator.rippleFadeOutName, rippleRef.view, animationListener);
   }
 
-  private static startFadeAnimation(element: HTMLElement, fadeConfig: KeyframeAnimationConfig, animationListener: KeyframeAnimationListener) {
-    RippleAnimator.keyframeAnimator.subscribeAnimationListener(fadeConfig.name, element, animationListener);
-    RippleAnimator.keyframeAnimator.startAnimation(element, fadeConfig);
-  }
-
-  private static createFadeConfig(name: string, duration: number): KeyframeAnimationConfig {
-    return {
-      ...RippleAnimator.defaultConfig,
-      name: name,
-      duration: `${duration}ms`
-    }
+  private startFadeAnimation(animationName: string, element: HTMLElement, animationListener: KeyframeAnimationListener) {
+    RippleAnimator.keyframeAnimator.subscribeAnimationListener(animationName, element, animationListener);
+    RippleAnimator.keyframeAnimator.startAnimation(animationName, element, {duration: `${this.rippleConfig.fadeInDuration}ms`});
   }
 
   public destroy() {

@@ -38,7 +38,7 @@ describe('keyframes-finder test', () => {
   const keyframesFinder = new KeyframesFinder();
   beforeEach(() => {
     [1, 2, 3].forEach(value => {
-      keyframesFinder.addKeyframes(`mommoo${value}`, mockKeyFrames);
+      // keyframesFinder.addAnimationKeyframe(`mommoo${value}`, mockKeyFrames);
     });
   });
   it('keyframes-finder size test', () => {
@@ -65,7 +65,7 @@ describe('keyframeAnimator test', () => {
     //   });
     //   mommooDiv.appendChild(document.createTextNode('Mommoo!!'));
     //   document.body.appendChild(mommooDiv);
-    //   keyframeAnimator.addKeyframe('mommoo', mockKeyFrames2);
+    //   keyframeAnimator.addAnimationKeyframe('mommoo', mockKeyFrames2);
     //   keyframeAnimator.startAnimation(mommooDiv, {
     //     name: 'mommoo',
     //     duration: '3000ms',

@@ -119,7 +119,7 @@ export class DomUtils {
     }
     const element = DomUtils.takeElementIfWrappedRef(target);
     const clientRect = element.getBoundingClientRect();
-    return DomUtils.createBounds(clientRect.width, clientRect.height, clientRect.left + pageXOffset, clientRect.top + pageYOffset);
+    return DomUtils.createBounds(clientRect.width, clientRect.height, clientRect.left, clientRect.top);
   }
 
   public static offset(element : HTMLElement) : Bounds;
