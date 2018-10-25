@@ -1,19 +1,16 @@
-import {KeyframeAnimator} from '../../../../../mommoo-library/handler/animation/keyframe/keyframe-animator';
+import {KeyframeAnimator} from '../../../../mommoo-library/handler/animation/keyframe/keyframe-animator';
 import {ElementRef, Injectable} from '@angular/core';
-import {AnimationKeyframe, KeyframeAnimationConfig, KeyframeAnimationType} from '../../../../../mommoo-library/handler/animation/types';
+import {
+  AnimationKeyframe,
+  KeyframeAnimationConfig,
+  KeyframeAnimationType
+} from '../../../../mommoo-library/handler/animation/keyframe/types';
+import {DomUtils} from '../../../../mommoo-library/util/dom';
 
 @Injectable()
 export class MenuButtonAnimator {
-  private static readonly commonConfig = MenuButtonAnimator.createCommonConfig();
   private keyframeAnimator = MenuButtonAnimator.createMenuButtonKeyframeAnimator();
   private isPending;
-
-  private static createCommonConfig(): KeyframeAnimationConfig {
-    return {
-      name: '',
-      fillMode: 'forwards'
-    };
-  }
 
   private static createMenuButtonKeyframeAnimator() {
     const keyframeAnimator = new KeyframeAnimator();
@@ -36,6 +33,7 @@ export class MenuButtonAnimator {
       if ( type === KeyframeAnimationType.ANIMATION_END ) {
         animationEndChecker[index] = true;
       }
+
       const animationAllEnd = animationEndChecker.every(bool=> bool);
       if (animationAllEnd) {
         doneListener();
@@ -44,17 +42,34 @@ export class MenuButtonAnimator {
       }
     };
 
+    /** In IE when occur reflow screen,
+     * re-start animation although animation already end. *
+     * so, to prevent that problem when animation event end,
+     * element change to the style that applied by animation event
+     */
+    const preventIEReflowReAnimate = (key, type)=>{
+      if ( type === KeyframeAnimationType.ANIMATION_END ) {
+        DomUtils.applyStyle(key.elementRef, {
+          ...this.keyframeAnimator.getKeyframe(key.animationName).keyframe.to,
+          animationName: ''
+        });
+      }
+    };
+
     animationKeys.forEach((key, index)=> {
-      this.keyframeAnimator.subscribeAnimationListener(key.animationName, key.elementRef.nativeElement, type=> animationCheckListener(type, index));
+      this.keyframeAnimator.subscribeAnimationListener(key.animationName, key.elementRef.nativeElement, type=> {
+        animationCheckListener(type, index);
+        preventIEReflowReAnimate(key, type);
+      });
     });
   }
 
-  public startNormalAnimation(elementRefs: ElementRef<HTMLElement>[], doneListener: ()=>void) {
-    this.startAnimations(elementRefs, LineKeyframes.getNormalAnimationNames(), 'ease-in', doneListener);
-  }
-
-  public startReverseAnimation(elementRefs: ElementRef<HTMLElement>[], doneListener: ()=>void) {
-    this.startAnimations(elementRefs, LineKeyframes.getReverseAnimationNames(), 'ease-out', doneListener);
+  public startAnimation(type: 'normal' | 'reverse', elementRefs: ElementRef<HTMLElement>[], doneListener: ()=>void){
+    if ( type === 'normal' ) {
+      this.startAnimations(elementRefs, LineKeyframes.getNormalAnimationNames(), doneListener);
+    } else {
+      this.startAnimations(elementRefs, LineKeyframes.getReverseAnimationNames(), doneListener);
+    }
   }
 
   public isAnimationPending() {
@@ -68,15 +83,11 @@ export class MenuButtonAnimator {
     }))
   }
 
-  private startAnimations(elementRefs: ElementRef<HTMLElement>[], animationName:string[], easing: 'ease-in' | 'ease-out', doneListener: ()=>void) {
+  private startAnimations(elementRefs: ElementRef<HTMLElement>[], animationName:string[], doneListener: ()=>void) {
     const animationKeys = MenuButtonAnimator.createAnimationKeys(elementRefs, animationName);
     this.registerDoneListener(animationKeys, doneListener);
     this.isPending = true;
-    animationKeys.forEach(key=> this.keyframeAnimator.startAnimation(key.elementRef, {
-        ...MenuButtonAnimator.commonConfig,
-        name: key.animationName,
-        timingFunction: easing
-      }));
+    animationKeys.forEach(key=> this.keyframeAnimator.startAnimation(key.animationName, key.elementRef));
   }
 }
 
@@ -107,6 +118,14 @@ class LineKeyframes {
 
   public static computeKeyframes(): [AnimationKeyframe[], AnimationKeyframe[]] {
     const normalKeyframeValues = this.computeNormalKeyframeValues();
+    const normalAnimationConfig: KeyframeAnimationConfig= {
+      timingFunction: 'ease-in',
+      fillMode: 'forwards'
+    };
+    const reverseAnimationConfig: KeyframeAnimationConfig = {
+      timingFunction: 'ease-out',
+      fillMode: 'forwards'
+    };
 
     const normalAnimationKeyframes: AnimationKeyframe[] =
       LineKeyframes.getNormalAnimationNames()
@@ -115,7 +134,8 @@ class LineKeyframes {
           keyframe: {
             from: normalKeyframeValues[index][0],
             to: normalKeyframeValues[index][1]
-          }
+          },
+          commonConfig: {...normalAnimationConfig}
         }));
 
     const reverseAnimationKeyframes: AnimationKeyframe[] =
@@ -125,7 +145,8 @@ class LineKeyframes {
           keyframe: {
             from: normalKeyframeValues[index][1],
             to: normalKeyframeValues[index][0]
-          }
+          },
+          commonConfig: {...reverseAnimationConfig}
         }));
 
     return [normalAnimationKeyframes, reverseAnimationKeyframes];
@@ -145,10 +166,10 @@ class LineKeyframes {
 
     const normalMiddleKeyframeValue = [
       {
-        opacity: 1
+        opacity: '1'
       },
       {
-        opacity: 0
+        opacity: '0'
       }
     ];
 
