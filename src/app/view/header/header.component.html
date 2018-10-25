@@ -1,10 +1,16 @@
 <header id="header">
-  <div id="flex-column-line">
+  <div id="media-query-layout">
     <div id="title">{{headerTitle | uppercase}}</div>
 
     <view-menu-button id="menu-button"
-                     (menuButtonEvent)="fireMenuButtonEvent($event)"></view-menu-button>
+                     (menuButtonEvent)="triggerMenuButtonEvent($event)"></view-menu-button>
   </div>
 
-  <view-menu-list (menuListItemClick)="fireMenuListItemClickEvent()"></view-menu-list>
+  <animation-box>
+    <view-menu-list (menuListItemClick)="triggerMenuListItemClickEvent()"></view-menu-list>
+
+    <div mommooRipple [rippleRadius]="'50%'" id="back-button">
+      <img src="../../../../assets/images/arrow_back.svg"/>
+    </div>
+  </animation-box>
 </header>

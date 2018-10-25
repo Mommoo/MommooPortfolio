@@ -1,0 +1,11 @@
+<nav>
+  <ul>
+    <ng-container *ngFor="let menuItemName of menuItemNames;">
+      <li>
+        <div mommooRipple (click)="menuItemClickEvent(menuItemName)" class="li-text-contents">
+          {{menuItemName | uppercase}}
+        </div>
+      </li>
+    </ng-container>
+  </ul>
+</nav>
