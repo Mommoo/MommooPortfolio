@@ -27,6 +27,14 @@ export class KeyframeAnimator {
     this.writeKeyframeToStyle();
   }
 
+  public getKeyframe(animationName: string): AnimationKeyframe {
+    return this.keyframesFinder.getAnimationKeyframe(animationName);
+  }
+
+  public getKeyframes(): AnimationKeyframe[] {
+    return this.keyframesFinder.getWholeAnimationKeyframes();
+  }
+
   public removeKeyframe(animationName: string) {
     this.keyframesFinder.removeKeyframe(animationName);
     this.writeKeyframeToStyle();

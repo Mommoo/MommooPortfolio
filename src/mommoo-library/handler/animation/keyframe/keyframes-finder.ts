@@ -43,6 +43,10 @@ export class KeyframesFinder {
     }));
   }
 
+  public getAnimationKeyframe(animationName: string): AnimationKeyframe {
+    return this.finder.get(animationName);
+  }
+
   public getCommonConfig(animationName: string) {
     return this.finder.get(animationName).commonConfig;
   }
