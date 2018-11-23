@@ -1,0 +1,7 @@
+@import '../../../../../../common';
+
+#card-title {
+  @include NanumGhothicFont;
+  font-weight:900;
+  text-align : center;
+}
