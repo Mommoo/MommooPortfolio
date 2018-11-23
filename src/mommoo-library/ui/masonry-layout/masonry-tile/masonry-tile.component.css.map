@@ -1,7 +1,0 @@
-{
-"version": 3,
-"mappings": "AAAA,KAAM;EACJ,OAAO,EAAG,KAAK;EACf,QAAQ,EAAG,QAAQ",
-"sources": ["masonry-tile.component.scss"],
-"names": [],
-"file": "masonry-tile.component.css"
-}
