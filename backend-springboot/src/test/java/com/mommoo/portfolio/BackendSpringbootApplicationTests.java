@@ -1,4 +1,4 @@
-package com.mommoo;
+package com.mommoo.portfolio;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
