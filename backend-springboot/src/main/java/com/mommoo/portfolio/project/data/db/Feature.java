@@ -1,4 +1,4 @@
-package com.mommoo.data.project;
+package com.mommoo.portfolio.project.data.db;
 
 import lombok.Getter;
 import lombok.ToString;

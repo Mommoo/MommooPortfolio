@@ -1,6 +1,6 @@
-package com.mommoo.repository;
+package com.mommoo.portfolio.project.repository;
 
-import com.mommoo.data.project.Project;
+import com.mommoo.portfolio.project.data.db.Project;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 /**
