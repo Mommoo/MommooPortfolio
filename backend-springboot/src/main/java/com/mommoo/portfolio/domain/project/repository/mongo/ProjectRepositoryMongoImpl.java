@@ -1,10 +1,9 @@
 package com.mommoo.portfolio.domain.project.repository.mongo;
 
-import com.mommoo.portfolio.domain.project.data.db.Project;
-import com.mommoo.portfolio.domain.project.data.db.SimpleProject;
+import com.mommoo.portfolio.domain.project.Project;
+import com.mommoo.portfolio.domain.project.SimpleProject;
 import com.mommoo.portfolio.domain.project.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
