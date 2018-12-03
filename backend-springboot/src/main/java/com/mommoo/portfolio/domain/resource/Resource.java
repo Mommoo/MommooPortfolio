@@ -17,16 +17,16 @@ public class Resource {
     private String repositoryPath;
     private HashMap<String, String> icon;
 
-    public String getIconFilePathAppliedRepositoryPath(String iconName) {
+    public String getIconFilePath(String iconName) {
         String iconFileName = icon.get(iconName);
         if ( iconFileName == null ) {
             return "";
         }
 
-        return getFilePathAppliedRepositoryPath(iconFileName);
+        return getFilePath(iconFileName);
     }
 
-    public String getFilePathAppliedRepositoryPath(String resourceFileName) {
+    public String getFilePath(String resourceFileName) {
         return repositoryPath + "/" + resourceFileName;
     }
 }
