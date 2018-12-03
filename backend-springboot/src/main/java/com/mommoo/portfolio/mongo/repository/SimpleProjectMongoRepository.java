@@ -1,4 +1,4 @@
-package com.mommoo.portfolio.domain.project.repository.mongo;
+package com.mommoo.portfolio.mongo.repository;
 
 import com.mommoo.portfolio.domain.project.SimpleProject;
 import org.springframework.data.mongodb.repository.MongoRepository;
