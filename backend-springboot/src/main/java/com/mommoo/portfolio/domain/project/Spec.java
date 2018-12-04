@@ -30,11 +30,22 @@ import java.util.stream.Collectors;
 @ToString
 public class Spec {
 
+    /**
+     * icon property will be converted to file path from icon name {@link #createCombinedWithResource(Resource)}
+     */
+    @Builder
     @Getter
     @ToString
-    public class Item {
-        private String image;
-        private String name;
+    public static class Item {
+        private final String icon;
+        private final String name;
+
+        private Item createCombinedWithResource(Resource resource) {
+            return Item.builder()
+                    .icon(resource.getIconFilePath(icon))
+                    .name(name)
+                    .build();
+        }
     }
 
     private List<Item> devEnvironments;
@@ -43,19 +54,19 @@ public class Spec {
     private List<Item> frameworks;
     private List<Item> libraries;
 
-    private static List<Item> createItemListWithResource(List<Item> list, Resource resource) {
+    private static List<Item> createItemListCombinedWithResource(List<Item> list, Resource resource) {
         return list.stream()
-                .peek(item -> item.image = resource.getFilePath(item.image))
+                .map(item -> item.createCombinedWithResource(resource))
                 .collect(Collectors.toList());
     }
 
     Spec createCombinedWithResource(Resource resource) {
         return Spec.builder()
-                .devEnvironments(createItemListWithResource(devEnvironments, resource))
-                .runtimeEnvironments(createItemListWithResource(runtimeEnvironments, resource))
-                .languages(createItemListWithResource(languages, resource))
-                .frameworks(createItemListWithResource(frameworks, resource))
-                .libraries(createItemListWithResource(libraries, resource))
+                .devEnvironments(createItemListCombinedWithResource(devEnvironments, resource))
+                .runtimeEnvironments(createItemListCombinedWithResource(runtimeEnvironments, resource))
+                .languages(createItemListCombinedWithResource(languages, resource))
+                .frameworks(createItemListCombinedWithResource(frameworks, resource))
+                .libraries(createItemListCombinedWithResource(libraries, resource))
                 .build();
     }
 }
