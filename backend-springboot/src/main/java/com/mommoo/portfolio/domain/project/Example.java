@@ -18,10 +18,17 @@ import org.springframework.data.mongodb.core.mapping.Field;
  * see github source code or see youtubeIFrame video or download app or see blog web page,
  * this class provides the following data
  *
- * github{@link URL}: have the Github URL you can see project source code and icon file path of github
- * youtube{@link Youtube}: have the data we need to implement YouTube video and icon file path of youtube
- * googlePlay{@link GooglePlay}: have Google App's package name we need to download app from googlePlay and icon file path of googlePlay
- * blog{@link URL}: have the Blog URL introducing about project and icon file path of blog
+ * github{@link URL}:
+ *      have the Github URL you can see project source code and icon file path of github
+ * youtube{@link Youtube}:
+ *      have the data we need to implement YouTube video and icon file path of youtube
+ * googlePlay{@link GooglePlay}:
+ *      have Google App's package name we need to download app from googlePlay and icon file path of googlePlay
+ * program{@link URL}:
+ *      have the something URL for program application ( ex.) web url, application download url etc... )
+ *      and icon file path of program
+ * blog{@link URL}:
+ *      have the Blog URL introducing about project and icon file path of blog
  *
  * @author mommoo
  */
@@ -36,6 +43,7 @@ class Example {
     private URL github;
     private Youtube youtube;
     private GooglePlay googlePlay;
+    private URL program;
     private URL blog;
 
     @JsonIgnore()
@@ -70,6 +78,15 @@ class Example {
                 .build();
     }
 
+    @JsonIgnore()
+    @AccessType(AccessType.Type.PROPERTY)
+    @Field("programURL")
+    public void setProgramURL(String programURL) {
+        this.program = URL.builder()
+                .icon("program")
+                .url(programURL)
+                .build();
+    }
 
     @JsonIgnore()
     @AccessType(AccessType.Type.PROPERTY)
