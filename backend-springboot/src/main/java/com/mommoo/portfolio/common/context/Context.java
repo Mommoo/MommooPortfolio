@@ -5,13 +5,8 @@ import lombok.Getter;
 import lombok.ToString;
 
 /**
- * It is the context data that decide by developer for project's properties
- *
- * If illogical static data exist,
- * it have to declare to this application.properties file {@see classpath::resouces.application.properties}
- * and this class provide it if you want
- *
- * This data will be provided to front-end, by controller {@link com.mommoo.portfolio.controller.RestDataController}
+ * This class is the context data that can obtain project property values defined by developer
+ * It is created by {@link ContextProvider}
  *
  * @author mommoo
  */
@@ -20,5 +15,23 @@ import lombok.ToString;
 @ToString
 public class Context {
     private final String contextPath;
+    private final Assets assets;
     private final String themeColor;
+
+    /**
+     * This class is provides directory paths that involved assets resources.
+     *
+     * Assets resources have program static resources files that consisted
+     * static web file repository (it is located assets directory root path) and
+     * the image file repository.
+     */
+    @Builder
+    @Getter
+    @ToString
+    public static class Assets {
+        private final String absolutePath;
+        private final String relativePath;
+        private final String absoluteImageDirectoryPath;
+        private final String relativeImageDirectoryPath;
+    }
 }
