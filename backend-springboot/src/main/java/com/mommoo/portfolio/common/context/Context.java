@@ -22,9 +22,8 @@ public class Context {
      * This class is provides directory paths that involved assets resources.
      * Provided paths is compatible to any OS System.
      *
-     * Assets resources have program static resources files that consisted
-     * static web file repository (it is located assets directory root path) and
-     * the image file repository.
+     * Assets resources have program static resources files that have the image file repository.
+     * (in this time, Assets resource have only image repository)
      */
     @Builder
     @Getter
