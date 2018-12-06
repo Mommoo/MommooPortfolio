@@ -20,6 +20,7 @@ public class Context {
 
     /**
      * This class is provides directory paths that involved assets resources.
+     * Provided paths is compatible to any OS System.
      *
      * Assets resources have program static resources files that consisted
      * static web file repository (it is located assets directory root path) and
