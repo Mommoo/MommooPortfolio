@@ -23,8 +23,8 @@ import static org.junit.Assert.assertTrue;
 @SpringBootTest(properties = "classpath:application.test.properties")
 public class ContextProviderTest {
     private static final String MOCK_CONTEXT_PATH = "/mommoo-portfolio";
-    private static final String RELATIVE_ASSETS_PATH = "static" + File.separator + "assets" + File.separator;
-    private static final String RELATIVE_IMAGE_PATH = RELATIVE_ASSETS_PATH + "images" + File.separator;
+    private static final String RELATIVE_ASSETS_PATH = "assets";
+    private static final String RELATIVE_IMAGE_PATH = RELATIVE_ASSETS_PATH + File.separator + "images";
 
     @Autowired
     public ContextProvider contextProvider;
@@ -33,6 +33,11 @@ public class ContextProviderTest {
     public void testRootContextPathMatched() {
         String contextPathOfContextData = contextProvider.getContext().getContextPath();
         assertThat(MOCK_CONTEXT_PATH, is( contextPathOfContextData ));
+    }
+
+    @Test
+    public void printAbsoluteWebDirectoryPathMatched() {
+        System.out.println(contextProvider.getContext().getAbsoluteWebDirectoryPath());
     }
 
     @Test

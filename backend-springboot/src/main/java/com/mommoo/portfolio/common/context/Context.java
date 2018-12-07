@@ -35,6 +35,7 @@ public class Context {
      * Assets relative path source is absolute web resource path {@link Context#absoluteWebDirectoryPath}
      */
     @Builder
+    @Getter
     @ToString
     public static class Assets {
         private final String absolutePath;
