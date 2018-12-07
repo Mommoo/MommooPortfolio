@@ -10,14 +10,12 @@ import java.io.FileNotFoundException;
 import java.util.regex.Matcher;
 
 /**
- * This class create {@link Context} instance
- * that using data declared at application.properties file {@see classpath:application.properties file}.
+ * This class create {@link Context} instance and provide it.
+ * Context be created using data declared at application.properties file {@see classpath:application.properties file}.
  *
  * The key values declared in this class is to key data of application.properties file.
  *
- * It will building assets's{@link Context.Assets} path compatible any OS system by using API {@link File#separator}
- *
- * @see Context
+ * It will building assets's{@link Context.Assets} path compatible any OS system by using API {@link File#separator}.
  *
  * @author mommoo
  */
@@ -38,6 +36,7 @@ public class ContextProvider {
     public Context getContext() {
         return Context.builder()
                 .contextPath(this.environment.getProperty(CONTEXT_PATH_PROPERTY_KEY))
+                .absoluteWebDirectoryPath(getAbsoluteWebDirectoryPath())
                 .assets(createContextAssets())
                 .themeColor(this.environment.getProperty(THEME_COLOR_PROPERTY_KEY))
                 .build();
@@ -52,7 +51,13 @@ public class ContextProvider {
                 .build();
     }
 
-    private String getRelativeRootDirectoryPath() {
+    private String getAbsoluteWebDirectoryPath() {
+        String absoluteAssetsDirectoryPath = getAbsoluteAssetsDirectoryPath();
+        String relativeAssetsDirectoryPath = getRelativeAssetsDirectoryPath();
+        return absoluteAssetsDirectoryPath.substring(0, absoluteAssetsDirectoryPath.lastIndexOf(relativeAssetsDirectoryPath) - 1);
+    }
+
+    private String getRelativeWebDirectoryPath() {
         String staticResourceLocations = this.environment.getProperty(STATIC_RESOURCE_LOCATION_KEY);
         String classPathPrefix = "classpath:/";
 
@@ -61,20 +66,19 @@ public class ContextProvider {
             path = staticResourceLocations.substring(classPathPrefix.length());
         }
 
-        String OSCompatiblePath = path.replaceAll("/", Matcher.quoteReplacement(File.separator)) + File.separator;
+        String OSCompatiblePath = path.replaceAll("/", Matcher.quoteReplacement(File.separator));
 
         return OSCompatiblePath;
     }
 
     private String getRelativeAssetsDirectoryPath() {
-        String assetsDirectoryName = this.environment.getProperty(ASSETS_DIRECTORY_NAME_KEY);
-        return getRelativeRootDirectoryPath() + assetsDirectoryName + File.separator;
+        return this.environment.getProperty(ASSETS_DIRECTORY_NAME_KEY);
     }
 
     private String getAbsoluteAssetsDirectoryPath() {
-        String assetsDirectoryResourcePath = "classpath:" + getRelativeAssetsDirectoryPath();
+        String assetsDirectoryResourcePath = "classpath:" + getRelativeWebDirectoryPath() + File.separator + getRelativeAssetsDirectoryPath();
         try {
-            return ResourceUtils.getFile(assetsDirectoryResourcePath).getPath() + File.separator;
+            return ResourceUtils.getFile(assetsDirectoryResourcePath).getPath();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             return "";
@@ -83,11 +87,11 @@ public class ContextProvider {
 
     private String getAbsoluteImageDirectoryPath() {
         String imageDirectoryName = this.environment.getProperty(IMAGE_DIRECTORY_NAME_KEY);
-        return getAbsoluteAssetsDirectoryPath() + imageDirectoryName + File.separator;
+        return getAbsoluteAssetsDirectoryPath() + File.separator + imageDirectoryName;
     }
 
     private String getRelativeImageDirectoryPath() {
         String imageDirectoryName = this.environment.getProperty(IMAGE_DIRECTORY_NAME_KEY);
-        return getRelativeAssetsDirectoryPath() + imageDirectoryName + File.separator;
+        return getRelativeAssetsDirectoryPath()+ File.separator + imageDirectoryName;
     }
 }
