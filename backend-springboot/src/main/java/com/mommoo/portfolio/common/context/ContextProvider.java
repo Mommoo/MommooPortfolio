@@ -12,10 +12,13 @@ import java.util.regex.Matcher;
 /**
  * This class create {@link Context} instance and provide it.
  * Context be created using data declared at application.properties file {@see classpath:application.properties file}.
- *
  * The key values declared in this class is to key data of application.properties file.
  *
- * It will building assets's{@link Context.Assets} path compatible any OS system by using API {@link File#separator}.
+ * There is two-ways of providing context data.
+ * First way is a providing pre-loaded context data {@link #getContext()}
+ * last way is a providing new-loaded context data {@link #getLatestContext()}
+ *
+ * It will also building assets's{@link Context.Assets} path compatible any OS system by using API {@link File#separator}.
  *
  * @author mommoo
  */
@@ -28,18 +31,32 @@ public class ContextProvider {
     private static final String THEME_COLOR_PROPERTY_KEY = "theme.color";
     private Environment environment;
 
+    private Context cachedContext;
+
     @Autowired
     public ContextProvider(Environment environment) {
         this.environment = environment;
+        this.cachedContext = getLatestContext();
+    }
+
+    /** update context data  */
+    public void update() {
+        this.cachedContext = getLatestContext();
     }
 
     public Context getContext() {
-        return Context.builder()
+        return cachedContext;
+    }
+
+    public Context getLatestContext() {
+        this.cachedContext = Context.builder()
                 .contextPath(this.environment.getProperty(CONTEXT_PATH_PROPERTY_KEY))
                 .absoluteWebDirectoryPath(getAbsoluteWebDirectoryPath())
                 .assets(createContextAssets())
                 .themeColor(this.environment.getProperty(THEME_COLOR_PROPERTY_KEY))
-                .build();
+                .build(); 
+        
+        return cachedContext;
     }
 
     private Context.Assets createContextAssets() {
