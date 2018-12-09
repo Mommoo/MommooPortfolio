@@ -9,7 +9,7 @@ import java.util.regex.Matcher;
 /**
  * It is decorating class of {@link ImageResourceFinder}
  * This class convert from server file path to web resource file path desired by web client user
- * {@link WebClientImageResourceFinder#findImageFile(String)}
+ * {@link WebClientImageResourceFinder#findRelativeImageFile(String)}
  *
  * @author mommoo
  */
@@ -24,7 +24,7 @@ class WebClientImageResourceFinder {
     }
 
     /** provides an image path that the web client can using at browser environment */
-    String findImageFile(String fileName) {
+    String findRelativeImageFile(String fileName) {
         String absoluteImageFilePath = this.imageResourceFinder.findAbsoluteImageFilePath(fileName);
         if ( absoluteImageFilePath.contains(absoluteWebDirectoryPath) ) {
 

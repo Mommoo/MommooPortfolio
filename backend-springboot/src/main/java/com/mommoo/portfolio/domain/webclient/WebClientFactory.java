@@ -2,9 +2,11 @@ package com.mommoo.portfolio.domain.webclient;
 
 import com.mommoo.portfolio.common.context.Context;
 import com.mommoo.portfolio.common.context.ContextProvider;
+import com.mommoo.portfolio.domain.introduction.Introduction;
 import com.mommoo.portfolio.domain.project.BasicProject;
 import com.mommoo.portfolio.domain.project.NormalProject;
 import com.mommoo.portfolio.mongo.repository.BasicProjectMongoRepository;
+import com.mommoo.portfolio.mongo.repository.IntroductionMongoRepository;
 import com.mommoo.portfolio.mongo.repository.NormalProjectMongoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,9 +15,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * This class creates and provides web client's data.
- * Specific project resource directory's name is {@link BasicProject#getName()}
- * {@link #createWebClientResource(Context, BasicProject)}
+ * This class creates web client's data that be created by both Entity and {@link WebClientResource}
+ *
+ * Tn case WebClientProject Data {@link WebClientBasicProject}{@link WebClientNormalProject},
+ * the resource directory name needed to {@link WebClientResource},
+ * will be as project's name{@link BasicProject#getName()}.
  *
  * @author mommoo
  */
@@ -24,40 +28,42 @@ public class WebClientFactory {
     private ContextProvider contextProvider;
     private BasicProjectMongoRepository basicProjectMongoRepository;
     private NormalProjectMongoRepository normalProjectMongoRepository;
+    private IntroductionMongoRepository introductionMongoRepository;
 
     @Autowired
-    private WebClientFactory(ContextProvider contextProvider, BasicProjectMongoRepository basicProjectMongoRepository,
-                             NormalProjectMongoRepository normalProjectMongoRepository) {
+    private WebClientFactory(ContextProvider contextProvider,
+                             BasicProjectMongoRepository basicProjectMongoRepository,
+                             NormalProjectMongoRepository normalProjectMongoRepository,
+                             IntroductionMongoRepository introductionMongoRepository) {
 
         this.contextProvider = contextProvider;
         this.basicProjectMongoRepository = basicProjectMongoRepository;
         this.normalProjectMongoRepository = normalProjectMongoRepository;
+        this.introductionMongoRepository = introductionMongoRepository;
     }
 
-    public List<WebClientBasicProject> createWebClientBasicProjectList() {
-        Context context = this.contextProvider.getContext();
-
+    public List<WebClientBasicProject> createWebClientBasicProjectList(String domainPath) {
         return basicProjectMongoRepository
                 .findAll()
                 .stream()
-                .map(project-> new WebClientBasicProject(project, createWebClientResource(context, project)))
+                .map(project-> new WebClientBasicProject(project, createWebClientResource(domainPath, project.getName())))
                 .collect(Collectors.toList());
     }
 
-    public WebClientNormalProject createWebClientNormalProjectBySerialNumber(int serialNumber) {
-        Context context = this.contextProvider.getContext();
+    public WebClientNormalProject createWebClientNormalProjectBySerialNumber(int serialNumber, String domainPath) {
         NormalProject foundProject = normalProjectMongoRepository.findBySerialNumber(serialNumber);
-        return new WebClientNormalProject(foundProject, createWebClientResource(context, foundProject));
+        WebClientResource webClientResource = createWebClientResource(domainPath, foundProject.getName());
+        return new WebClientNormalProject(foundProject, webClientResource);
     }
 
-    /** specific project directory name will be used as project's name */
-    private static WebClientResource createWebClientResource(Context context, BasicProject basicProject) {
-        String projectResourceDirectoryName = basicProject.getName();
+    public WebClientIntroduction createWebClientIntroduction(String domainPath) {
+        Introduction introduction = introductionMongoRepository.findFirstBy();
+        WebClientResource webClientResource = createWebClientResource(domainPath);
+        return new WebClientIntroduction(introduction, webClientResource);
+    }
 
-        return WebClientResource
-                .builder()
-                .context(context)
-                .imageDirectoryNames(projectResourceDirectoryName)
-                .build();
+    public WebClientResource createWebClientResource(String domainPath, String... additionalDirectoryPath) {
+        Context context = this.contextProvider.getContext();
+        return new WebClientResource(context, domainPath, additionalDirectoryPath);
     }
 }
