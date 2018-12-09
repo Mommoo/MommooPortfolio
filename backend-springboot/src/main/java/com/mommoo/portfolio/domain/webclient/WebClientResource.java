@@ -1,12 +1,12 @@
-package com.mommoo.portfolio.domain.project.webclient;
+package com.mommoo.portfolio.domain.webclient;
 
 import com.mommoo.portfolio.common.context.Context;
 import com.mommoo.portfolio.common.resource.ImageResourceFinder;
-import com.mommoo.portfolio.domain.project.BasicProject;
 import lombok.Builder;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -18,22 +18,18 @@ import java.util.stream.Collectors;
  * one is a common directory that have images for public use.
  * the other is a specific project directory that have images for using only specific project.
  *
- * common and specific project's directory name will be decided by {@link #getResourceDirectoryNamesToFind()}
+ * common and specific project's directory name will be decided by {@link #resourceDirectoryNames}, {@link #getResourceDirectoryNamesToFind(String...)}
  *
  * @author mommoo
  */
 public class WebClientResource {
-    private BasicProject project;
-    private WebClientImageResourceFinder imageResourceFinder;
+    private final String[] resourceDirectoryNames;
+    private final WebClientImageResourceFinder imageResourceFinder;
 
     @Builder
-    WebClientResource(Context context, BasicProject project) {
-        this.project = project;
+    WebClientResource(Context context, String... imageDirectoryNames) {
+        this.resourceDirectoryNames = getResourceDirectoryNamesToFind(imageDirectoryNames);
         this.imageResourceFinder = createWebClientImageResourceFinder(context);
-    }
-
-    public BasicProject getProject() {
-        return project;
     }
 
     public String findImageFile(String imageName) {
@@ -42,7 +38,6 @@ public class WebClientResource {
 
     private WebClientImageResourceFinder createWebClientImageResourceFinder(Context context) {
         String absoluteImageRepositoryPath = context.getAssets().getAbsoluteImageDirectoryPath();
-        String[] resourceDirectoryNames = getResourceDirectoryNamesToFind();
 
         String[] resourceDirectoryPathsToFind = Arrays.stream(resourceDirectoryNames)
                 .map(directoryName-> absoluteImageRepositoryPath + File.separator + directoryName)
@@ -61,7 +56,10 @@ public class WebClientResource {
                 .build();
     }
 
-    private String[] getResourceDirectoryNamesToFind() {
-        return new String[]{"common", this.project.getName()};
+    private String[] getResourceDirectoryNamesToFind(String... imageDirectoryNames) {
+        List<String> directoryNameList = Arrays.asList(imageDirectoryNames);
+        directoryNameList.add(0, "common");
+        int size = directoryNameList.size();
+        return directoryNameList.toArray(new String[size]);
     }
 }

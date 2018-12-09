@@ -1,4 +1,4 @@
-package com.mommoo.portfolio.domain.project.webclient;
+package com.mommoo.portfolio.domain.webclient;
 
 import com.mommoo.portfolio.common.resource.ImageResourceFinder;
 import lombok.Builder;
@@ -13,18 +13,18 @@ import java.util.regex.Matcher;
  *
  * @author mommoo
  */
-public class WebClientImageResourceFinder {
+class WebClientImageResourceFinder {
     private final ImageResourceFinder imageResourceFinder;
     private final String absoluteWebDirectoryPath;
 
     @Builder
-    public WebClientImageResourceFinder(ImageResourceFinder imageResourceFinder, String absoluteWebDirectoryPath) {
+    WebClientImageResourceFinder(ImageResourceFinder imageResourceFinder, String absoluteWebDirectoryPath) {
         this.imageResourceFinder = imageResourceFinder;
         this.absoluteWebDirectoryPath = absoluteWebDirectoryPath;
     }
 
     /** provides an image path that the web client can using at browser environment */
-    public String findImageFile(String fileName) {
+    String findImageFile(String fileName) {
         String absoluteImageFilePath = this.imageResourceFinder.findAbsoluteImageFilePath(fileName);
         if ( absoluteImageFilePath.contains(absoluteWebDirectoryPath) ) {
 

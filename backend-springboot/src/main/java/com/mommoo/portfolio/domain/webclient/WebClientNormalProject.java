@@ -1,4 +1,4 @@
-package com.mommoo.portfolio.domain.project.webclient;
+package com.mommoo.portfolio.domain.webclient;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.mommoo.portfolio.domain.project.NormalProject;
@@ -27,9 +27,8 @@ public class WebClientNormalProject extends WebClientBasicProject {
     private final WebClientExample example;
     private final List<NormalProject.Feature> features;
 
-    WebClientNormalProject(WebClientResource webClientResource) {
-        super(webClientResource);
-        NormalProject project = (NormalProject) webClientResource.getProject();
+    WebClientNormalProject(NormalProject project, WebClientResource webClientResource) {
+        super(project, webClientResource);
         this.bannerImage = webClientResource.findImageFile(project.getBannerImage());
         this.plannings = project.getPlannings();
         this.results = project.getResults();

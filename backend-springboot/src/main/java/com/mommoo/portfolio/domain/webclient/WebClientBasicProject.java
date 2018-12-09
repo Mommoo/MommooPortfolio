@@ -1,11 +1,10 @@
-package com.mommoo.portfolio.domain.project.webclient;
+package com.mommoo.portfolio.domain.webclient;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mommoo.portfolio.domain.project.BasicProject;
 import com.mommoo.portfolio.domain.project.BasicProject.Spec;
 import com.mommoo.portfolio.domain.project.BasicProject.SpecItem;
-import lombok.Builder;
 import lombok.ToString;
 
 import java.util.List;
@@ -32,17 +31,15 @@ public class WebClientBasicProject {
     @JsonIgnore
     protected WebClientResource webClientResource;
 
-    @Builder
-    WebClientBasicProject(WebClientResource webClientResource) {
+    WebClientBasicProject(BasicProject project, WebClientResource webClientResource) {
         this.webClientResource = webClientResource;
 
-        BasicProject basicProject = webClientResource.getProject();
-        this.serialNumber = basicProject.getSerialNumber();
-        this.name = basicProject.getName();
-        this.previewBannerImage = webClientResource.findImageFile(basicProject.getPreviewBannerImage());
-        this.descriptions = basicProject.getDescriptions();
-        this.spec = createWebClientSpec(basicProject.getSpec());
-        this.skills = basicProject.getSkills();
+        this.serialNumber = project.getSerialNumber();
+        this.name = project.getName();
+        this.previewBannerImage = webClientResource.findImageFile(project.getPreviewBannerImage());
+        this.descriptions = project.getDescriptions();
+        this.spec = createWebClientSpec(project.getSpec());
+        this.skills = project.getSkills();
     }
 
     private Spec createWebClientSpec(Spec spec) {
