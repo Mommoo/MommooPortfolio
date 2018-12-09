@@ -1,4 +1,4 @@
-package com.mommoo.portfolio.domain.resource;
+package com.mommoo.portfolio.common.resource;
 
 import lombok.Builder;
 
