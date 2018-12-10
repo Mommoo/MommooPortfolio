@@ -1,0 +1,21 @@
+:host(#banner){
+  display : flex;
+  flex-direction: column;
+  justify-items: center;
+  // IE10 is not exist 'justify-contents' property so,
+  // write 'text-align' property to align name and subtitle to center
+  text-align: center;
+
+  padding-bottom: 16px;
+}
+
+:host(#banner-title) {
+  font-weight : 900;
+  text-align : center;
+  font-size:60px;
+}
+
+:host(#banner-sub-title) {
+  text-align : center;
+  color : rgba(0, 0, 0, 0.68);
+}

@@ -1,0 +1,47 @@
+:host(.list) {
+  display: block;
+}
+
+:host(.list-title){
+  display: block;
+  background-color : #ececec;
+  padding : 16px;
+  font-size : 22px;
+}
+
+:host(.list-section) {
+  display: block;
+  padding : 0 16px 0 22px;
+
+  #section-title {
+    padding : 16px 16px 0 16px;
+    color : rgba(0,0,0,.54);
+    font-weight: 500;
+    font-size : 14px;
+  }
+
+  &:after {
+    display:block;
+    content :'';
+    height: 1px;
+    width : calc(100% - 22px);
+    background-color : rgba(0,0,0,.36);
+    margin : 0 auto;
+  }
+
+  &:last-child {
+    &:after {
+      height : 0;
+    }
+  }
+
+  #section-content {
+    padding : 16px 16px 16px 22px;
+  }
+}
+
+:host(.list-item) {
+  display : block;
+  padding : 8px 0;
+}
+
