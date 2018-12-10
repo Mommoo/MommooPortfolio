@@ -34,7 +34,7 @@ public class ImageResourceFinder {
     public ImageResourceFinder(String... absoluteDirectoryPaths) {
         this.cachedFileList = Arrays.stream(absoluteDirectoryPaths)
                 .map(absoluteDirectoryPath -> Paths.get(absoluteDirectoryPath))
-                .flatMap(ImageResourceFinder::createFileListPathStream)
+                .flatMap(ImageResourceFinder::flatPathStream)
                 .collect(Collectors.toList());
     }
 
@@ -47,11 +47,17 @@ public class ImageResourceFinder {
                 .orElse("");
     }
 
-    private static Stream<Path> createFileListPathStream(Path path) {
-        try {
-            return Files.list(path);
-        } catch (IOException e) {
-            return Stream.empty();
+    private static Stream<Path> flatPathStream(Path path) {
+        if ( Files.isDirectory(path) ) {
+            try {
+                return Files
+                        .list(path)
+                        .flatMap(ImageResourceFinder::flatPathStream);
+            } catch (IOException e) {
+                return Stream.empty();
+            }
+        } else {
+            return Stream.of(path);
         }
     }
 
