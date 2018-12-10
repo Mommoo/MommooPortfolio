@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 /**
  * This class creates web client's data that be created by both Entity and {@link WebClientResource}
  *
- * Tn case WebClientProject Data {@link WebClientBasicProject}{@link WebClientNormalProject},
+ * In case WebClientProject Data {@link WebClientBasicProject}{@link WebClientNormalProject},
  * the resource directory name needed to {@link WebClientResource},
  * will be as project's name{@link BasicProject#getName()}.
  *
@@ -43,6 +43,7 @@ public class WebClientFactory {
     }
 
     public List<WebClientBasicProject> createWebClientBasicProjectList(String domainPath) {
+        contextProvider.update();
         return basicProjectMongoRepository
                 .findAll()
                 .stream()
@@ -51,18 +52,25 @@ public class WebClientFactory {
     }
 
     public WebClientNormalProject createWebClientNormalProjectBySerialNumber(int serialNumber, String domainPath) {
+        contextProvider.update();
         NormalProject foundProject = normalProjectMongoRepository.findBySerialNumber(serialNumber);
         WebClientResource webClientResource = createWebClientResource(domainPath, foundProject.getName());
         return new WebClientNormalProject(foundProject, webClientResource);
     }
 
     public WebClientIntroduction createWebClientIntroduction(String domainPath) {
+        contextProvider.update();
         Introduction introduction = introductionMongoRepository.findFirstBy();
         WebClientResource webClientResource = createWebClientResource(domainPath);
         return new WebClientIntroduction(introduction, webClientResource);
     }
 
-    public WebClientResource createWebClientResource(String domainPath, String... additionalDirectoryPath) {
+    public WebClientResource createWebClientResource(Context context, String domainPath, String... additionalDirectoryPath) {
+        return new WebClientResource(context, domainPath, additionalDirectoryPath);
+    }
+
+    /** use cached context */
+    private WebClientResource createWebClientResource(String domainPath, String... additionalDirectoryPath) {
         Context context = this.contextProvider.getContext();
         return new WebClientResource(context, domainPath, additionalDirectoryPath);
     }

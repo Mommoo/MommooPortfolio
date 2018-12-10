@@ -9,6 +9,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
+ * This class is decorating data {@link Introduction}
+ * that several data be converted to web client data {@link WebClientResource}
+ *
  * @author mommoo
  */
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
