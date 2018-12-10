@@ -58,11 +58,19 @@ public class WebClientFactory {
         return new WebClientNormalProject(foundProject, webClientResource);
     }
 
-    public WebClientIntroduction createWebClientIntroduction(String domainPath) {
+    private WebClientIntroduction createWebClientIntroduction(String domainPath) {
         contextProvider.update();
         Introduction introduction = introductionMongoRepository.findFirstBy();
         WebClientResource webClientResource = createWebClientResource(domainPath);
         return new WebClientIntroduction(introduction, webClientResource);
+    }
+
+    public WebClientIntroduction.WebClientProfile createWebClientProfile(String domainPath) {
+        return createWebClientIntroduction(domainPath).getProfile();
+    }
+
+    public List<WebClientIntroduction.WebClientLanguageTech> createWebClientLanguageTechs(String domainPath) {
+        return createWebClientIntroduction(domainPath).getLanguageTechs();
     }
 
     public WebClientResource createWebClientResource(Context context, String domainPath, String... additionalDirectoryPath) {

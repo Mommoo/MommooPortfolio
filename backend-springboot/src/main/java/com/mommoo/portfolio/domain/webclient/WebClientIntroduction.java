@@ -2,6 +2,7 @@ package com.mommoo.portfolio.domain.webclient;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.mommoo.portfolio.domain.introduction.Introduction;
+import lombok.Getter;
 import lombok.ToString;
 
 import java.util.Calendar;
@@ -14,7 +15,7 @@ import java.util.stream.Collectors;
  *
  * @author mommoo
  */
-@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
+@Getter
 @ToString
 class WebClientIntroduction {
     private final WebClientProfile profile;
@@ -60,7 +61,7 @@ class WebClientIntroduction {
 
     @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
     @ToString
-    private static class WebClientLanguageTech {
+    static class WebClientLanguageTech {
         private final String name;
         private final String image;
         private final List<String> briefings;
