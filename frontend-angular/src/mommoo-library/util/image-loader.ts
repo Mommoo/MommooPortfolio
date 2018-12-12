@@ -1,6 +1,8 @@
 import {ImageDimension} from './types';
 
 export class ImageLoader {
+  private constructor() {}
+
   public static promiseLoadImage(imagePath: string) {
     return new Promise<ImageDimension>((resolve, reject) => {
       if (!imagePath) {
