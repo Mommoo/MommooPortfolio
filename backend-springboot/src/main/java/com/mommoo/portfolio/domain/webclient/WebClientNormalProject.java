@@ -60,26 +60,62 @@ public class WebClientNormalProject extends WebClientBasicProject {
     @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
     @ToString
     private class WebClientExample {
-        private final Map<String, String> github;
-        private final Map<String, String> youtube;
-        private final Map<String, String> googleApp;
-        private final Map<String, String> sample;
-        private final Map<String, String> blog;
+        private final WebClientURLExample github;
+        private final WebClientYoutubeExample youtube;
+        private final WebClientURLExample googleApp;
+        private final WebClientURLExample sample;
+        private final WebClientURLExample blog;
 
         private WebClientExample(Example example) {
-            this.github = createImageItem("github", "url", example.getGithubURL());
-            this.youtube = createImageItem("youtube", "token", example.getYoutubeToken());
-            this.googleApp = createImageItem("google_play", "packageName", example.getGoogleAppPackageName());
-            this.sample = createImageItem("program", "url", example.getSampleURL());
-            this.blog = createImageItem("blog", "url", example.getBlogURL());
+            this.github = new WebClientURLExample("github", example.getGithubURL());
+            this.youtube = new WebClientYoutubeExample("youtube", example.getYoutubeToken());
+            this.googleApp = new WebClientURLExample("google_play", convertToGoogleAppDownloadURL(example.getGoogleAppPackageName()));
+            this.sample = new WebClientURLExample("program", example.getSampleURL());
+            this.blog = new WebClientURLExample("blog", example.getBlogURL());
         }
 
-        private Map<String, String> createImageItem(String imageName, String key, String value) {
-            Map<String, String> imageItem = new HashMap<>();
-            String imageFile = webClientResource.findImageFile(imageName);
-            imageItem.put("image", imageFile);
-            imageItem.put(key, value);
-            return imageItem;
+        private boolean isStringEmpty(String string) {
+            return string == null || string.equals("");
+        }
+
+        private String convertToGoogleAppDownloadURL(String packageName) {
+            if ( isStringEmpty(packageName) ) {
+                return "";
+            }
+            return "https://play.google.com/store/apps/details?id="+packageName;
+        }
+
+        @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
+        @ToString(callSuper = true)
+        private class WebClientURLExample {
+            private final String image;
+            private final String url;
+
+            private WebClientURLExample(String imageName, String URL) {
+                if ( isStringEmpty(URL) ){
+                    this.image = this.url = "";
+                    return;
+                }
+
+                this.image = webClientResource.findImageFile(imageName);
+                this.url = URL;
+            }
+        }
+
+        @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
+        @ToString(callSuper = true)
+        private class WebClientYoutubeExample  {
+            private final String image;
+            private final String token;
+
+            private WebClientYoutubeExample(String imageName, String token) {
+                if ( isStringEmpty(token) ) {
+                    this.image = this.token = "";
+                    return;
+                }
+                this.image = webClientResource.findImageFile(imageName);
+                this.token = token;
+            }
         }
     }
 }

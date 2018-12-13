@@ -61,8 +61,8 @@ public class WebClientResource {
 
     private String[] getResourceDirectoryNamesToFind(String... imageDirectoryNames) {
         List<String> directoryNameList = new ArrayList<>();
-        directoryNameList.addAll(Arrays.asList(defaultFileNamesToFind));
         directoryNameList.addAll(Arrays.asList(imageDirectoryNames));
+        directoryNameList.addAll(Arrays.asList(defaultFileNamesToFind));
 
         int size = directoryNameList.size();
         return directoryNameList.toArray(new String[size]);
