@@ -4,6 +4,7 @@ import com.mommoo.portfolio.common.resource.ImageResourceFinder;
 import lombok.Builder;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.regex.Matcher;
 
 /**
@@ -14,28 +15,36 @@ import java.util.regex.Matcher;
  * @author mommoo
  */
 class WebClientImageResourceFinder {
-    private final ImageResourceFinder imageResourceFinder;
     private final String absoluteWebDirectoryPath;
+    private final ImageResourceFinder[] imageResourceFinders;
 
-    @Builder
-    WebClientImageResourceFinder(ImageResourceFinder imageResourceFinder, String absoluteWebDirectoryPath) {
-        this.imageResourceFinder = imageResourceFinder;
+    WebClientImageResourceFinder(String absoluteWebDirectoryPath, ImageResourceFinder... imageResourceFinders) {
         this.absoluteWebDirectoryPath = absoluteWebDirectoryPath;
+        this.imageResourceFinders = imageResourceFinders;
     }
 
     /** provides an image path that the web client can using at browser environment */
     String findRelativeImageFile(String fileName) {
-        String absoluteImageFilePath = this.imageResourceFinder.findAbsoluteImageFilePath(fileName);
-        if ( absoluteImageFilePath.contains(absoluteWebDirectoryPath) ) {
 
-            int beginIndex = absoluteImageFilePath.indexOf(absoluteWebDirectoryPath) + absoluteWebDirectoryPath.length();
-            /* relative path should be not containing separator */
-            beginIndex++;
-            return absoluteImageFilePath
-                    .substring(beginIndex)
-                    .replaceAll(Matcher.quoteReplacement(File.separator), "/");
+        return Arrays
+                .stream(this.imageResourceFinders)
+                .map(imageFinder -> imageFinder.findAbsoluteImageFilePath(fileName))
+                .filter(foundImageFile -> foundImageFile.lastIndexOf(fileName) != -1)
+                .map(this::convertToWebImageFilePath)
+                .findFirst()
+                .orElse("");
+    }
+
+    private String convertToWebImageFilePath(String absoluteFileImagePath) {
+        if ( !absoluteFileImagePath.contains(absoluteWebDirectoryPath) ) {
+            return "";
         }
 
-        return "";
+        int beginIndex = absoluteFileImagePath.indexOf(absoluteWebDirectoryPath) + absoluteWebDirectoryPath.length();
+        /* relative path should be not containing separator */
+        beginIndex++;
+        return absoluteFileImagePath
+                .substring(beginIndex)
+                .replaceAll(Matcher.quoteReplacement(File.separator), "/");
     }
 }

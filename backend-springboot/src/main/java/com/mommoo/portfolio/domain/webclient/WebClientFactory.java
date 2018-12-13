@@ -47,21 +47,25 @@ public class WebClientFactory {
         return basicProjectMongoRepository
                 .findAll()
                 .stream()
-                .map(project-> new WebClientBasicProject(project, createWebClientResource(domainPath, project.getName())))
+                .map(project-> {
+                    WebClientResource resource
+                            = createWebClientResourceUsingByCached(domainPath, project.getName());
+                    return new WebClientBasicProject(project, resource);
+                })
                 .collect(Collectors.toList());
     }
 
     public WebClientNormalProject createWebClientNormalProjectBySerialNumber(int serialNumber, String domainPath) {
         contextProvider.update();
         NormalProject foundProject = normalProjectMongoRepository.findBySerialNumber(serialNumber);
-        WebClientResource webClientResource = createWebClientResource(domainPath, foundProject.getName());
+        WebClientResource webClientResource = createWebClientResourceUsingByCached(domainPath, foundProject.getName());
         return new WebClientNormalProject(foundProject, webClientResource);
     }
 
     private WebClientIntroduction createWebClientIntroduction(String domainPath) {
         contextProvider.update();
         Introduction introduction = introductionMongoRepository.findFirstBy();
-        WebClientResource webClientResource = createWebClientResource(domainPath);
+        WebClientResource webClientResource = createWebClientResourceUsingByCached(domainPath);
         return new WebClientIntroduction(introduction, webClientResource);
     }
 
@@ -74,12 +78,12 @@ public class WebClientFactory {
     }
 
     public WebClientResource createWebClientResource(Context context, String domainPath, String... additionalDirectoryPath) {
-        return new WebClientResource(context, domainPath, additionalDirectoryPath);
+        return WebClientResource.of(context, domainPath, additionalDirectoryPath);
     }
 
-    /** use cached context */
-    private WebClientResource createWebClientResource(String domainPath, String... additionalDirectoryPath) {
+    /** use cached data */
+    private WebClientResource createWebClientResourceUsingByCached(String domainPath, String... additionalDirectoryPath) {
         Context context = this.contextProvider.getContext();
-        return new WebClientResource(context, domainPath, additionalDirectoryPath);
+        return WebClientResource.ofDefaultCached(context, domainPath, additionalDirectoryPath);
     }
 }
