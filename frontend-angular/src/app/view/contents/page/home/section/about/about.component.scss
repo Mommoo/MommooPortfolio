@@ -1,0 +1,12 @@
+@import '~src/styles';
+
+.card-title {
+  @include ZCOOLFont;
+  font-weight:900;
+  text-align : center;
+}
+
+.card-hash-message {
+  @include NotoSansKRFont;
+  font-weight: 100;
+}
