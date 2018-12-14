@@ -27,7 +27,7 @@ export module WebClient {
       readonly serialNumber: number;
       readonly name: string;
       readonly previewBannerImage: string;
-      readonly descriptions: string[];
+      readonly description: string;
       readonly spec: Spec;
       readonly skills: string[];
     }

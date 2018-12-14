@@ -24,7 +24,7 @@ public class WebClientBasicProject {
     private final int serialNumber;
     private final String name;
     private final String previewBannerImage;
-    private final List<String> descriptions;
+    private final String description;
     private final Spec spec;
     private final List<String> skills;
 
@@ -37,7 +37,7 @@ public class WebClientBasicProject {
         this.serialNumber = project.getSerialNumber();
         this.name = project.getName();
         this.previewBannerImage = webClientResource.findImageFile(project.getPreviewBannerImage());
-        this.descriptions = project.getDescriptions();
+        this.description = String.join("\n", project.getDescriptions());
         this.spec = createWebClientSpec(project.getSpec());
         this.skills = project.getSkills();
     }
