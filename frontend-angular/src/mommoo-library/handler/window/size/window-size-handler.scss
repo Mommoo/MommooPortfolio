@@ -1,0 +1,56 @@
+/** The following media query's size is conform to size specification
+declared at window-size-handler.status file */
+
+@mixin basic-small-media-query {
+  @media all and (max-width:575.9px) {
+    @content
+  }
+}
+
+@mixin basic-medium-media-query {
+  @media all and (min-width:576px) and (max-width:1023.9px) {
+    @content
+  }
+}
+
+@mixin basic-large-media-query {
+  @media all and (min-width:1024px) {
+    @content
+  }
+}
+
+@mixin x-large-media-query{
+  @media all and (min-width:1280px) {
+    @content
+  }
+}
+
+@mixin large-media-query{
+  @media all and (min-width:1024px) and (max-width:1279.9px) {
+    @content
+  }
+}
+
+@mixin x-medium-media-query{
+  @media all and (min-width:768px) and (max-width:1023.9px) {
+    @content
+  }
+}
+
+@mixin medium-media-query{
+  @media all and (min-width:576px) and (max-width:767.9px) {
+    @content
+  }
+}
+
+@mixin x-small-media-query{
+  @media all and (min-width:384px) and (max-width:575.9px) {
+    @content
+  }
+}
+
+@mixin small-media-query{
+  @media all and (max-width:383.9px) {
+    @content
+  }
+}
