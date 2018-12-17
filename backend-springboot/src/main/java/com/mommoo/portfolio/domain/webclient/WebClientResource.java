@@ -65,7 +65,13 @@ public class WebClientResource {
     }
 
     public String findImageFile(String imageName) {
-        return this.domainPath + "/" + this.imageResourceFinder.findRelativeImageFile(imageName);
+        String relativeImageFilePath = this.imageResourceFinder.findRelativeImageFile(imageName);
+
+        if (relativeImageFilePath.equals("")) {
+            return "";
+        } else {
+            return this.domainPath + "/" + relativeImageFilePath;
+        }
     }
 
     private static ImageResourceFinder createImageResourceFinder(String absoluteImageDirectoryPath, String... resourceDirectoryNames) {
