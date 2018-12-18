@@ -25,6 +25,7 @@ public class Introduction {
     public static class Profile {
         private final String name;
         private final int birthYear;
+        private final String sex;
         private final List<String> degree;
     }
 

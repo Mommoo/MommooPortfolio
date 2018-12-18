@@ -42,10 +42,14 @@ class WebClientIntroduction {
         private final List<String> degree;
 
         WebClientProfile(Introduction.Profile profile) {
-            this.name = profile.getName();
+            this.name = computeNameWithSex(profile);
             this.lastTwoOfBirthYear = computeLastTwoOfBirthYear(profile.getBirthYear());
             this.age = computeAge(profile.getBirthYear());
             this.degree = profile.getDegree();
+        }
+
+        private String computeNameWithSex(Introduction.Profile profile) {
+            return profile.getName() +"(" + profile.getSex() + ")";
         }
 
         private String computeLastTwoOfBirthYear(int birthYear) {
