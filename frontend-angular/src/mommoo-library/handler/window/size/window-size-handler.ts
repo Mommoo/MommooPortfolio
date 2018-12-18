@@ -28,14 +28,16 @@ export class WindowSizeEventHandler {
   /**
    * @description: it is enable to detect the moment of when user resizing pause
    */
-  public static addDoneResizingEvent(eventListener, initRun = false): string {
+  public static addDoneResizingEvent(eventListener,
+                                     holdingTime = WindowSizeEventHandler.RESIZING_HOLD_TIME,
+                                     initRun = false): string {
     if ( initRun ) {
       eventListener();
     }
     let resizeID;
     const doneResizing = () => {
       clearTimeout(resizeID);
-      resizeID = setTimeout(eventListener, WindowSizeEventHandler.RESIZING_HOLD_TIME);
+      resizeID = setTimeout(eventListener, holdingTime);
     };
 
     return WindowSizeEventHandler.addEvent('resize', doneResizing);
