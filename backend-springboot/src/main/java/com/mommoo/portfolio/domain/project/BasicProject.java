@@ -1,9 +1,6 @@
 package com.mommoo.portfolio.domain.project;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Value;
+import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
@@ -12,7 +9,7 @@ import java.util.List;
  * BasicProject is persistence DTO class that basic of 'project' database data.
  *
  * {@link #serialNumber}: the project unique number value.
- * {@link #name}: the project name.
+ * {@link #title}: the project title.
  * {@link #previewBannerImage}: the file name of the resource that can see simple project view.
  * {@link #descriptions}: the descriptions of project.
  * {@link #spec}: the programming specification of project. {@link Spec}
@@ -22,10 +19,11 @@ import java.util.List;
  */
 @AllArgsConstructor
 @Getter
+@ToString
 @Document(collection = "project")
 public class BasicProject {
     private final int serialNumber;
-    private final String name;
+    private final String title;
     private final String previewBannerImage;
     private final List<String> descriptions;
     private final Spec spec;

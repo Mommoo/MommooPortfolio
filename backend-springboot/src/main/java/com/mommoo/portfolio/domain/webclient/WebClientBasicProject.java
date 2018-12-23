@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 @ToString
 public class WebClientBasicProject {
     private final int serialNumber;
-    private final String name;
+    private final String title;
     private final String previewBannerImage;
     private final String description;
     private final Spec spec;
@@ -35,7 +35,7 @@ public class WebClientBasicProject {
         this.webClientResource = webClientResource;
 
         this.serialNumber = project.getSerialNumber();
-        this.name = project.getName();
+        this.title = project.getTitle();
         this.previewBannerImage = webClientResource.findImageFile(project.getPreviewBannerImage());
         this.description = String.join("\n", project.getDescriptions());
         this.spec = createWebClientSpec(project.getSpec());

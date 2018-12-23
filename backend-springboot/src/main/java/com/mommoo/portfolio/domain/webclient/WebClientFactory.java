@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  *
  * In case WebClientProject Data {@link WebClientBasicProject}{@link WebClientNormalProject},
  * the resource directory name needed to {@link WebClientResource},
- * will be as project's name{@link BasicProject#getName()}.
+ * will be as project's title{@link BasicProject#getTitle}.
  *
  * @author mommoo
  */
@@ -49,7 +49,7 @@ public class WebClientFactory {
                 .stream()
                 .map(project-> {
                     WebClientResource resource
-                            = createWebClientResourceUsingByCached(domainPath, project.getName());
+                            = createWebClientResourceUsingByCached(domainPath, project.getTitle());
                     return new WebClientBasicProject(project, resource);
                 })
                 .collect(Collectors.toList());
@@ -58,7 +58,7 @@ public class WebClientFactory {
     public WebClientNormalProject createWebClientNormalProjectBySerialNumber(int serialNumber, String domainPath) {
         contextProvider.update();
         NormalProject foundProject = normalProjectMongoRepository.findBySerialNumber(serialNumber);
-        WebClientResource webClientResource = createWebClientResourceUsingByCached(domainPath, foundProject.getName());
+        WebClientResource webClientResource = createWebClientResourceUsingByCached(domainPath, foundProject.getTitle());
         return new WebClientNormalProject(foundProject, webClientResource);
     }
 

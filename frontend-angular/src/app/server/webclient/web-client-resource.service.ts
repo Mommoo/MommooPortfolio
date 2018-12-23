@@ -19,9 +19,7 @@ import {RestAPIUrl} from '../rest-api-url';
  * @author mommoo
  */
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class WebClientDataLoader {
   public readonly introductionLoader: WebClientIntroduction;
   public readonly projectLoader: WebClientProject;

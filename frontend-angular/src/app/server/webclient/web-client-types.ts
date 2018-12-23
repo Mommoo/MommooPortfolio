@@ -25,7 +25,7 @@ export module WebClient {
   export module Project {
     export interface Basic {
       readonly serialNumber: number;
-      readonly name: string;
+      readonly title: string;
       readonly previewBannerImage: string;
       readonly description: string;
       readonly spec: Spec;
@@ -34,6 +34,7 @@ export module WebClient {
 
     export interface Normal extends Basic {
       readonly bannerImage: string;
+      readonly subTitle: string;
       readonly plannings: string[];
       readonly results: string[];
       readonly example: Example;

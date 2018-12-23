@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 @ToString(callSuper = true)
 public class WebClientNormalProject extends WebClientBasicProject {
     private final String bannerImage;
+    private final String subTitle;
     private final List<String> plannings;
     private final List<String> results;
     private final WebClientExample example;
@@ -30,6 +31,7 @@ public class WebClientNormalProject extends WebClientBasicProject {
     WebClientNormalProject(NormalProject project, WebClientResource webClientResource) {
         super(project, webClientResource);
         this.bannerImage = webClientResource.findImageFile(project.getBannerImage());
+        this.subTitle = project.getSubTitle();
         this.plannings = project.getPlannings();
         this.results = project.getResults();
         this.example = new WebClientExample(project.getExample());

@@ -11,6 +11,7 @@ import java.util.List;
  * <p>
  * {@link BasicProject}: the basic project data properties.
  * {@link #bannerImage}: the banner image file name.
+ * {@link #subTitle}: the project subtitle.
  * {@link #plannings}: the plannings of project.
  * {@link #results}: the results that after project complete.
  * {@link #example}: the examples that can experience the project result. {@link Example}
@@ -22,23 +23,25 @@ import java.util.List;
 @ToString(callSuper = true)
 public class NormalProject extends BasicProject {
     private final String bannerImage;
+    private final String subTitle;
     private final List<String> plannings;
     private final List<String> results;
     private final Example example;
     private final List<Feature> features;
 
     @PersistenceConstructor
-    public NormalProject(int serialNumber, String name, String previewBannerImage, List<String> descriptions, Spec spec, List<String> skills,
+    public NormalProject(int serialNumber, String title, String subTitle, String previewBannerImage, List<String> descriptions, Spec spec, List<String> skills,
                          String bannerImage, List<String> plannings, List<String> results, Example example, List<Feature> features) {
-        super(serialNumber, name, previewBannerImage, descriptions, spec, skills);
+        super(serialNumber, title, previewBannerImage, descriptions, spec, skills);
         this.bannerImage = bannerImage;
+        this.subTitle = subTitle;
         this.plannings = plannings;
         this.results = results;
         this.example = example;
         this.features = features;
     }
 
-    /**
+    /**c
      * To creating user experiences that see github source code, youtube video,blog or download app etc...
      *
      * @author mommoo
