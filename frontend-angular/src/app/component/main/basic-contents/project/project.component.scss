@@ -1,0 +1,32 @@
+@import '~src/styles';
+
+:host {
+  display : block;
+}
+$padding: 16px;
+.card-viewport {
+
+  .side-padding {
+    padding-left: $padding;
+    padding-right: $padding;
+  }
+}
+
+.card-title {
+  @include TekoFont;
+  padding-top: $padding;
+  //font-size: 2.5vw;
+}
+
+.card-contents {
+  @include NanumGhothicFont;
+  line-height:140%;
+}
+
+.card-action-button {
+  @include TekoFont;
+}
+
+.card-hash-message {
+  @include NotoSansKRFont;
+}

@@ -1,0 +1,31 @@
+#pdf-guide {
+  display:flex;
+  flex-direction: column;
+  text-align: center;
+  justify-items: center;
+  align-items:center;
+  padding: 16px 0;
+
+  p {
+    padding: 0 10px;
+    box-sizing: border-box;
+    max-width:100%;
+    word-break: break-word;
+    -ms-word-break: break-all;
+    -ms-word-wrap: break-word;
+  }
+}
+
+#flex-row-box {
+  display: flex;
+  align-items: center;
+  justify-items: center;
+
+  padding: 16px;
+
+  img{
+    width : 30px;
+    height: 30px;
+    padding-right:16px;
+  }
+}

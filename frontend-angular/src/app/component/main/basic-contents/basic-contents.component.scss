@@ -1,0 +1,23 @@
+@import '~src/mommoo-library/handler/window/size/window-size-handler';
+
+:host {
+  display: block;
+}
+
+@include basic-large-media-query {
+  :host {
+    padding: 0 64px;
+  }
+}
+
+@include basic-medium-media-query {
+  :host {
+    padding: 0 32px;
+  }
+}
+
+@include basic-small-media-query {
+  :host {
+    padding: 0 16px;
+  }
+}

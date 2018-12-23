@@ -3,7 +3,7 @@ import {NumberUtils} from './number';
 export class NumberIdGenerator {
   private readonly numberIDSet = new Set<string>();
 
-  public constructor(private digitNumber : number = 6) {
+  public constructor(private digitNumber: number = 6) {
 
   }
 

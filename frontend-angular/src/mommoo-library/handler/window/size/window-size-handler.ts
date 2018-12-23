@@ -76,6 +76,10 @@ export class WindowSizeEventHandler {
     return WindowSizeEventHandler.addEvent('resize', resolutionChangeEvent);
   }
 
+  public static removeEvents(...eventIDs: string[]) {
+    eventIDs.forEach(eventID => this.removeEvent(eventID));
+  }
+
   public static removeEvent(eventID: string) {
     if ( eventID === undefined ) {
       return;

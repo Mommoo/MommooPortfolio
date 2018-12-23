@@ -14,7 +14,7 @@ import {MommooListTitle} from './list-title.component';
 export class MommooList implements OnInit, AfterContentInit {
 
   @ContentChild(MommooListTitle, {read : ElementRef})
-  private mommooListTitle : ElementRef<HTMLElement>;
+  private mommooListTitle: ElementRef<HTMLElement>;
 
   constructor() { }
 
@@ -22,6 +22,6 @@ export class MommooList implements OnInit, AfterContentInit {
   }
 
   ngAfterContentInit(): void {
-    DomUtils.move(this.mommooListTitle, 0);
+    // DomUtils.move(this.mommooListTitle, 0);
   }
 }

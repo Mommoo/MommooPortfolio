@@ -1,0 +1,17 @@
+@import '~src/styles';
+
+:host {
+  display : block;
+  padding-top : 40px;
+  width: 100%;
+}
+
+#banner-title {
+  @include TekoFont;
+  font-weight:900;
+}
+
+.banner-text-contents {
+  @include NanumGhothicFont;
+  font-weight: 300;
+}

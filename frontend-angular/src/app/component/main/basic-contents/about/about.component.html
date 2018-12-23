@@ -1,0 +1,22 @@
+<banner [title]="bannerTitle" [descriptions]="bannerDescriptions"></banner>
+<mommoo-grid-list #cardParent
+                  [colGap]="gutterSize"
+                  [rowGap]="gutterSize"
+                  [maxColumnNum]="maxColumnNum"
+                  [style.padding.px]="gutterSize"
+                  [rowHeight]="'1:1'">
+  <mommoo-grid-tile *ngFor="let languageTech of languageTechs" [colSpan]="1" [rowSpan]="1">
+    <mommoo-card>
+      <mommoo-card-viewport [style.padding]="'10px'">
+        <mommoo-card-image [imagePath]="languageTech.image"></mommoo-card-image>
+        <mommoo-card-contents [style.fontSize]="cardTextFontSize" class="card-title">
+          {{languageTech.name}}
+        </mommoo-card-contents>
+        <mommoo-card-hashtag>
+          <mommoo-card-hashtag-contents
+            *ngFor="let briefing of languageTech.briefings" class="card-hash-message">{{briefing}}</mommoo-card-hashtag-contents>
+        </mommoo-card-hashtag>
+      </mommoo-card-viewport>
+    </mommoo-card>
+  </mommoo-grid-tile>
+</mommoo-grid-list>

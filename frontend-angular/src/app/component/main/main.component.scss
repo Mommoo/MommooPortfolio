@@ -1,0 +1,70 @@
+@import '~src/styles';
+@import '~src/mommoo-library/handler/window/size/window-size-handler';
+
+:host {
+  display: block;
+}
+
+#fixed-header-wrapper {
+  z-index:100;
+}
+
+#footer-area {
+  text-align : center;
+}
+
+@include basic-large-media-query {
+  #header-area {
+    width : $headerWidthInDesktopMediaQuery;
+    position: fixed;
+    left:0;
+    top:0;
+    bottom:0;
+  }
+
+  #fixed-header-wrapper {
+    width: $headerWidthInDesktopMediaQuery;
+    height : 100%;
+  }
+
+  #contents-area {
+    padding-left: $headerWidthInDesktopMediaQuery;
+  }
+
+  #viewport {
+    padding: 0 64px;
+  }
+}
+
+@mixin medium-small-media-query {
+  #header-area {
+    width : 100%;
+  }
+
+  #fixed-header-wrapper {
+    position : fixed; // for ie fixed-header dragging bug, must be set fixed when changed to 3-line menu
+    width: 100%;
+    height : auto;
+    box-shadow : 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12);
+  }
+
+  #contents-area {
+    padding-left: 0;
+  }
+}
+
+@include basic-medium-media-query {
+  @include medium-small-media-query;
+
+  #viewport {
+    padding: 0 32px;
+  }
+}
+
+@include basic-small-media-query {
+  @include medium-small-media-query;
+
+  #viewport {
+    padding: 0 16px;
+  }
+}

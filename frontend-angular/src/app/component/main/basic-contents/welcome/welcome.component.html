@@ -1,0 +1,10 @@
+<banner [title]="getBannerTitle()" [descriptions]="getBannerDescriptions()"></banner>
+<div id="pdf-guide">
+  <p>혹시 간편하게 정리된 PDF 포트폴리오를 보고 싶으신가요?</p>
+  <mommoo-button>
+    <div id="flex-row-box">
+      <img *ngIf="isImagePathLoaded()" draggable="false" [src]="properties.pdf"/>
+      PDF로 보기
+    </div>
+  </mommoo-button>
+</div>

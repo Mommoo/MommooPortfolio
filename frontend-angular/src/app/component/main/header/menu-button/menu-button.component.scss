@@ -1,0 +1,31 @@
+$margin : 6px;
+$menuBarH : 4px;
+$menuBarW : 30px;
+
+#menuButton {
+  position : relative;
+  width : $menuBarW;
+  height : $menuBarH * 3 + $margin *2;
+  cursor : pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.common {
+  width  : $menuBarW;
+  height : $menuBarH;
+  background-color: black;
+  position : absolute;
+}
+#menu-top {
+  @extend .common;
+}
+
+#menu-middle {
+  @extend .common;
+  top : $margin + $menuBarH;
+}
+
+#menu-bottom {
+  @extend .common;
+  top : ($margin + $menuBarH) * 2;
+}

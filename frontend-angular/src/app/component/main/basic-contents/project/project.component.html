@@ -1,0 +1,25 @@
+<banner [title]="bannerTitle" [descriptions]="bannerDescriptions"></banner>
+<mommoo-masonry-layout *ngIf="projectCardList"
+                       [style.padding]="'0'"
+                       [maxColumnNum]="masonryColumnLength">
+  <mommoo-masonry-tile *ngFor="let projectCard of projectCardList"
+                       [colSpan]="projectCard.columnSpan">
+    <mommoo-card [cardWidth]="'fit'" [cardHeight]="'wrap'" (click)="onCardClickListener(projectCard.serialNumber)">
+      <mommoo-card-viewport class="card-viewport">
+        <mommoo-card-title class="side-padding card-title">{{projectCard.name}}</mommoo-card-title>
+        <mommoo-card-image [imagePath]="projectCard.previewImage" [animate]="true"></mommoo-card-image>
+        <mommoo-card-contents class="side-padding card-contents">
+          {{projectCard.description}}
+        </mommoo-card-contents>
+        <mommoo-card-hashtag class="side-padding card-hash-message">
+          <mommoo-card-hashtag-contents *ngFor="let skill of projectCard.skills">
+            {{skill}}
+          </mommoo-card-hashtag-contents>
+        </mommoo-card-hashtag>
+        <mommoo-card-action>
+          <mommoo-card-action-button class="card-action-button">Read More</mommoo-card-action-button>
+        </mommoo-card-action>
+      </mommoo-card-viewport>
+    </mommoo-card>
+  </mommoo-masonry-tile>
+</mommoo-masonry-layout>

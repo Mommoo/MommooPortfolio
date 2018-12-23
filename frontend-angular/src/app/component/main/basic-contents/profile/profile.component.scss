@@ -1,0 +1,23 @@
+:host{
+  display : flex;
+  flex-wrap : wrap;
+  flex-direction : column;
+  padding-bottom : 1rem;
+  overflow : hidden;
+  justify-items: center;
+  align-items: center;
+}
+
+.flex-row {
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 0 10px;
+  justify-content : center;
+  align-items : center;
+}
+
+#profile-guide {
+  display : block;
+  height : 100%;
+  margin : auto 0;
+}

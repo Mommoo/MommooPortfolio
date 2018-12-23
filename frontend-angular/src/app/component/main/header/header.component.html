@@ -1,0 +1,22 @@
+<header id="header">
+  <div id="media-query-layout">
+    <div id="title">{{headerTitle | uppercase}}</div>
+
+    <view-menu-button id="menu-button"
+                     (menuButtonEvent)="afterMenuButtonClickEvent($event)"></view-menu-button>
+  </div>
+
+  <animation-box>
+    <div id="animation-box-viewport">
+      <view-menu-list (menuListItemClick)="afterMenuListItemClickEvent()"></view-menu-list>
+
+      <div *ngIf="isBackButtonVisible"
+           mommooRipple
+           [rippleRadius]="'50%'"
+           (click)="afterBackButtonClickEvent()"
+           id="back-button">
+        <img src="../../../../assets/images/arrow_back.svg"/>
+      </div>
+    </div>
+  </animation-box>
+</header>

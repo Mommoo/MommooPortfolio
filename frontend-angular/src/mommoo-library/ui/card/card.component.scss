@@ -1,5 +1,7 @@
 @import '../common/style/common-style';
 
+$default_gutter_size: 5px;
+
 :host(.mommoo-card) {
   display : inline-block;
   visibility: hidden;
@@ -12,13 +14,13 @@
   height : 100%;
   box-sizing: border-box;
   overflow: hidden;
-  padding:16px;
 }
 
 :host(.mommoo-card-title) {
+  @extend .content-break;
   display: block;
   align-self : start;
-  font-size : 20px;
+  font-size : 30px;
   font-weight: bold;
   color : black;
 }
@@ -57,17 +59,19 @@
 }
 
 :host(.mommoo-card-hashtag-contents) {
+  @extend .content-break;
+
   display:block;
   width:auto;
   background-color : rgba(255,0,0,.5);
   color : white;
-  border-radius: 10px;
-  padding : 3px 5px;
-  font-size : 10px;
+  border-radius: 12px;
+  padding : 4px 8px;
+  font-size : 12px;
 
   &:nth-child(n) {
-    margin-right : 5px;
-    margin-bottom : 5px;
+    margin-right : $default_gutter_size;
+    margin-top : $default_gutter_size;
   }
 
   &:nth-last-child(1) {
@@ -102,7 +106,7 @@
   cursor : pointer;
 
   &:nth-child(n) {
-    margin-right : 10px;
+    margin-right : $default_gutter_size * 2;
   }
 
   &:nth-last-child(1) {
@@ -112,4 +116,16 @@
   #button {
     padding:8px;
   }
+}
+
+.content-break {
+  max-width:100%;
+  box-sizing: border-box;
+
+  /* For IE */
+  -ms-word-wrap: break-word;
+  -ms-word-break: break-all;
+
+  /* For Chrome */
+  word-break: break-word;
 }

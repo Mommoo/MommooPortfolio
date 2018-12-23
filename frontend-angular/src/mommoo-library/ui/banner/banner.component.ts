@@ -24,7 +24,7 @@ export class MommooBannerTitle {}
   styleUrls: ['./banner.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host : {
-    id : 'banner-sub-name'
+    id : 'banner-text-contents'
   }
 })
 export class MommooBannerTextContents {}

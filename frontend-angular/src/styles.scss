@@ -1,0 +1,53 @@
+/* You can add global styles to this file, and also import other style files */
+html, body{
+  padding : 0;
+  margin : 0;
+  background-color : #f9f9f9;
+}
+
+$NotoSansKR: 'Noto+Sans+KR:100,300';
+$NanumGhotic: 'Nanum+Gothic';
+$Teko: 'Teko:400,500,600,700';
+$Exo2: 'Exo+2:500';
+$Baloo: 'Baloo+Bhaijaan';
+$ZCOOL: 'ZCOOL+QingKe+HuangYou';
+//Font
+@import url('https://fonts.googleapis.com/css?family=#{$NotoSansKR}|#{$NanumGhotic}|#{$Teko}|#{$Exo2}|#{$Baloo}|#{$ZCOOL}');
+
+@mixin TekoFont {
+  font-family: 'Teko', 'sans-serif';
+}
+
+@mixin NanumGhothicFont {
+  font-family: 'Nanum Gothic', sans-serif;
+}
+
+@mixin NotoSansKRFont {
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+@mixin BalooFont {
+  font-family: 'Baloo Bhaijaan', cursive;
+}
+
+@mixin Exo2Font {
+  font-family: 'Exo 2', cursive;
+}
+
+@mixin ZCOOLFont {
+  font-family: 'ZCOOL QingKe HuangYou', cursive;
+}
+
+//MediaQuery
+
+$headerWidthInDesktopMediaQuery: 300px;
+
+// common function
+
+@mixin break-word {
+  /* For IE */
+  word-wrap: break-word;
+
+  /* For Chrome */
+  word-break: break-word;
+}

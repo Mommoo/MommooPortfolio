@@ -107,7 +107,6 @@ export class MommooCard implements OnChanges, AfterViewInit, OnInit {
     try {
       const imagePath = this.mommooCardImage.imagePath;
       const imageDimension = await ImageLoader.promiseLoadImage(imagePath);
-      // console.log(imageDimension.naturalWidth, imageDimension.naturalHeight);
       const imageStyle = this.cardDomHandler.getHeightWrapImageStyle(imageDimension.naturalWidth, imageDimension.naturalHeight);
       DomUtils.applyStyle(this.mommooCardImageElementRef, imageStyle);
     } catch {}

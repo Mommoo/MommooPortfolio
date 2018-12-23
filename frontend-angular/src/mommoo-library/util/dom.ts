@@ -151,36 +151,6 @@ export class DomUtils {
     };
   }
 
-  public static insideOffsets(elementRef: ElementRef<HTMLElement>): Bounds;
-
-  public static insideOffsets(element: HTMLElement): Bounds;
-
-  public static insideOffsets(target: ElementRef<HTMLElement> | HTMLElement): Bounds {
-    if ( !target ) {
-      return emptyBounds();
-    }
-
-    const element = DomUtils.takeElementIfWrappedRef(target);
-    const offsets = this.offset(element);
-
-    const computedStyle = window.getComputedStyle(element);
-    const paddingX = parseFloat(computedStyle.paddingLeft) + parseFloat(computedStyle.paddingRight);
-    const paddingY = parseFloat(computedStyle.paddingTop) + parseFloat(computedStyle.paddingBottom);
-
-    const borderX = parseFloat(computedStyle.borderLeftWidth) + parseFloat(computedStyle.borderRightWidth);
-    const borderY = parseFloat(computedStyle.borderTopWidth) + parseFloat(computedStyle.borderBottomWidth);
-
-    const outsideLeft = parseFloat(computedStyle.paddingLeft) + parseFloat(computedStyle.borderLeftWidth);
-    const outsideTop  = parseFloat(computedStyle.paddingTop) + parseFloat(computedStyle.borderTopWidth);
-
-    const innerWidth = offsets.width - paddingX - borderX;
-    const innerHeight = offsets.height - paddingY - borderY;
-    const innerLeft = offsets.left + outsideLeft;
-    const innerTop = offsets.top + outsideTop;
-
-    return DomUtils.createBounds(innerWidth, innerHeight, innerLeft, innerTop);
-  }
-
   public static takeElementIfWrappedRef(target: ElementRef<HTMLElement> | HTMLElement) {
     if ( target instanceof ElementRef ) {
       return target.nativeElement;

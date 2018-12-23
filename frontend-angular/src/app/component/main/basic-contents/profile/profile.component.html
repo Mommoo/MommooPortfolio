@@ -1,0 +1,9 @@
+<banner [title]="bannerTitle" [descriptions]="bannerDescriptions"></banner>
+<div class="flex-row">
+  <mommoo-list>
+    <mommoo-list-title>Mommoo</mommoo-list-title>
+    <mommoo-list-section *ngIf="profile" [sectionTitle]="profile.title">
+      <mommoo-list-item *ngFor="let item of profile.items">{{item}}</mommoo-list-item>
+    </mommoo-list-section>
+  </mommoo-list>
+</div>

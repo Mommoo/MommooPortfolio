@@ -19,7 +19,7 @@ export class MommooCardViewport {}
   styleUrls: ['./card.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    class:'mommoo-card-name container'
+    class:'mommoo-card-title container'
   }
 })
 export class MommooCardTitle {}
@@ -45,14 +45,14 @@ export class MommooCardImage {
     return this.sanitizer.bypassSecurityTrustStyle(`url(${this.imagePath})`);
   }
 
-  public get imagePath(){
+  public get imagePath() {
     return this._imagePath;
   }
 
   @Input()
-  private animate: boolean = false;
+  private animate = false;
 
-  @ViewChild('imageBox',{read: ElementRef})
+  @ViewChild('imageBox', {read: ElementRef})
   private imageBox: ElementRef<HTMLElement>;
 
   constructor(private cardImageAnimator: CardImageAnimator, private sanitizer: DomSanitizer) {}

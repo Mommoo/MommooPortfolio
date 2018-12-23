@@ -1,4 +1,6 @@
 :host(#banner){
+  max-width: 100%;
+  box-sizing: border-box;
   display : flex;
   flex-direction: column;
   justify-items: center;
@@ -12,10 +14,17 @@
 :host(#banner-title) {
   font-weight : 900;
   text-align : center;
-  font-size:60px;
+  font-size: 60px;
+
+  -ms-word-wrap: break-word;
+  -ms-word-break: break-all;
+
+  word-break: break-word;
 }
 
-:host(#banner-sub-title) {
+:host(#banner-text-contents) {
   text-align : center;
-  color : rgba(0, 0, 0, 0.68);
+  padding: 0 10px;
+  box-sizing: border-box;
+  max-width: 100%;
 }
