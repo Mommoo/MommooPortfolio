@@ -15,7 +15,7 @@ import {
 } from '@angular/core';
 import {MommooMasonryTile} from './masonry-tile/masonry-tile.component';
 import {DomUtils} from '../../util/dom';
-import {WindowEventHandler} from '../../handler/window/window-event';
+import {WindowSizeEventHandler} from '../../handler/window/size/window-size-handler';
 import {MasonryRenderer} from './masonry-renderer';
 
 @Component({
@@ -24,22 +24,20 @@ import {MasonryRenderer} from './masonry-renderer';
   styleUrls: ['./masonry-layout.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
+// TODO Masonry Tile이 하나 추가 되면, 전부 로딩해야 하는 구조. 추가 된 카드만 크기를 구하고.. layout만 하는 코드가 필요함.
 export class MommooMasonryLayout implements OnInit, AfterViewInit, AfterContentChecked, OnChanges, OnDestroy {
-  private static readonly DEFAULT_PADDING = DomUtils.getScrollbarWidth();
+  private static readonly DEFAULT_PADDING = DomUtils.getScrollbarWidth() / 2;
   private masonryLayoutWindowDoneEventID;
 
-  @ViewChild('paddingWrapper')
-  private paddingWrapper : ElementRef<HTMLElement>;
-
   @ContentChildren(MommooMasonryTile)
-  private masonryTileQueryList : QueryList<MommooMasonryTile>;
+  private masonryTileQueryList: QueryList<MommooMasonryTile>;
 
-  @Input() private maxColumnNum : number = 4;
-  @Input() private gutterSize   : number = 10;
+  @Input() private maxColumnNum = 4;
+  @Input() private gutterSize = 10;
 
-  private readonly masonryRenderer : MasonryRenderer = new MasonryRenderer(this.maxColumnNum, this.gutterSize);
+  private readonly masonryRenderer = new MasonryRenderer(this.maxColumnNum, this.gutterSize);
 
-  public constructor() {
+  public constructor(private hostElementRef: ElementRef<HTMLElement>) {
 
   }
 
@@ -50,22 +48,23 @@ export class MommooMasonryLayout implements OnInit, AfterViewInit, AfterContentC
       this.isFirstChanged = false;
       return;
     }
+    
     this.paintMasonryTiles();
     this.layoutMasonryTiles();
   }
 
   public ngOnInit(): void {
-    DomUtils.applyStyle(this.paddingWrapper, {
+    DomUtils.applyStyle(this.hostElementRef, {
       padding: `${MommooMasonryLayout.DEFAULT_PADDING}px`,
       opacity: 0
     });
   }
 
   public ngAfterViewInit(): void {
-    this.masonryLayoutWindowDoneEventID = WindowEventHandler.addDoneResizingEvent(()=> {
+    this.masonryLayoutWindowDoneEventID = WindowSizeEventHandler.addDoneResizingEvent(() => {
       this.paintMasonryTiles();
       this.layoutMasonryTiles();
-    }, true);
+    }, 400, true);
   }
 
   public ngAfterContentChecked(): void {
@@ -82,17 +81,17 @@ export class MommooMasonryLayout implements OnInit, AfterViewInit, AfterContentC
   }
 
   public ngOnDestroy(): void {
-    WindowEventHandler.removeEvent(this.masonryLayoutWindowDoneEventID);
+    WindowSizeEventHandler.removeEvent(this.masonryLayoutWindowDoneEventID);
   }
 
   public paintMasonryTiles(): void {
     this.masonryRenderer.paint();
   }
 
-  public layoutMasonryTiles() : void {
+  public layoutMasonryTiles(): void {
     const containerHeight = this.masonryRenderer.doMasonryLayout();
     const computedLayoutHeight = containerHeight + (MommooMasonryLayout.DEFAULT_PADDING * 2);
-    DomUtils.applyStyle(this.paddingWrapper, {
+    DomUtils.applyStyle(this.hostElementRef, {
       height: `${computedLayoutHeight}px`,
       opacity: 1
     });

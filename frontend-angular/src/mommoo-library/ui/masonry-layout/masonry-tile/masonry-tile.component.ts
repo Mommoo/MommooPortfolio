@@ -8,25 +8,25 @@ import {ChangeDetectionStrategy, Component, ElementRef, Input} from '@angular/co
 })
 export class MommooMasonryTile {
 
-  private _colSpan : number = 1;
+  private _colSpan = 1;
   @Input()
-  public set colSpan(_colSpan : number) {
+  public set colSpan(_colSpan: number) {
     this._colSpan = Math.max(1, _colSpan);
   }
 
-  public get colSpan() : number{
+  public get colSpan(): number {
     return this._colSpan;
   }
 
-  public constructor(private hostElementRef : ElementRef) {
+  public constructor(private hostElementRef: ElementRef) {
 
   }
 
-  public setStyles(style : {}) : void {
+  public setStyles(style: {}): void {
     Object.assign(this.hostElementRef.nativeElement.style, style);
   }
 
-  public getOffsetHeight() : number {
+  public getOffsetHeight(): number {
     return this.hostElementRef.nativeElement.offsetHeight;
   }
 }
