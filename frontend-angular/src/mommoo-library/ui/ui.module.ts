@@ -5,6 +5,7 @@ import {MommooMasonryModule} from './masonry-layout/mommoo-masonry.module';
 import {MommooBannerModule} from './banner/banner.module';
 import {MommooListModule} from './list/list.module';
 import {MommooButtonModule} from './button/button.module';
+import {MommooChipViewModule} from './chip-view/chip-view.module';
 
 const UI_MODULE_LIST = [
   MommooGridListModule,
@@ -12,7 +13,8 @@ const UI_MODULE_LIST = [
   MommooMasonryModule,
   MommooBannerModule,
   MommooListModule,
-  MommooButtonModule
+  MommooButtonModule,
+  MommooChipViewModule
 ];
 
 @NgModule({

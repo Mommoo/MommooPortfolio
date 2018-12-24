@@ -1,0 +1,23 @@
+$chipViewHeight: 30px;
+$chipViewImgSize: 20px;
+
+:host {
+  display: inline-flex;
+  padding: 2px 10px;
+  height: $chipViewHeight;
+  border-radius: 16px;
+  background-color: #c8c8c8;
+  justify-content: center;
+  align-items: center;
+  font-weight:900;
+  font-size: 14px;
+}
+
+#icon {
+  border-radius: 50%;
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: $chipViewImgSize;
+  height: $chipViewImgSize;
+  padding-right: 5px;
+}
