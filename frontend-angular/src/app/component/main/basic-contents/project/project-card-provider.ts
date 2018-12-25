@@ -11,12 +11,18 @@ export class ProjectCardProvider {
   }
 
   private createProjectCardWith(basicProject: WebClient.Project.Basic) {
+    const enterHTMLTag = '</br>';
+    const preciseMaxLimitTextLength
+      = this.config.descriptionMaxLimitTextLength
+      + (basicProject.descriptions.length * enterHTMLTag.length);
+
+    const description = basicProject.descriptions.join(enterHTMLTag);
+
     const isTooLongDescription
-      = basicProject.description.length > this.config.descriptionMaxLimitTextLength;
+      = description.length > preciseMaxLimitTextLength;
 
     const preferredDescription = isTooLongDescription ?
-      basicProject.description.substring(0, this.config.descriptionMaxLimitTextLength) :
-      basicProject.description;
+      description.substring(0, preciseMaxLimitTextLength) : description;
 
     return {
       serialNumber: basicProject.serialNumber,

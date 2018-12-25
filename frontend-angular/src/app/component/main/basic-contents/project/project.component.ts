@@ -15,10 +15,10 @@ import {MommooCardsLoadCheckerService} from '../../../../../mommoo-library/ui/ca
 import {Router} from '@angular/router';
 import {ContentsLayoutDetector} from '../../contents-layout-finder.service';
 import {AngularUtils} from '../../../../../mommoo-library/util/angular';
-import {ContentsItem} from '../../contents/contents.types';
 import {ProjectCardProvider} from './project-card-provider';
 import {ProjectCard, ProviderConfig} from './project.types';
 import {WebClient} from '../../../../server/webclient/web-client-types';
+import {ContentsItem} from '../../main.types';
 
 @Component({
   selector: 'project',

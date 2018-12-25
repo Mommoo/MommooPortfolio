@@ -1,6 +1,5 @@
 /**
  * This types definition files indicate data type that result of communication with server api
- *
  */
 
 /**
@@ -27,7 +26,7 @@ export module WebClient {
       readonly serialNumber: number;
       readonly title: string;
       readonly previewBannerImage: string;
-      readonly description: string;
+      readonly descriptions: string[];
       readonly spec: Spec;
       readonly skills: string[];
     }
