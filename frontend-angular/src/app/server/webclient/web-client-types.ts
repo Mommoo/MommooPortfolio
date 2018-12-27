@@ -33,6 +33,7 @@ export module WebClient {
 
     export interface Normal extends Basic {
       readonly bannerImage: string;
+      readonly UIImage: string;
       readonly subTitle: string;
       readonly plannings: string[];
       readonly results: string[];

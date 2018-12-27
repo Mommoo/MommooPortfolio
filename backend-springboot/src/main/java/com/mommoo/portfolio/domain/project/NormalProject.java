@@ -23,6 +23,7 @@ import java.util.List;
 @ToString(callSuper = true)
 public class NormalProject extends BasicProject {
     private final String bannerImage;
+    private final String UIImage;
     private final String subTitle;
     private final List<String> plannings;
     private final List<String> results;
@@ -31,9 +32,10 @@ public class NormalProject extends BasicProject {
 
     @PersistenceConstructor
     public NormalProject(int serialNumber, String title, String subTitle, String previewBannerImage, List<String> descriptions, Spec spec, List<String> skills,
-                         String bannerImage, List<String> plannings, List<String> results, Example example, List<Feature> features) {
+                         String bannerImage, String UIImage, List<String> plannings, List<String> results, Example example, List<Feature> features) {
         super(serialNumber, title, previewBannerImage, descriptions, spec, skills);
         this.bannerImage = bannerImage;
+        this.UIImage = UIImage;
         this.subTitle = subTitle;
         this.plannings = plannings;
         this.results = results;

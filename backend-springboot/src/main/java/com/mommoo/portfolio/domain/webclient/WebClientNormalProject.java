@@ -5,9 +5,7 @@ import com.mommoo.portfolio.domain.project.NormalProject;
 import com.mommoo.portfolio.domain.project.NormalProject.Example;
 import lombok.ToString;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -22,6 +20,7 @@ import java.util.stream.Collectors;
 @ToString(callSuper = true)
 public class WebClientNormalProject extends WebClientBasicProject {
     private final String bannerImage;
+    private final String UIImage;
     private final String subTitle;
     private final List<String> plannings;
     private final List<String> results;
@@ -31,6 +30,7 @@ public class WebClientNormalProject extends WebClientBasicProject {
     WebClientNormalProject(NormalProject project, WebClientResource webClientResource) {
         super(project, webClientResource);
         this.bannerImage = webClientResource.findImageFile(project.getBannerImage());
+        this.UIImage = webClientResource.findImageFile(project.getUIImage());
         this.subTitle = project.getSubTitle();
         this.plannings = project.getPlannings();
         this.results = project.getResults();
