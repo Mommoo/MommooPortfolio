@@ -22,8 +22,8 @@ export class CardDimensionChecker {
     return this.cardH;
   }
 
-  private computeDimenProps(cardW : string, cardH) : [CardDimensionProp, CardDimensionProp] {
-    const dimensionProps : CardDimensionProp[] = [];
+  private computeDimenProps(cardW: string, cardH): [CardDimensionProp, CardDimensionProp] {
+    const dimensionProps: CardDimensionProp[] = [];
     [cardW, cardH].forEach(string => {
       if ( CardDimensionChecker.isFixedValue(string) ) {
         dimensionProps.push(CardDimensionProp.FIX);
@@ -40,35 +40,35 @@ export class CardDimensionChecker {
     return [dimensionProps[0], dimensionProps[1]];
   }
 
-  private static isFixedValue(stringValue : string) : boolean {
+  private static isFixedValue(stringValue: string): boolean {
     const length = stringValue.length;
-    const value  = stringValue.substring(0, length-2);
-    const suffix = stringValue.substring(length-2, length);
+    const value  = stringValue.substring(0, length - 2);
+    const suffix = stringValue.substring(length - 2, length);
 
     return suffix === 'px' && NumberUtils.isNumeric(value);
   }
 
-  private isAnyone(cardDimenProp : CardDimensionProp) : boolean {
+  private isAnyone(cardDimenProp: CardDimensionProp): boolean {
     return this.cardDimenProps.some(prop => prop === cardDimenProp);
   }
 
-  private isAnyoneRatio() : boolean {
+  private isAnyoneRatio(): boolean {
     return this.isAnyone(CardDimensionProp.RATIO);
   }
 
-  public isAnyoneWrap() : boolean {
+  public isAnyoneWrap(): boolean {
     return this.isAnyone(CardDimensionProp.WRAP);
   }
 
-  public isWidthWrap() : boolean {
+  public isWidthWrap(): boolean {
     return this.cardDimenProps[0] === CardDimensionProp.WRAP;
   }
 
-  public isHeightWrap() : boolean {
+  public isHeightWrap(): boolean {
     return this.cardDimenProps[1] === CardDimensionProp.WRAP;
   }
 
-  private isBoth(cardDimenProp : CardDimensionProp) : boolean {
+  private isBoth(cardDimenProp: CardDimensionProp): boolean {
     return this.cardDimenProps.every(prop => prop === cardDimenProp);
   }
 
@@ -76,7 +76,7 @@ export class CardDimensionChecker {
     return this.isBoth(CardDimensionProp.WRAP);
   }
 
-  public isBothRatio() : boolean {
+  public isBothRatio(): boolean {
     return this.isBoth(CardDimensionProp.RATIO);
   }
 

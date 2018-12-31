@@ -1,4 +1,12 @@
-import {ChangeDetectionStrategy, Component, ElementRef, HostListener, Input, ViewChild} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  HostBinding,
+  HostListener,
+  Input,
+  ViewChild
+} from '@angular/core';
 import {CardImageAnimator} from './card-image-animator';
 import {DomSanitizer} from '@angular/platform-browser';
 
@@ -6,34 +14,32 @@ import {DomSanitizer} from '@angular/platform-browser';
   selector: 'mommoo-card-viewport',
   template: '<ng-content></ng-content>',
   styleUrls: ['./card.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  host: {
-    class: 'mommoo-card-viewport'
-  }
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MommooCardViewport {}
+export class MommooCardViewport {
+  @HostBinding('class.mommoo-card-viewport') private classToggle = true;
+}
 
 @Component({
   selector: 'mommoo-card-title',
   template: '<ng-content></ng-content>',
   styleUrls: ['./card.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  host: {
-    class:'mommoo-card-title container'
-  }
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MommooCardTitle {}
+export class MommooCardTitle {
+  @HostBinding('class.mommoo-card-title')
+  @HostBinding('class.container')
+  private classToggle = true;
+}
 
 @Component({
   selector: 'mommoo-card-image',
   template: `<div id="image-box" [style.background-image]="securityImageURL" #imageBox></div>`,
   styleUrls: ['./card.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  host: {
-    class:'mommoo-card-image'
-  }
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MommooCardImage {
+  @HostBinding('class.mommoo-card-image') private classToggle = true;
   private _imagePath;
 
   @Input()
@@ -55,7 +61,7 @@ export class MommooCardImage {
   @ViewChild('imageBox', {read: ElementRef})
   private imageBox: ElementRef<HTMLElement>;
 
-  constructor(private cardImageAnimator: CardImageAnimator, private sanitizer: DomSanitizer) {}
+  public constructor(private cardImageAnimator: CardImageAnimator, private sanitizer: DomSanitizer) {}
 
   @HostListener('mouseenter')
   private mouseEnter() {
@@ -76,53 +82,48 @@ export class MommooCardImage {
   selector: 'mommoo-card-contents',
   template: `<ng-content></ng-content>`,
   styleUrls: ['./card.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  host: {
-    class:'mommoo-card-contents'
-  }
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MommooCardContents {}
+export class MommooCardContents {
+  @HostBinding('class.mommoo-card-contents') private classToggle = true;
+}
 
 @Component({
   selector: 'mommoo-card-hashtag',
   template: `<ng-content></ng-content>`,
   styleUrls: ['./card.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  host: {
-    class:'mommoo-card-hashtag'
-  }
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MommooCardHashTag {}
+export class MommooCardHashTag {
+  @HostBinding('class.mommoo-card-hashtag') private classToggle = true;
+}
 
 @Component({
   selector: 'mommoo-card-hashtag-contents',
   template: `<ng-content></ng-content>`,
   styleUrls: ['./card.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  host: {
-    class:'mommoo-card-hashtag-contents'
-  }
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MommooCardHashTagContents {}
+export class MommooCardHashTagContents {
+  @HostBinding('class.mommoo-card-hashtag-contents') private classToggle = true;
+}
 
 @Component({
   selector: 'mommoo-card-action',
-  template: `<div id="divider"></div><div id="flex-row-box"><ng-content></ng-content></div>`,
+  template: `<ng-content></ng-content>`,
   styleUrls: ['./card.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  host: {
-    class:'mommoo-card-action'
-  }
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MommooCardAction {}
+export class MommooCardAction {
+  @HostBinding('class.mommoo-card-action') private classToggle = true;
+}
 
 @Component({
   selector: 'mommoo-card-action-button',
   template: `<mommoo-button [flat]="true"><div id="button"><ng-content></ng-content></div></mommoo-button>`,
   styleUrls: ['./card.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  host: {
-    class:'mommoo-card-action-button'
-  }
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MommooCardActionButton {}
+export class MommooCardActionButton {
+  @HostBinding('class.mommoo-card-action-button') private classToggle = true;
+}

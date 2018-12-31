@@ -1,6 +1,7 @@
 @import '../common/style/common-style';
 
-$default_gutter_size: 5px;
+$default_gutter_size: 6px;
+$default-padding: 16px;
 
 :host(.mommoo-card) {
   display : inline-block;
@@ -22,7 +23,10 @@ $default_gutter_size: 5px;
   align-self : start;
   font-size : 30px;
   font-weight: bold;
-  color : black;
+  color : $primaryTextColor;
+  width:100%;
+  background-color: #f0f0f0;
+  padding: $default-padding;
 }
 
 :host(.mommoo-card-image) {
@@ -50,12 +54,16 @@ $default_gutter_size: 5px;
 :host(.mommoo-card-contents) {
   display: block;
   font-size : 16px;
+  padding: $default-padding;
+  color: $secondaryTextColor;
+  line-height: 32px;
 }
 
 :host(.mommoo-card-hashtag) {
   display : flex;
   flex-wrap : wrap;
   flex-direction: row;
+  padding: 0 $default-padding;
 }
 
 :host(.mommoo-card-hashtag-contents) {
@@ -71,7 +79,7 @@ $default_gutter_size: 5px;
 
   &:nth-child(n) {
     margin-right : $default_gutter_size;
-    margin-top : $default_gutter_size;
+    margin-bottom : $default_gutter_size;
   }
 
   &:nth-last-child(1) {
@@ -82,28 +90,14 @@ $default_gutter_size: 5px;
 :host(.mommoo-card-action){
   display: block;
   width: 100%;
-
-  .align {
-    $width : 100%;
-    width : $width;
-    margin-left : (100% - $width)/2;
-  }
-
-  #divider {
-    @extend .align;
-    height : 1px;
-    background-color : #ededed;
-  }
-
-  #flex-row-box {
-    display:block;
-    text-align: right;
-  }
+  text-align: right;
+  background-color: #f0f0f0;
 }
 
 :host(.mommoo-card-action-button) {
   display: inline-block;
   cursor : pointer;
+  padding: $default_gutter_size;
 
   &:nth-child(n) {
     margin-right : $default_gutter_size * 2;
@@ -114,7 +108,11 @@ $default_gutter_size: 5px;
   }
 
   #button {
-    padding:8px;
+    display: flex;
+    align-items: center;
+    padding-left:16px;
+    padding-right: 16px;
+    height: 36px;
   }
 }
 

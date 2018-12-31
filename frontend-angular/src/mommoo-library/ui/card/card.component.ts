@@ -4,7 +4,7 @@ import {
   ChangeDetectorRef,
   Component,
   ContentChild,
-  ElementRef,
+  ElementRef, HostBinding,
   Input,
   OnChanges,
   OnInit,
@@ -22,15 +22,13 @@ import {ImageLoader} from '../../util/image-loader';
   templateUrl: './card.component.html',
   styleUrls: ['./card.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [CardDomHandler, CardDimensionChecker],
-  host: {
-    class: 'mommoo-card'
-  }
+  providers: [CardDomHandler, CardDimensionChecker]
 })
 export class MommooCard implements OnChanges, AfterViewInit, OnInit {
+  @HostBinding('class') private hostClassName = "mommoo-card";
+
   @Input() private cardWidth: string = CardDimensionProp.FIT;
   @Input() private cardHeight: string = CardDimensionProp.FIT;
-  @Input() private cardContentsGutter = 10;
 
   private isFirstChanged = true;
   private cardLoadCompleteListeners: CardLoadCompleteListener[] = [];
@@ -73,7 +71,6 @@ export class MommooCard implements OnChanges, AfterViewInit, OnInit {
   public async setStyles() {
     this.setHostStyle();
     this.setCardTitleStyle();
-    this.setCardViewportGiveGutterToContents();
     await this.setCardImageStyle();
     this.changeDetector.detectChanges();
     this.cardLoadCompleteListeners.forEach(listener => listener());
@@ -86,15 +83,6 @@ export class MommooCard implements OnChanges, AfterViewInit, OnInit {
   private setCardTitleStyle() {
     if (this.mommooCardTitle) {
       DomUtils.applyStyle(this.mommooCardTitle, this.cardDomHandler.getTitleStyle());
-    }
-  }
-
-  private setCardViewportGiveGutterToContents() {
-    if (this.mommooCardViewport) {
-      Array.from(this.mommooCardViewport.nativeElement.children)
-        .slice(1)
-        .map(element => <HTMLElement>element)
-        .forEach(element => DomUtils.applyStyle(element, {marginTop: `${this.cardContentsGutter}px`}));
     }
   }
 

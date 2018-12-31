@@ -6,10 +6,6 @@ export class DomUtils {
 
   public static emptyEventListener: () => void = () => {};
 
-  public static applyStyle(elementRef: ElementRef<HTMLElement>, style: DomCSSStyle): HTMLElement;
-
-  public static applyStyle(element: HTMLElement, style: DomCSSStyle): HTMLElement;
-
   public static applyStyle(target: HTMLElement | ElementRef<HTMLElement>, style: DomCSSStyle): HTMLElement {
     const element = DomUtils.takeElementIfWrappedRef(target);
     Object.assign(element.style, style);

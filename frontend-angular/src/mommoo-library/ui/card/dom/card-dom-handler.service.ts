@@ -17,13 +17,13 @@ export class CardDomHandler {
       return {
         ...commonStyle,
         ...CardDomHandler.computeRootBoxStyleByRatio(cardWidth, cardHeight)
-      }
+      };
     } else {
       return {
         ...commonStyle,
         ...CardDomHandler.computeRootBoxStyleExceptRatio(cardWidth, cardHeight),
         display: this.cardDimensionChecker.isWidthWrap() ? 'table' : 'block'
-      }
+      };
     }
   }
 
@@ -56,20 +56,20 @@ export class CardDomHandler {
     };
   }
 
-  //cross-browser
+  // cross-browser
   public getTitleStyle(): DomCSSStyle {
     if (!this.cardDimensionChecker.isWidthWrap()) {
       return {
         wordBreak: 'break-word',
         wordWrap: 'break-word',
         whiteSpace: 'normal'
-      }
+      };
     } else {
       return {
         wordBreak: 'keep-all',
         wordWrap: 'keep-all',
         whiteSpace: 'nowrap'
-      }
+      };
     }
   }
 
@@ -79,12 +79,12 @@ export class CardDomHandler {
         return {
           width: `${naturalWidth}px`,
           height: `${naturalHeight}px`
-        }
+        };
       } else {
         const ratio = naturalHeight / naturalWidth;
         return {
           paddingBottom: `${ratio * 100}%`
-        }
+        };
       }
     }
   }
