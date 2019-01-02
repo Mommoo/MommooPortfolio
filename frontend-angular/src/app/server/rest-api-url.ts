@@ -2,6 +2,7 @@ export class RestAPIUrl {
   private static readonly serverMetaData = {
     protocol: 'http',
     hostName: '192.168.0.10',
+    // hostName: 'localhost',
     portNumber: '8080',
     contextPath: '/mommoo-portfolio'
   };

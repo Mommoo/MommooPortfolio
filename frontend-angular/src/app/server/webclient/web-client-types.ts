@@ -32,15 +32,16 @@ export module WebClient {
     }
 
     export interface Normal extends Basic {
-      readonly bannerImage: string;
       readonly UIImage: string;
+      readonly programType: string[];
       readonly subTitle: string;
       readonly plannings: string[];
       readonly results: string[];
       readonly example: Example;
+      readonly features: Feature[];
     }
 
-    interface Spec {
+    export interface Spec {
       readonly devEnvironments: SpecItem[];
       readonly runtimeEnvironments: SpecItem[];
       readonly languages: SpecItem[];
@@ -48,12 +49,12 @@ export module WebClient {
       readonly libraries: SpecItem[];
     }
 
-    interface SpecItem {
+    export interface SpecItem {
       readonly image: string;
       readonly name: string;
     }
 
-    interface Example {
+    export interface Example {
       readonly github: URLExample;
       readonly youtube: YoutubeExample;
       readonly googleApp: GoogleAppExample;
@@ -61,19 +62,31 @@ export module WebClient {
       readonly blog: URLExample;
     }
 
-    interface URLExample {
+    export interface IconExample {
       readonly image: string;
+    }
+
+    export interface URLExample extends IconExample {
       readonly url: string;
     }
 
-    interface YoutubeExample {
-      readonly image: string;
+    export interface YoutubeExample extends IconExample {
       readonly token: string;
     }
 
-    interface GoogleAppExample {
-      readonly image: string;
+    export interface GoogleAppExample extends IconExample {
       readonly packageName: string;
+    }
+
+    export interface Feature {
+      readonly title: string;
+      readonly image: string;
+      readonly explanations: Explanation[];
+    }
+
+    export interface Explanation {
+      readonly heading: string;
+      readonly descriptions: string[];
     }
   }
 }

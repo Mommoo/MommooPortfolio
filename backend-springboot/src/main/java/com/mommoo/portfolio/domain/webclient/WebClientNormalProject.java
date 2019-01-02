@@ -19,8 +19,8 @@ import java.util.stream.Collectors;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 @ToString(callSuper = true)
 public class WebClientNormalProject extends WebClientBasicProject {
-    private final String bannerImage;
     private final String UIImage;
+    private final List<String> programType;
     private final String subTitle;
     private final List<String> plannings;
     private final List<String> results;
@@ -29,8 +29,8 @@ public class WebClientNormalProject extends WebClientBasicProject {
 
     WebClientNormalProject(NormalProject project, WebClientResource webClientResource) {
         super(project, webClientResource);
-        this.bannerImage = webClientResource.findImageFile(project.getBannerImage());
         this.UIImage = webClientResource.findImageFile(project.getUIImage());
+        this.programType = project.getProgramType();
         this.subTitle = project.getSubTitle();
         this.plannings = project.getPlannings();
         this.results = project.getResults();
