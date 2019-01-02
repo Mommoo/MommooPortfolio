@@ -6,8 +6,10 @@ import {MommooBannerModule} from './banner/banner.module';
 import {MommooListModule} from './list/list.module';
 import {MommooButtonModule} from './button/button.module';
 import {MommooChipViewModule} from './chip-view/chip-view.module';
+import {MommooCommonModule} from './common/common.module';
 
 const UI_MODULE_LIST = [
+  MommooCommonModule,
   MommooGridListModule,
   MommooCardModule,
   MommooMasonryModule,
