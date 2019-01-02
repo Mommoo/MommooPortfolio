@@ -1,6 +1,12 @@
 import {Injectable} from '@angular/core';
 import {ItemFinder} from '../../../mommoo-library/data-structure/item-finder';
-import {ContentsItem, ContentsLayout, ContentsLayoutChangeListener, SubscribeContext} from './main.types';
+import {
+  ColumnItemWidth,
+  ColumnLayout,
+  ColumnLayoutChangeListener,
+  invalidColumnLayout,
+  SubscribeContext
+} from './main.types';
 
 /**
  * This is class provides the number of item columns to display in the contents
@@ -15,20 +21,19 @@ import {ContentsItem, ContentsLayout, ContentsLayoutChangeListener, SubscribeCon
  *
  */
 @Injectable()
-export class ContentsLayoutDetector {
+export class MainContentsColumnDetector {
   private readonly contextFinder = new ItemFinder<SubscribeContext>();
-  private contentsWidth: number;
+  private viewportWidth: number;
 
-  private static findProperContentsLayout(containerWidth: number, context: SubscribeContext): ContentsLayout {
-
-    const preferredMaxWidth = context.contentsItem.preferredWidth;
-    const minWidth = context.contentsItem.minWidth;
+  private computeColumnLayout(context: SubscribeContext): ColumnLayout {
+    const preferredMaxWidth = context.columnItemWidth.preferred;
+    const minWidth = context.columnItemWidth.minimum;
 
     /* to improve performance algorithm, if there is previous data, set it to variable */
-    let expectedNumberOfItem = Math.max(context.previousContentsLayout.numberOfItem, 1);
+    let expectedNumberOfItem = Math.max(context.columnLayout.count, 1);
 
     while (true) {
-      const expectedItemWidth = containerWidth / expectedNumberOfItem;
+      const expectedItemWidth = this.viewportWidth / expectedNumberOfItem;
 
       if (expectedItemWidth > preferredMaxWidth) {
         expectedNumberOfItem++;
@@ -36,7 +41,7 @@ export class ContentsLayoutDetector {
       }
 
       if (expectedNumberOfItem !== 1) {
-        const previousExpectCardSize = containerWidth / (expectedNumberOfItem - 1);
+        const previousExpectCardSize = this.viewportWidth / (expectedNumberOfItem - 1);
 
         const isNotExistProperSize
           = previousExpectCardSize < minWidth && expectedItemWidth < minWidth;
@@ -56,11 +61,16 @@ export class ContentsLayoutDetector {
         const isTooShortNotThinkNear = expectedItemWidth < minWidth;
 
         if (isLongerOneNearPreferred || isTooShortNotThinkNear) {
-          return new ContentsLayout(expectedNumberOfItem - 1, previousExpectCardSize);
+          return {
+            count: expectedNumberOfItem - 1,
+            width: previousExpectCardSize
+          };
         }
       }
-
-      return new ContentsLayout(expectedNumberOfItem, expectedItemWidth);
+      return {
+        count: expectedNumberOfItem,
+        width: expectedItemWidth
+      };
     }
   }
 
@@ -69,46 +79,41 @@ export class ContentsLayoutDetector {
     this.notifyEventToSubscribers(contextValues);
   }
 
+  private notifyColumnChangeEvent(subscribeContext: SubscribeContext) {
+    const computedLayout = this.computeColumnLayout(subscribeContext);
 
-  private notifyEventToSubscribers(contextValues: SubscribeContext[]): void {
-    if (!this.contentsWidth) {
-      return;
+    const isNeedToNotify = computedLayout.count !== subscribeContext.columnLayout.count;
+
+    if ( isNeedToNotify ) {
+      subscribeContext.eventListener(computedLayout);
+      subscribeContext.columnLayout = computedLayout;
     }
+  }
 
-    contextValues.forEach(context => {
-      const properLayout
-        = ContentsLayoutDetector.findProperContentsLayout(this.contentsWidth, context);
-
-      const isNeedToNotify
-        = properLayout.numberOfItem !== context.previousContentsLayout.numberOfItem;
-
-      if ( isNeedToNotify ) {
-        context.eventListener(properLayout);
-        context.previousContentsLayout = properLayout;
-      }
-    });
+  private notifyEventToSubscribers(contexts: SubscribeContext[]): void {
+    if (this.viewportWidth) {
+      contexts.forEach(context => this.notifyColumnChangeEvent(context));
+    }
   }
 
   public notifyEventToAllIfUpdated(contentsWidth: number) {
-    const isUpdated = contentsWidth && this.contentsWidth !== contentsWidth;
+    const isUpdated = contentsWidth && this.viewportWidth !== contentsWidth;
     if ( isUpdated ) {
-      this.contentsWidth = contentsWidth;
+      this.viewportWidth = contentsWidth;
       this.notifyEventToAll();
     }
   }
 
-  public subscribe(contentsItem: ContentsItem, contentsChangeListener: ContentsLayoutChangeListener): string {
 
+  public subscribe(columnItemWidth: ColumnItemWidth, columnLayoutChangeListener: ColumnLayoutChangeListener): string {
     const context: SubscribeContext = {
-      contentsItem: contentsItem,
-      eventListener: contentsChangeListener,
-      previousContentsLayout: ContentsLayout.invalidInstance
+      columnItemWidth: columnItemWidth,
+      eventListener: columnLayoutChangeListener,
+      columnLayout: invalidColumnLayout
     };
 
-    const eventID =  this.contextFinder.addItem(context);
-
+    const eventID = this.contextFinder.addItem(context);
     this.notifyEventToSubscribers([context]);
-
     return eventID;
   }
 
