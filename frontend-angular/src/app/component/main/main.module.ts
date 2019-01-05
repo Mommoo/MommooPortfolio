@@ -5,8 +5,9 @@ import {MainComponent} from './main.component';
 import {HeaderModule} from './header/header.module';
 import {FooterModule} from './footer/footer.module';
 import {RouterModule} from '@angular/router';
-import {BasicContentsModule} from './basic-contents/basic-contents.module';
-import {ProjectContentsModule} from './project-contents/project-contents.module';
+import {ContentsModule} from './contents/contents.module';
+import {MainCommonAnimator} from './main.common-animator.service';
+import {MainComponentLayoutDetector} from './main.component-layout-detector.service';
 
 @NgModule({
   imports: [
@@ -14,9 +15,12 @@ import {ProjectContentsModule} from './project-contents/project-contents.module'
     MommooUIModule,
     HeaderModule,
     FooterModule,
-    BasicContentsModule,
-    ProjectContentsModule,
+    ContentsModule,
     RouterModule
+  ],
+  providers: [
+    MainComponentLayoutDetector,
+    MainCommonAnimator
   ],
   exports: [
     MainComponent

@@ -1,93 +1,95 @@
-import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  Component,
-  ElementRef,
-  OnDestroy,
-  OnInit,
-  ViewChild
-} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, OnDestroy, ViewChild} from '@angular/core';
 import {WindowSizeEventHandler} from '../../../mommoo-library/handler/window/size/window-size-handler';
 import {BasicViewportSizeState} from '../../../mommoo-library/handler/window/size/window-size-handler.type';
 import {DomUtils} from '../../../mommoo-library/util/dom';
-import {ContentsLayoutDetector} from './contents-layout-finder.service';
-import {ContentsLayout} from './contents/contents.types';
+import {MainComponentLayoutDetector} from './main.component-layout-detector.service';
+
+/**
+ * This class have role of manage component layout.
+ *
+ * The managing of component layout is to two things that
+ * one is deciding of where footer element location {@link enrollFooterWhereToAppendEvent}
+ * the others is compute elements of layout-detector.
+ * {@link MainComponentLayoutDetector}, {@link enrollComputeComponentLayoutEvent}
+ */
 
 @Component({
   selector: 'main',
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [ContentsLayoutDetector]
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MainComponent implements AfterViewInit, OnDestroy {
-  private templateChangeEventID;
-  private resizingEventID;
+  private windowSizeEventIDs: string[];
 
-  @ViewChild('headerArea')
+  @ViewChild('headerArea', {read: ElementRef})
   private headerAreaElementRef: ElementRef<HTMLElement>;
 
-  @ViewChild('contentsArea')
+  @ViewChild('contentsArea', {read: ElementRef})
   private contentsAreaElementRef: ElementRef<HTMLElement>;
 
-  @ViewChild('footerArea')
+  @ViewChild('footerArea', {read: ElementRef})
   private footerAreaElementRef: ElementRef<HTMLElement>;
 
-  private contentsComputedStyle;
+  @ViewChild('fakeHeader', {read: ElementRef})
+  private fakeHeaderElementRef: ElementRef<HTMLElement>;
 
-  public constructor(private contentsLayoutDetector: ContentsLayoutDetector) {
+  public constructor(private contentsLayoutDetector: MainComponentLayoutDetector) { }
 
-  }
+  private enrollFooterWhereToAppendEvent() {
+    return WindowSizeEventHandler
+      .addBasicViewportSizeStateChangeEvent(viewportSizeState => {
+        let whereAppendedArea, footerStyle;
 
-  public ngAfterViewInit(): void {
-    this.contentsComputedStyle = getComputedStyle(this.contentsAreaElementRef.nativeElement);
+        if (viewportSizeState === BasicViewportSizeState.LARGE) {
+          whereAppendedArea = this.headerAreaElementRef;
+          footerStyle = {
+            width: `${DomUtils.offset(this.headerAreaElementRef).width}px`,
+            position: 'fixed',
+            bottom: '0'
+          };
+        } else {
+          whereAppendedArea = this.contentsAreaElementRef;
+          footerStyle = {
+            width: `100%`,
+            position: 'static'
+          };
+        }
 
-    this.templateChangeEventID = WindowSizeEventHandler
-      .addBasicViewportSizeStateChangeEvent(this.footerMoveEventListener(), true);
-
-    this.resizingEventID = WindowSizeEventHandler
-      .addResizingEvent(() => {
-        const contentsWidth = this.computeContentsWidth();
-        this.contentsLayoutDetector.notifyEventToAllIfUpdated(contentsWidth);
+        DomUtils.append(whereAppendedArea, this.footerAreaElementRef);
+        DomUtils.applyStyle(this.footerAreaElementRef, footerStyle);
       }, true);
   }
 
-  private computeContentsWidth() {
-    if ( this.contentsComputedStyle ) {
-      return Math.round(parseFloat(this.contentsComputedStyle.width));
-    } else {
-      return -1;
-    }
+  private enrollComputeComponentLayoutEvent() {
+    /** we have to use computedStyle because offsetWidth contain padding value but we need to except it */
+    const contentsComputedStyle = window.getComputedStyle(this.contentsAreaElementRef.nativeElement);
+
+    return WindowSizeEventHandler
+      .addResizingEvent(() => {
+        const contentsWidth = Math.round(parseFloat(contentsComputedStyle.width));
+
+        const collapsedHeaderHeight = this.fakeHeaderElementRef.nativeElement.offsetHeight;
+
+        const isHeaderCollapsibleMode
+          = WindowSizeEventHandler.getBasicViewportSizeState() !== BasicViewportSizeState.LARGE;
+
+        this.contentsLayoutDetector
+          .setLayoutData(contentsWidth, collapsedHeaderHeight, isHeaderCollapsibleMode);
+      }, true);
   }
 
-  private footerMoveEventListener() {
-    const computeTemplateCondition = (viewportSizeState: BasicViewportSizeState) => {
-      /** targetRef is where footer element appending */
-      let targetRef, footerStyle;
+  public ngAfterViewInit(): void {
+    const footerWhereToAppendEventID = this.enrollFooterWhereToAppendEvent();
+    const computeComponentLayoutEventID = this.enrollComputeComponentLayoutEvent();
 
-      if ( viewportSizeState === BasicViewportSizeState.LARGE ) {
-        targetRef = this.headerAreaElementRef;
-        footerStyle = {
-          width: `${DomUtils.offset(this.headerAreaElementRef).width}px`,
-          position: 'fixed',
-          bottom: '0'
-        };
-      } else {
-        targetRef = this.contentsAreaElementRef;
-        footerStyle = {width: `100%`, position: 'static'};
-      }
-
-      return {targetRef, footerStyle};
-    };
-
-    return (viewportSizeState: BasicViewportSizeState) => {
-      const {targetRef, footerStyle} = computeTemplateCondition(viewportSizeState);
-      DomUtils.applyStyle(this.footerAreaElementRef, footerStyle);
-      DomUtils.append(targetRef, this.footerAreaElementRef);
-    };
+    this.windowSizeEventIDs = [
+      footerWhereToAppendEventID,
+      computeComponentLayoutEventID
+    ];
   }
 
   public ngOnDestroy(): void {
-    WindowSizeEventHandler.removeEvents(this.templateChangeEventID, this.resizingEventID);
+    WindowSizeEventHandler.removeEvents(...this.windowSizeEventIDs);
   }
 }

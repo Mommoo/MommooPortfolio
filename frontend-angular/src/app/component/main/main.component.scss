@@ -1,4 +1,3 @@
-@import '~src/styles';
 @import '~src/mommoo-library/handler/window/size/window-size-handler';
 
 :host {
@@ -9,13 +8,11 @@
   z-index:100;
 }
 
-#footer-area {
-  text-align : center;
-}
-
 @include basic-large-media-query {
+  $headerWidthInLargeMediaQuery: 300px;
+
   #header-area {
-    width : $headerWidthInDesktopMediaQuery;
+    width : $headerWidthInLargeMediaQuery;
     position: fixed;
     left:0;
     top:0;
@@ -23,16 +20,12 @@
   }
 
   #fixed-header-wrapper {
-    width: $headerWidthInDesktopMediaQuery;
+    width: $headerWidthInLargeMediaQuery;
     height : 100%;
   }
 
   #contents-area {
-    padding-left: $headerWidthInDesktopMediaQuery;
-  }
-
-  #viewport {
-    padding: 0 64px;
+    padding-left: $headerWidthInLargeMediaQuery;
   }
 }
 
@@ -55,16 +48,8 @@
 
 @include basic-medium-media-query {
   @include medium-small-media-query;
-
-  #viewport {
-    padding: 0 32px;
-  }
 }
 
 @include basic-small-media-query {
   @include medium-small-media-query;
-
-  #viewport {
-    padding: 0 16px;
-  }
 }
