@@ -3,7 +3,7 @@ $chipViewImgSize: 30px;
 
 :host {
   display: inline-flex;
-  height: $chipViewHeight;
+  min-height: $chipViewHeight;
   border-radius: 16px;
   background-color: #e6e6e6;
   justify-content: center;
