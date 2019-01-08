@@ -16,7 +16,7 @@ import {MenuButtonEvent, MenuButtonState, OnHeaderMenuEventChangeListener} from 
 import {CollapsibleBoxComponent} from './collapsible-box/collapsible-box.component';
 import {BasicViewportSizeState} from '../../../../mommoo-library/handler/window/size/window-size-handler.type';
 import {DomSanitizer} from '@angular/platform-browser';
-import {HeaderMenuEventProvider} from './header-menu-controller.service';
+import {HeaderMenuEventProvider} from './header-menu-event-provider.service';
 
 /**
  * This class is mediator class
