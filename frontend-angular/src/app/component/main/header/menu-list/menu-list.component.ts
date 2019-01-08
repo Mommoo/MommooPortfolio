@@ -1,37 +1,36 @@
-import {ChangeDetectorRef, Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
-import {HeaderMenuController} from '../header-menu-controller.service';
-import {OnMenuItemsChangedListener} from '../header.types';
+import {Component, ElementRef, EventEmitter, Input, Output} from '@angular/core';
+import {MainCommonAnimator} from '../../main.common-animator.service';
+import {AnimationType} from '../../main.types';
 
+/**
+ * This class display menu view with fade-in animation and provides menu item click event
+ */
 @Component({
   selector: 'view-menu-list',
   templateUrl: './menu-list.component.html',
   styleUrls: ['./menu-list.component.scss']
 })
-export class MenuListComponent implements OnInit, OnDestroy {
-  public menuItemNames: string[];
+export class MenuListComponent {
+  private _menuNames: string[];
 
   @Output('menuListItemClick')
   private readonly menuListItemClickEmitter: EventEmitter<string> = new EventEmitter<string>();
 
-  private readonly onMenuItemsChangedListener: OnMenuItemsChangedListener;
-
-  constructor(private headerMenuController: HeaderMenuController, changeDetector: ChangeDetectorRef) {
-    this.onMenuItemsChangedListener = menuItems => {
-      this.menuItemNames = menuItems;
-      changeDetector.detectChanges();
-    };
+  constructor(private commonKeyframeAnimator: MainCommonAnimator,
+              private hostElementRef: ElementRef<HTMLElement>) {
   }
 
-  public ngOnInit(): void {
-    this.headerMenuController.addOnMenuItemsChangedListener(this.onMenuItemsChangedListener);
+  @Input('menuNames')
+  public set menuNames(menuNames: string[]) {
+    this._menuNames = menuNames;
+    this.commonKeyframeAnimator.startAnimation(AnimationType.FADE_IN, this.hostElementRef);
   }
 
-  public ngOnDestroy(): void {
-    this.headerMenuController.removeMenuItemsChangeListener(this.onMenuItemsChangedListener);
+  public get menuNames() {
+    return this._menuNames;
   }
 
-  public menuItemClickEvent(menuItemName: string): void {
-    this.menuListItemClickEmitter.emit(menuItemName);
-    this.headerMenuController.notifyMenuItemClickEvent(menuItemName);
+  public menuItemClickEvent(menuName: string): void {
+    this.menuListItemClickEmitter.emit(menuName);
   }
 }
