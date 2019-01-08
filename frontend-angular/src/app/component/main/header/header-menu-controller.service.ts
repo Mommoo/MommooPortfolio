@@ -1,43 +1,77 @@
 import {Injectable} from '@angular/core';
-import {OnMenuItemClickEventListener, OnMenuItemsChangedListener} from './header.types';
+import {OnHeaderMenuEventChangeListener, OnMenuClickEventListener} from './header.types';
 
+/**
+ * This class provides critical three functions that any component can reference as service
+ * (Note. this class have to connected to {@link HeaderComponent}
+ * used by {@link addOnHeaderMenuEventChangeListener} )
+ *
+ * first of all is requesting header's menu item change by injecting menu names.
+ * {@link addOnHeaderMenuEventChangeListener}.
+ *
+ * second of all is observed header's menu item click events.
+ * {@link addOnHeaderMenuEventChangeListener}.
+ *
+ * last of all is can turn on/off header menu's back button visibility.
+ * {@link setBackButtonVisible}.
+ */
 @Injectable()
-export class HeaderMenuController {
-  private menuItems: string[];
-  private onMenuItemClickListener: OnMenuItemClickEventListener;
-  private onMenuItemChangedListenerList: OnMenuItemsChangedListener[] = [];
+export class HeaderMenuEventProvider {
+  private menuNames: string[];
+  private isBackButtonVisible = false;
+  private onMenuClickEventListener: OnMenuClickEventListener;
+  private onHeaderMenuEventChangeListeners: OnHeaderMenuEventChangeListener[] = [];
 
   constructor() {
 
   }
 
-  public notifyMenuItemClickEvent(menuItemName: string) {
-    if ( this.onMenuItemClickListener ) {
-      this.onMenuItemClickListener(menuItemName);
+  public notifyMenuNameClickEvent(menuName: string) {
+    if ( this.onMenuClickEventListener ) {
+      this.onMenuClickEventListener(menuName);
     }
   }
 
-  public addOnMenuItemsChangedListener(onMenuItemsChangedListener: OnMenuItemsChangedListener) {
-    this.onMenuItemChangedListenerList.push(onMenuItemsChangedListener);
-    const isExistMenuItems = this.menuItems && this.menuItems.length > 0;
+  /** because of fake menu-list component attached at fake header,
+   * provide add interface not set */
+  public addOnHeaderMenuEventChangeListener(onHeaderMenuEventChangeListener: OnHeaderMenuEventChangeListener) {
+    this.onHeaderMenuEventChangeListeners.push(onHeaderMenuEventChangeListener);
+
+    const isExistMenuItems = this.menuNames && this.menuNames.length > 0;
     if ( isExistMenuItems ) {
-      onMenuItemsChangedListener(this.menuItems);
+      onHeaderMenuEventChangeListener.onMenuNamesChangeListener(this.menuNames);
     }
+
+    onHeaderMenuEventChangeListener.onBackButtonVisibleChangeListener(this.isBackButtonVisible);
   }
 
-  public removeMenuItemsChangeListener(changedListener) {
-    const foundIndex = this.onMenuItemChangedListenerList.findIndex(changedListener);
+  public removeOnHeaderMenuEventChangeListener
+  (onHeaderMenuEventChangeListener: OnHeaderMenuEventChangeListener) {
+    const foundIndex
+      = this.onHeaderMenuEventChangeListeners
+      .findIndex(value => onHeaderMenuEventChangeListener === value);
     if ( foundIndex !== -1 ) {
-      this.onMenuItemChangedListenerList.splice(foundIndex, 1);
+      this.onHeaderMenuEventChangeListeners.splice(foundIndex, 1);
     }
   }
 
-  public setMenuItems(menuItems: string[]) {
-    this.menuItems = menuItems;
-    this.onMenuItemChangedListenerList.forEach(changedListener => changedListener(menuItems));
+  public setMenuNames(menuNames: string[]) {
+    this.menuNames = menuNames;
+    this.onHeaderMenuEventChangeListeners
+      .forEach(menuControlListener => menuControlListener.onMenuNamesChangeListener(menuNames));
   }
 
-  public setOnMenuItemClickListener(menuItemClickEventListener: OnMenuItemClickEventListener) {
-    this.onMenuItemClickListener = menuItemClickEventListener;
+  public clearMenuNames() {
+    this.setMenuNames([]);
+  }
+
+  public setOnMenuItemClickListener(menuItemClickEventListener: OnMenuClickEventListener) {
+    this.onMenuClickEventListener = menuItemClickEventListener;
+  }
+
+  public setBackButtonVisible(backButtonVisible: boolean) {
+    this.isBackButtonVisible = backButtonVisible;
+    this.onHeaderMenuEventChangeListeners
+      .forEach(menuControlListener => menuControlListener.onBackButtonVisibleChangeListener(backButtonVisible));
   }
 }
