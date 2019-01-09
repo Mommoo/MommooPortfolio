@@ -1,1 +1,12 @@
-Copyright© Mommoo 2018
+<div id="contents-wrapper">
+  <div style="display:inline-block;">
+    <ng-container *ngFor="let content of contents">
+      <div (click)="content.onClick()" class="contents">
+        <img [src]="content.icon" /><div>{{content.text}}</div>
+      </div>
+    </ng-container>
+  </div>
+</div>
+<div id="suffix">
+  Copyright© Mommoo 2018
+</div>
