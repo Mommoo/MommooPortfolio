@@ -1,16 +1,14 @@
 import {
   AfterContentInit,
-  AfterViewChecked,
-  AfterViewInit,
-  ChangeDetectionStrategy, ChangeDetectorRef,
+  ChangeDetectionStrategy,
   Component,
   ContentChildren,
-  DoCheck,
   ElementRef,
   Input,
   OnChanges,
   QueryList,
-  SimpleChanges, ViewChild
+  SimpleChanges,
+  ViewChild
 } from '@angular/core';
 import {MommooGridTile} from './grid-tile/grid-tile.component';
 import {TileCoordinator} from './tile-coordinator';
@@ -24,34 +22,38 @@ import {DomUtils} from '../../util/dom';
   styleUrls: ['./grid-list.component.scss'],
   changeDetection : ChangeDetectionStrategy.OnPush
 })
-export class MommooGridList implements AfterContentInit, OnChanges{
+export class MommooGridList implements AfterContentInit, OnChanges {
 
   @Input()
-  private rowHeight : string = '100px';
+  private rowHeight = '100px';
 
   @Input()
-  private maxColumnNum : number = 4;
+  private maxColumnNum = 4;
 
   @Input()
-  private colGap : number = 10;
+  private colGap = 10;
 
   @Input()
-  private rowGap : number=  10;
+  private rowGap = 10;
 
   @ContentChildren(MommooGridTile)
-  private gridTileQueryList : QueryList<MommooGridTile>;
+  private gridTileQueryList: QueryList<MommooGridTile>;
 
   @ViewChild('viewport', {read: ElementRef})
   private viewport: ElementRef<HTMLElement>;
 
-  private isFirstChanged: boolean = true;
+  private isFirstChanged = true;
 
   constructor() {
 
   }
 
   public ngAfterContentInit(): void {
-    this.gridTileQueryList.changes.subscribe(()=>this.layoutTiles());
+    if (this.gridTileQueryList && this.gridTileQueryList.toArray()) {
+      this.layoutTiles();
+    }
+
+    this.gridTileQueryList.changes.subscribe(() => this.layoutTiles());
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
@@ -62,19 +64,19 @@ export class MommooGridList implements AfterContentInit, OnChanges{
     }
   }
 
-  private getProperStyleProvider() : StyleProvider {
+  private getProperStyleProvider(): StyleProvider {
     if ( this.rowHeight.includes('px') ) {
-      const intRowHeight : number = parseInt(this.rowHeight);
+      const intRowHeight = parseInt(this.rowHeight);
       return new FixedStyleProvider(intRowHeight, this.maxColumnNum, this.colGap, this.rowGap);
     }
 
     if ( this.rowHeight.includes(':') ) {
-      const ratioNum : number = parseInt(this.rowHeight.split(":")[0]);
+      const ratioNum = parseInt(this.rowHeight.split(":")[0]);
       return new RatioStyleProvider(ratioNum, this.maxColumnNum, this.colGap, this.rowGap);
     }
   }
 
-  private layoutTiles() : void {
+  private layoutTiles(): void {
     const computedResult = new TileCoordinator().compute(this.maxColumnNum, this.gridTileQueryList.toArray());
     const styleProvider  = this.getProperStyleProvider();
     const viewportStyle = styleProvider.getViewportStyle(computedResult.numRows);
