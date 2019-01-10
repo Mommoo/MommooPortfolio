@@ -1,15 +1,11 @@
 <div id="header-guide">
-  <div id="title">{{title}}</div>
+  <div id="title">Mommoo Portfolio</div>
 
   <header-menu-button id="menu-button"
                     (menuButtonEvent)="afterMenuButtonClickEvent($event)"></header-menu-button>
 </div>
 
 <collapsible-box>
-  <view-menu-list
-    [menuNames]="menuNames"
-    (menuListItemClick)="afterMenuListItemClickEvent($event)"></view-menu-list>
-
   <div *ngIf="isBackButtonVisible"
        mommooRipple
        [rippleRadius]="'50%'"
@@ -17,4 +13,8 @@
        id="back-button">
     <img [src]="backButtonImagePath" alt="back-button"/>
   </div>
+
+  <view-menu-list
+    [menuNames]="menuNames"
+    (menuListItemClick)="afterMenuListItemClickEvent($event)"></view-menu-list>
 </collapsible-box>

@@ -17,6 +17,7 @@ import {CollapsibleBoxComponent} from './collapsible-box/collapsible-box.compone
 import {BasicViewportSizeState} from '../../../../mommoo-library/handler/window/size/window-size-handler.type';
 import {DomSanitizer} from '@angular/platform-browser';
 import {HeaderMenuEventProvider} from './header-menu-event-provider.service';
+import {AppImageNameType, AppImagePathFinder} from '../../../app-image-finder.service';
 
 /**
  * This class is mediator class
@@ -34,7 +35,6 @@ import {HeaderMenuEventProvider} from './header-menu-event-provider.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
-  public readonly title = `Mommoo\nPortfolio`;
   private _menuNames: string[];
 
   private _isBackButtonVisible = false;
@@ -54,14 +54,24 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input()
   private _backButtonImagePath: string;
 
-  public constructor(private headerMenuController: HeaderMenuEventProvider,
+  public constructor(appImagePathFinder: AppImagePathFinder,
+                     private headerMenuController: HeaderMenuEventProvider,
                      private location: Location,
                      private changeDetector: ChangeDetectorRef,
                      private sanitizer: DomSanitizer) {
+
+    const subscriber
+      = appImagePathFinder
+      .observable
+      .subscribe(imageMap => {
+        this._backButtonImagePath = imageMap.get(AppImageNameType.ARROW_BACK);
+        this.changeDetector.detectChanges();
+        subscriber.unsubscribe();
+      });
   }
 
   private static isCollapseMode() {
-   return WindowSizeEventHandler.getBasicViewportSizeState() !== BasicViewportSizeState.LARGE;
+    return WindowSizeEventHandler.getBasicViewportSizeState() !== BasicViewportSizeState.LARGE;
   }
 
   private enrollHeaderModeViewStateChange() {
@@ -78,7 +88,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private triggerHeaderCollapseIfInCollapseMode() {
-    if ( HeaderComponent.isCollapseMode() ) {
+    if (HeaderComponent.isCollapseMode()) {
       /** button animation will trigger @{#afterMenuButtonClickEvent}
        * After that method, header wii be collapsed */
       this.menuButtonComponent.executeButtonEvent(MenuButtonEvent.CLOSE);
