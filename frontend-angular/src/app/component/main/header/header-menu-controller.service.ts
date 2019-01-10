@@ -16,13 +16,13 @@ import {OnHeaderMenuEventChangeListener, OnMenuClickEventListener} from './heade
  * {@link setBackButtonVisible}.
  */
 @Injectable()
-export class HeaderMenuEventProvider {
+export class HeaderMenuController {
   private menuNames: string[];
   private isBackButtonVisible = false;
   private onMenuClickEventListener: OnMenuClickEventListener;
   private onHeaderMenuEventChangeListeners: OnHeaderMenuEventChangeListener[] = [];
 
-  constructor() {
+  public constructor() {
 
   }
 
