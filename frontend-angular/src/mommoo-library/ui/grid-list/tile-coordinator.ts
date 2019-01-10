@@ -1,26 +1,27 @@
 import {MommooGridTile} from './grid-tile/grid-tile.component';
 
 export interface TilePosition {
-  x : number ,y : number
+  readonly x: number;
+  readonly y: number;
 }
 
 export interface ComputeResult {
-  positions : TilePosition[],
-  numRows : number
+  readonly positions: TilePosition[];
+  readonly numRows: number;
 }
 
 export class TileCoordinator {
 
-  private findCollisionLastIndex(tracker : Array<number>, beginIndex : number, endIndex : number, numRows : number) : number {
+  private findCollisionLastIndex(tracker: Array<number>, beginIndex: number, endIndex: number, numRows: number) {
     const foundIndex = [...tracker]
       .slice(beginIndex, endIndex)
       .reverse()
-      .findIndex(value=> value > numRows);
+      .findIndex(value => value > numRows);
 
     return foundIndex === -1 ? -1 : beginIndex + foundIndex;
   }
 
-  private findNextCoordination(tracker : Array<number>, currentX : number, numRows : number) : [number, number] {
+  private findNextCoordination(tracker: Array<number>, currentX: number, numRows: number): [number, number] {
     while (true) {
       const foundIndex = tracker
         .slice(currentX)
@@ -35,7 +36,7 @@ export class TileCoordinator {
     }
   }
 
-  private computeCoordination(tracker : Array<number>, colSpan : number, oldX : number, oldY : number) : [number, number] {
+  private computeCoordination(tracker: Array<number>, colSpan: number, oldX: number, oldY: number): [number, number] {
     const maxColumnNum = tracker.length;
     let currentX = oldX, currentY = oldY;
     while ( true ) {
@@ -59,8 +60,8 @@ export class TileCoordinator {
     }
   }
 
-  public compute(maxColumnNum : number, tiles : Array<MommooGridTile>) : ComputeResult {
-    const tracker : number[] = new Array(maxColumnNum).fill(-1, 0, maxColumnNum);
+  public compute(maxColumnNum: number, tiles: Array<MommooGridTile>): ComputeResult {
+    const tracker: number[] = new Array(maxColumnNum).fill(-1, 0, maxColumnNum);
     let oldX = 0, oldY = 0;
 
     const positions: TilePosition[] = tiles.map(item => {
@@ -79,6 +80,6 @@ export class TileCoordinator {
     return {
       positions,
       numRows: Math.max(...tracker)
-    }
+    };
   }
 }

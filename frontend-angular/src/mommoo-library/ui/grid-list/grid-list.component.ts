@@ -66,17 +66,21 @@ export class MommooGridList implements AfterContentInit, OnChanges {
 
   private getProperStyleProvider(): StyleProvider {
     if ( this.rowHeight.includes('px') ) {
-      const intRowHeight = parseInt(this.rowHeight);
+      const intRowHeight = parseInt(this.rowHeight, 10);
       return new FixedStyleProvider(intRowHeight, this.maxColumnNum, this.colGap, this.rowGap);
     }
 
     if ( this.rowHeight.includes(':') ) {
-      const ratioNum = parseInt(this.rowHeight.split(":")[0]);
+      const ratioNum = parseInt(this.rowHeight.split(":")[0], 10);
       return new RatioStyleProvider(ratioNum, this.maxColumnNum, this.colGap, this.rowGap);
     }
   }
 
   private layoutTiles(): void {
+    if ( this.maxColumnNum <= 0 ) {
+      return;
+    }
+
     const computedResult = new TileCoordinator().compute(this.maxColumnNum, this.gridTileQueryList.toArray());
     const styleProvider  = this.getProperStyleProvider();
     const viewportStyle = styleProvider.getViewportStyle(computedResult.numRows);
