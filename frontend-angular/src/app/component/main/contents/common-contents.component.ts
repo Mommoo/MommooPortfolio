@@ -34,7 +34,8 @@ export abstract class CommonContentsComponent implements OnDestroy {
 
   /* Because that restoring scroll position is completed after rendering views,
    * user can see afterimage of views.
-   * So we preventing it as providing fade-in animation  */
+   * Also since existing of async loaded element, not precisely scroll located
+   * So we solve them by providing fade-in animation for hiding unnecessary things */
   private restoreScrollPosition(hostElementRef: ElementRef<HTMLElement>,
                                 router: Router,
                                 viewportScroller: ViewportScroller) {
