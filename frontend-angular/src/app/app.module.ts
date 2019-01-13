@@ -5,7 +5,7 @@ import {AppComponent} from './app.component';
 import {AppRouterModule} from './app-router.module';
 import {MainModule} from './component/main/main.module';
 import {PageNotFoundModule} from './component/page-not-found/page-not-found.module';
-// import {fakeBackendProvider} from './server/mock-server/mock-server.service';
+import {AppIconPathDataResolver} from './app-icon-path-data-resolver.service';
 
 @NgModule({
   declarations: [
@@ -16,6 +16,9 @@ import {PageNotFoundModule} from './component/page-not-found/page-not-found.modu
     MainModule,
     PageNotFoundModule,
     AppRouterModule
+  ],
+  providers: [
+    AppIconPathDataResolver
   ],
   bootstrap: [AppComponent]
 })

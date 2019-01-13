@@ -11,6 +11,4 @@ import {ChangeDetectionStrategy, Component} from '@angular/core';
   styles: [],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AppComponent {
-
-}
+export class AppComponent { }
