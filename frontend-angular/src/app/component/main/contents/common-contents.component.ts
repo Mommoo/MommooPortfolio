@@ -4,7 +4,7 @@ import {MainCommonAnimator} from '../main.common-animator.service';
 import {AnimationType} from '../main.types';
 import {ResolveKey} from '../../../app.types';
 import {ActivatedRoute, Router, Scroll} from '@angular/router';
-import {filter, map} from 'rxjs/operators';
+import {filter, map, tap} from 'rxjs/operators';
 import {ViewportScroller} from '@angular/common';
 
 /**
@@ -28,6 +28,8 @@ export abstract class CommonContentsComponent implements OnDestroy {
     const router = injector.get(Router);
     const viewportScroller = injector.get(ViewportScroller);
 
+    bugFixViewportScrollIfInIE(viewportScroller);
+
     this.initializeHeaderMenu(this.headerMenuController);
     this.restoreScrollPosition(hostElementRef, router, viewportScroller);
   }
@@ -41,8 +43,8 @@ export abstract class CommonContentsComponent implements OnDestroy {
                                 viewportScroller: ViewportScroller) {
 
     hostElementRef.nativeElement.style.opacity = '0';
-
     const routerScrollEvent$ = router.events.pipe(
+      tap(console.log),
       filter(event => event instanceof Scroll),
       map(event => (event as Scroll).position),
     );
@@ -72,7 +74,7 @@ export abstract class CommonContentsComponent implements OnDestroy {
   }
 
   public scrollAt(elementRef: ElementRef) {
-    this.mainCommonAnimator.startAnimation(AnimationType.SCROLL_AT, elementRef);
+    this.mainCommonAnimator.startAnimation(AnimationType.SCROLL_TO, elementRef);
   }
 
   public getResolveData(resolveKey: ResolveKey) {
@@ -82,4 +84,25 @@ export abstract class CommonContentsComponent implements OnDestroy {
   public ngOnDestroy(): void {
     this.headerMenuController.clearMenuNames();
   }
+}
+
+// FIXME (2019. 01. 16.)
+//  ViewportScroller's getScrollPosition API is using scrollX, scrollY API.
+//  that APIs not supported in IE, so it is obviously Angular API bug.
+//  until this bug solved, this code have to be applied in IE.
+function bugFixViewportScrollIfInIE (viewportScroller: ViewportScroller) {
+  const isIE = navigator.userAgent.match(/Trident\/7\./);
+
+  if ( !isIE ) {
+    return ;
+  }
+
+  const prototype = viewportScroller as any;
+  prototype['getScrollPosition'] = function() {
+    if (this.supportScrollRestoration()) {
+      return [this.window.pageXOffset, this.window.pageYOffset];
+    } else {
+      return [0, 0];
+    }
+  };
 }
