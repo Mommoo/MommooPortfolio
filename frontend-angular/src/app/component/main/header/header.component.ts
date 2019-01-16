@@ -16,15 +16,15 @@ import {MenuButtonEvent, MenuButtonState, OnHeaderMenuEventChangeListener} from 
 import {CollapsibleBoxComponent} from './collapsible-box/collapsible-box.component';
 import {BasicViewportSizeState} from '../../../../mommoo-library/handler/window/size/window-size-handler.type';
 import {DomSanitizer} from '@angular/platform-browser';
-import {HeaderMenuEventProvider} from './header-menu-event-provider.service';
-import {AppImageNameType, AppImagePathFinder} from '../../../app-image-finder.service';
+import {HeaderMenuController} from './header-menu-controller.service';
+import {AppIconPathFinder, AppIconType} from '../../../app.types';
 
 /**
  * This class is mediator class
  * that convey event user event to event-provider
  * and response of event-provider's ui display request
  *
- * The event-provider is {@link HeaderMenuEventProvider}
+ * The event-provider is {@link HeaderMenuController}
  * and it is have to be connected to this class. {@link OnInit}
  */
 
@@ -52,22 +52,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   private animationBoxComponent: CollapsibleBoxComponent;
 
   @Input()
-  private _backButtonImagePath: string;
+  private appIconPathFinder: AppIconPathFinder;
 
-  public constructor(appImagePathFinder: AppImagePathFinder,
-                     private headerMenuController: HeaderMenuEventProvider,
+  public constructor(private headerMenuController: HeaderMenuController,
                      private location: Location,
                      private changeDetector: ChangeDetectorRef,
                      private sanitizer: DomSanitizer) {
 
-    const subscriber
-      = appImagePathFinder
-      .observable
-      .subscribe(imageMap => {
-        this._backButtonImagePath = imageMap.get(AppImageNameType.ARROW_BACK);
-        this.changeDetector.detectChanges();
-        subscriber.unsubscribe();
-      });
   }
 
   private static isCollapseMode() {
@@ -140,7 +131,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public get backButtonImagePath() {
-    return this.sanitizer.bypassSecurityTrustResourceUrl(`${this._backButtonImagePath}`);
+    return this.sanitizer.bypassSecurityTrustResourceUrl(`${this.appIconPathFinder.get(AppIconType.ARROW_BACK)}`);
   }
 
   public get menuNames() {

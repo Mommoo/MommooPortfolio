@@ -24,7 +24,7 @@
 }
 
 #title {
-  @include NotoSansKRFont;
+  @include Dosis;
   font-size   : 1.5rem;
   font-weight : bold;
   box-sizing : border-box;
@@ -50,7 +50,7 @@
 
 @include basic-large-media-query {
   #title {
-    padding-top: 64px;
+    padding-top: 32px;
     width: 100%;
     word-wrap: break-word;
     white-space: pre-line;

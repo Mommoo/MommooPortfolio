@@ -147,7 +147,7 @@ class LineKeyframes {
         top: `${menuButtonLineOffsetsTop.upperLineTop}px`
       },
       {
-        transform: 'rotate(-405deg)',
+        transform: 'rotate(-45deg)',
         top: `${menuButtonLineOffsetsTop.middleLineTop}px`
       }
     ];
@@ -167,7 +167,7 @@ class LineKeyframes {
         top: `${menuButtonLineOffsetsTop.lowerLineTop}px`
       },
       {
-        transform: 'rotate(405deg)',
+        transform: 'rotate(45deg)',
         top: `${menuButtonLineOffsetsTop.middleLineTop}px`
       }
     ];
@@ -189,13 +189,11 @@ class LineKeyframes {
   public static computeKeyframes(menuButtonLineOffsetsTop: MenuButtonLineOffsetsTop)
     : [AnimationKeyframe[], AnimationKeyframe[]] {
     const normalKeyframeValues = this.computeNormalKeyframeValues(menuButtonLineOffsetsTop);
-    const normalAnimationConfig: KeyframeAnimationConfig = {
-      timingFunction: 'ease-in',
-      fillMode: 'forwards'
-    };
-    const reverseAnimationConfig: KeyframeAnimationConfig = {
-      timingFunction: 'ease-out',
-      fillMode: 'forwards'
+
+    const animationConfig: KeyframeAnimationConfig = {
+      timingFunction: 'ease-in-out',
+      fillMode: 'forwards',
+      duration: '300ms'
     };
 
     const normalAnimationKeyframes: AnimationKeyframe[] =
@@ -206,7 +204,7 @@ class LineKeyframes {
             from: normalKeyframeValues[index][0],
             to: normalKeyframeValues[index][1]
           },
-          commonConfig: {...normalAnimationConfig}
+          commonConfig: animationConfig
         }));
 
     const reverseAnimationKeyframes: AnimationKeyframe[] =
@@ -217,7 +215,7 @@ class LineKeyframes {
             from: normalKeyframeValues[index][1],
             to: normalKeyframeValues[index][0]
           },
-          commonConfig: {...reverseAnimationConfig}
+          commonConfig: animationConfig
         }));
 
     return [normalAnimationKeyframes, reverseAnimationKeyframes];
