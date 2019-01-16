@@ -4,7 +4,7 @@ import {MainCommonAnimator} from '../main.common-animator.service';
 import {AnimationType} from '../main.types';
 import {ResolveKey} from '../../../app.types';
 import {ActivatedRoute, Router, Scroll} from '@angular/router';
-import {filter, map, tap} from 'rxjs/operators';
+import {filter, map} from 'rxjs/operators';
 import {ViewportScroller} from '@angular/common';
 
 /**
@@ -15,6 +15,7 @@ import {ViewportScroller} from '@angular/common';
  * Last, contents should be restored previous scroll position for user ux.
  */
 export abstract class CommonContentsComponent implements OnDestroy {
+  private static isAppliedBugFixViewportScroller = false;
   private readonly headerMenuController: HeaderMenuController;
   private readonly mainCommonAnimator: MainCommonAnimator;
   private readonly route: ActivatedRoute;
@@ -28,7 +29,10 @@ export abstract class CommonContentsComponent implements OnDestroy {
     const router = injector.get(Router);
     const viewportScroller = injector.get(ViewportScroller);
 
-    bugFixViewportScrollIfInIE(viewportScroller);
+    if ( !CommonContentsComponent.isAppliedBugFixViewportScroller ) {
+      bugFixViewportScrollIfInIE(viewportScroller);
+      CommonContentsComponent.isAppliedBugFixViewportScroller = true;
+    }
 
     this.initializeHeaderMenu(this.headerMenuController);
     this.restoreScrollPosition(hostElementRef, router, viewportScroller);
@@ -44,7 +48,7 @@ export abstract class CommonContentsComponent implements OnDestroy {
 
     hostElementRef.nativeElement.style.opacity = '0';
     const routerScrollEvent$ = router.events.pipe(
-      tap(console.log),
+      // tap(console.log),
       filter(event => event instanceof Scroll),
       map(event => (event as Scroll).position),
     );
