@@ -1,0 +1,31 @@
+@import "~src/styles";
+@import "~src/mommoo-library/handler/window/size/window-size-handler";
+
+.card-title {
+  @include ZCOOLFont;
+  font-weight: 900 !important;
+  text-align: center !important;
+  color: black !important;
+}
+
+.card-hash-message {
+  font-weight: 100;
+}
+
+@include basic-large-media-query {
+  .card-title {
+    padding: 5px !important;
+  }
+}
+
+@include basic-medium-media-query {
+  .card-title {
+    padding: 10px !important;
+  }
+}
+
+@include basic-small-media-query {
+  .card-title {
+    padding: 16px !important;
+  }
+}

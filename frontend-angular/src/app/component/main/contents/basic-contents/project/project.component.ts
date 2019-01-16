@@ -2,23 +2,24 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  ElementRef,
+  Input,
   OnDestroy,
   OnInit,
-  QueryList,
-  ViewChild,
+  QueryList, ViewChild,
   ViewChildren
 } from '@angular/core';
-import {MommooCard} from '../../../../../mommoo-library/ui/card/card.component';
-import {MommooMasonryLayout} from '../../../../../mommoo-library/ui/masonry-layout/masonry-layout.component';
-import {WebClientDataLoader} from '../../../../server/webclient/web-client-resource.service';
-import {MommooCardsLoadCheckerService} from '../../../../../mommoo-library/ui/card/card-load-checker.service';
+import {MommooCard} from '../../../../../../mommoo-library/ui/card/card.component';
+import {MommooMasonryLayout} from '../../../../../../mommoo-library/ui/masonry-layout/masonry-layout.component';
+import {MommooCardsLoadCheckerService} from '../../../../../../mommoo-library/ui/card/card-load-checker.service';
 import {Router} from '@angular/router';
-import {ContentsLayoutDetector} from '../../contents-layout-finder.service';
-import {AngularUtils} from '../../../../../mommoo-library/util/angular';
+import {MainComponentLayoutDetector} from '../../../main.component-layout-detector.service';
+import {AngularUtils, MultiViewChild} from '../../../../../../mommoo-library/util/angular';
 import {ProjectCardProvider} from './project-card-provider';
 import {ProjectCard, ProviderConfig} from './project.types';
-import {WebClient} from '../../../../server/webclient/web-client-types';
-import {ContentsItem} from '../../main.types';
+import {WebClient} from '../../../../../server/webclient/web-client-types';
+import {ColumnItemWidth} from '../../../main.types';
+import Basic = WebClient.Project.Basic;
 
 @Component({
   selector: 'project',
@@ -27,8 +28,10 @@ import {ContentsItem} from '../../main.types';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProjectComponent implements OnInit, OnDestroy {
-  private static readonly preferredMaxCardWidth = 320;
-  private static readonly minCardWidth = 300;
+  private static readonly columnItemWidth: ColumnItemWidth = {
+    preferred: 320,
+    minimum: 300
+  };
 
   private static readonly maxLimitTextLength = 100;
   private static readonly wideCardColumnSpan = 2;
@@ -37,8 +40,13 @@ export class ProjectComponent implements OnInit, OnDestroy {
   @ViewChildren(MommooCard)
   private mommooCardQueryList: QueryList<MommooCard>;
 
+  @ViewChild(MommooMasonryLayout, {read: ElementRef})
+  private readonly mommooMasonryLayoutElementRef: ElementRef<HTMLElement>;
+
   @ViewChild(MommooMasonryLayout)
-  private mommooMasonryLayout: MommooMasonryLayout;
+  private readonly mommooMasonryLayout: MommooMasonryLayout;
+
+  private isInitMasonryLayout = true;
 
   private masonryColumnChangeEventID: string;
   private _masonryColumnLength = 4;
@@ -46,10 +54,9 @@ export class ProjectComponent implements OnInit, OnDestroy {
   private _projectCardList: ProjectCard[];
 
   public constructor(private changeDetector: ChangeDetectorRef,
-                     private webClientDataLoader: WebClientDataLoader,
                      private mommooCardsLoadChecker: MommooCardsLoadCheckerService,
                      private router: Router,
-                     private contentsLayoutDetector: ContentsLayoutDetector) {
+                     private contentsColumnDetector: MainComponentLayoutDetector) {
 
     this.changeDetector = AngularUtils.createAsyncChangeDetectorRef(changeDetector);
   }
@@ -63,28 +70,19 @@ export class ProjectComponent implements OnInit, OnDestroy {
     };
   }
 
-  private async createProjectCardProvider() {
-    const basicProjects = await this.webClientDataLoader.projectLoader.getAllBasicProjects();
+  private static createProjectCardProvider(basicProjects: Basic[]) {
     const providerConfig = ProjectComponent.createProviderConfig(basicProjects);
     return new ProjectCardProvider(providerConfig);
   }
 
   private enrollMasonryColumnChangeEvent(projectCardProvider: ProjectCardProvider) {
-    const preferredItem: ContentsItem = {
-      preferredWidth: ProjectComponent.preferredMaxCardWidth,
-      minWidth: ProjectComponent.minCardWidth
-    };
-
-    let first = true;
-
-    return this.contentsLayoutDetector.subscribe(preferredItem, properContentsLayout => {
-
-      this._masonryColumnLength = properContentsLayout.numberOfItem;
-      const isWideMode = this._masonryColumnLength > 1 && properContentsLayout.calculatedItemWidth < 400;
+    return this.contentsColumnDetector.subscribeContentsColumnChange(ProjectComponent.columnItemWidth, columnLayout => {
+      this._masonryColumnLength = columnLayout.count;
+      const isWideMode = this._masonryColumnLength > 1 && columnLayout.width < 400;
       this._projectCardList = projectCardProvider.getOrderedCardList(isWideMode);
       this.changeDetector.detectChanges();
-      if ( first ) {
-        first = false;
+      if (this.isInitMasonryLayout) {
+        this.isInitMasonryLayout = false;
         this.renderMasonryLayout();
       }
     });
@@ -96,23 +94,33 @@ export class ProjectComponent implements OnInit, OnDestroy {
     this.mommooMasonryLayout.layoutMasonryTiles();
   }
 
-  public async ngOnInit() {
-    const projectCardProvider = await this.createProjectCardProvider();
+  @Input()
+  private set basicProjects(basicProjects: Basic[]) {
+    const projectCardProvider
+      = ProjectComponent.createProjectCardProvider(basicProjects);
 
     /** Need to first drawing to calculate */
     this._projectCardList = projectCardProvider.getOrderedCardList(false);
     this.changeDetector.detectChanges();
 
     /** Waiting for all of card loaded */
-    await this.mommooCardsLoadChecker.promiseLoadCards(this.mommooCardQueryList.toArray());
+    this.mommooCardsLoadChecker
+      .promiseLoadCards(this.mommooCardQueryList.toArray())
+      .then(() => {
+        this.renderMasonryLayout();
+        this.masonryColumnChangeEventID
+          = this.enrollMasonryColumnChangeEvent(projectCardProvider);
+      });
+  }
 
-    this.renderMasonryLayout();
-
-    this.masonryColumnChangeEventID = this.enrollMasonryColumnChangeEvent(projectCardProvider);
+  public ngOnInit(): void {
+    if (this.isInitMasonryLayout) {
+      this.mommooMasonryLayoutElementRef.nativeElement.style.opacity = '0';
+    }
   }
 
   public ngOnDestroy(): void {
-    this.contentsLayoutDetector.unSubscribe(this.masonryColumnChangeEventID);
+    this.contentsColumnDetector.unSubscribe(this.masonryColumnChangeEventID);
   }
 
   public get masonryColumnLength() {
@@ -123,9 +131,8 @@ export class ProjectComponent implements OnInit, OnDestroy {
     return this._projectCardList;
   }
 
-  public onCardClickListener(serialNumber: number) {
-    // alert(`serialNumber is ${serialNumber}`);
-    // this.router.navigate(['main', 'dfdf']);
+  public onCardClickListener(projectTitle: string) {
+    this.router.navigate(['main', projectTitle]);
   }
 
   public get bannerTitle(): string {
@@ -139,5 +146,4 @@ export class ProjectComponent implements OnInit, OnDestroy {
       '프로젝트를 하면서 필요한 내용을 \'공부\' 하여 \'원리\'를 습득 하는것에 집중 하였습니다.',
       '카드를 눌러보시면 더 상세한 정보를 볼 수 있습니다.'];
   }
-
 }

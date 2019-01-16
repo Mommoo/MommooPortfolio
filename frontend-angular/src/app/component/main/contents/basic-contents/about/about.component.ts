@@ -1,17 +1,7 @@
-import {
-  Component,
-  OnInit,
-  ChangeDetectionStrategy,
-  ViewChild,
-  ElementRef,
-  ChangeDetectorRef,
-  OnDestroy
-} from '@angular/core';
-import {WebClient} from '../../../../server/webclient/web-client-types';
-import {WebClientDataLoader} from '../../../../server/webclient/web-client-resource.service';
-import {ContentsLayoutDetector} from '../../contents-layout-finder.service';
-import {AngularUtils} from '../../../../../mommoo-library/util/angular';
-import {ContentsItem, ContentsLayout, ContentsLayoutChangeListener} from '../../contents/contents.types';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {WebClient} from '../../../../../server/webclient/web-client-types';
+import {MainComponentLayoutDetector} from '../../../main.component-layout-detector.service';
+import {ColumnItemWidth, ColumnLayout} from '../../../main.types';
 
 /**
  * This section class is preparing data about developer mommoo's language technologies.
@@ -19,7 +9,7 @@ import {ContentsItem, ContentsLayout, ContentsLayoutChangeListener} from '../../
  * and it is displayed card-view in grid-layout
  *
  * When contents area width resizing, the grid-card-properties are decide automatically relative to container width
- * {@link setProperGridCardProperty}, {@link ContentsLayoutDetector}
+ * {@link setProperGridCardProperty}, {@link MainComponentLayoutDetector}
  */
 
 @Component({
@@ -29,10 +19,13 @@ import {ContentsItem, ContentsLayout, ContentsLayoutChangeListener} from '../../
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AboutComponent implements OnInit, OnDestroy {
-  private static readonly preferredMaxCardSize = 240;
-  private static readonly preferredMinCardSize = 200;
   private static readonly cardFontRatio = 0.1;
   private static readonly preferredCardGutterSize = 10;
+
+  private static columnItemWidth: ColumnItemWidth = {
+    preferred: 260,
+    minimum: 240
+  };
 
   private gridCardProperty = {
     numberOfCard: -1,
@@ -40,35 +33,17 @@ export class AboutComponent implements OnInit, OnDestroy {
     cardTextFondSize: 20
   };
 
-  private _languageTechs: WebClient.Introduction.LanguageTech[];
-
-  @ViewChild('cardParent', {read: ElementRef})
-  private cardParentElementRef: ElementRef<HTMLElement>;
+  @Input('languageTechs')
+  private _languageTechs: WebClient.LanguageTech[];
 
   private cardLayoutChangeEventID: string;
 
   constructor(private changeDetector: ChangeDetectorRef,
-              private webClientDataLoader: WebClientDataLoader,
-              private contentsViewportHandler: ContentsLayoutDetector) {
+              private contentsViewportHandler: MainComponentLayoutDetector) { }
 
-    this.changeDetector = AngularUtils.createAsyncChangeDetectorRef(changeDetector);
-  }
-
-  private subscribeCardLayoutChangeEvent(): string {
-    const preferredItem: ContentsItem = {
-      preferredWidth: AboutComponent.preferredMaxCardSize,
-      minWidth: AboutComponent.preferredMinCardSize
-    };
-
-    const contentsLayoutChangeListener: ContentsLayoutChangeListener
-      = properContentsLayout => this.setProperGridCardProperty(properContentsLayout);
-
-    return this.contentsViewportHandler
-      .subscribe(preferredItem, contentsLayoutChangeListener);
-  }
-
-  private setProperGridCardProperty(properContentsLayout: ContentsLayout) {
-    const [cardNum, cardSize] = properContentsLayout.values();
+  private setProperGridCardProperty(computedViewportColumns: ColumnLayout) {
+    const cardNum = computedViewportColumns.count;
+    const cardSize = computedViewportColumns.width;
 
     this.gridCardProperty.numberOfCard = cardNum;
     this.gridCardProperty.cardTextFondSize = cardSize * AboutComponent.cardFontRatio;
@@ -76,13 +51,10 @@ export class AboutComponent implements OnInit, OnDestroy {
     this.changeDetector.detectChanges();
   }
 
-  public async ngOnInit() {
-    this._languageTechs
-      = await this.webClientDataLoader
-      .introductionLoader
-      .getLanguageTechsAsync();
-
-    this.cardLayoutChangeEventID = this.subscribeCardLayoutChangeEvent();
+  public ngOnInit() {
+    this.cardLayoutChangeEventID = this.contentsViewportHandler
+      .subscribeContentsColumnChange(AboutComponent.columnItemWidth,
+          columnLayout => this.setProperGridCardProperty(columnLayout));
   }
 
   public ngOnDestroy(): void {
@@ -105,7 +77,7 @@ export class AboutComponent implements OnInit, OnDestroy {
     return this._languageTechs;
   }
 
-  protected get bannerDescriptions(): string[] {
+  public get bannerDescriptions(): string[] {
     return ['2014년부터 개발 공부를 시작했습니다.',
       '이론과 실습을 계속 병행하며, 꾸준히 실력을 쌓아 왔습니다.',
       '개발 철학은 "그냥 넘어가지 말자" 입니다.',
@@ -114,7 +86,7 @@ export class AboutComponent implements OnInit, OnDestroy {
       '아래의 리스트는 제가 개발 가능한 언어와 환경을 나타냈습니다.'];
   }
 
-  protected get bannerTitle(): string {
+  public get bannerTitle(): string {
     return 'ABOUT-ME';
   }
 }

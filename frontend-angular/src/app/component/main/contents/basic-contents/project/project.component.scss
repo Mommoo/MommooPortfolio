@@ -1,0 +1,18 @@
+:host {
+  display : block;
+}
+$padding: 16px;
+
+.side-padding {
+  padding-left: $padding;
+  padding-right: $padding;
+}
+
+.card-title {
+  font-weight: 400 !important;
+  padding-top: $padding;
+}
+
+.card-contents {
+  line-height:140%;
+}

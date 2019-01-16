@@ -7,11 +7,10 @@
 }
 
 #banner-title {
-  @include TekoFont;
+  @include Dosis;
   font-weight:900;
 }
 
 .banner-text-contents {
-  @include NanumGhothicFont;
   font-weight: 300;
 }

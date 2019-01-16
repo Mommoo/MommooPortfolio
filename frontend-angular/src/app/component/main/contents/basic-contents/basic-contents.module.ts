@@ -1,8 +1,8 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {BasicContentsComponent} from './basic-contents.component';
-import {MommooUIModule} from '../../../../mommoo-library/ui/ui.module';
-import {WebClientModule} from '../../../server/webclient/web-client.module';
+import {MommooUIModule} from '../../../../../mommoo-library/ui/ui.module';
+import {WebClientModule} from '../../../../server/webclient/web-client.module';
 import {WelcomeComponent} from './welcome/welcome.component';
 import {BannerComponent} from './banner/banner.component';
 import { ProfileComponent } from './profile/profile.component';

@@ -1,8 +1,8 @@
-import {WebClient} from '../../../../server/webclient/web-client-types';
+import {WebClient} from '../../../../../server/webclient/web-client-types';
 
 export interface ProjectCard {
   readonly serialNumber: number;
-  readonly name: string;
+  readonly title: string;
   readonly previewImage: string;
   readonly description: string;
   readonly skills: string[];

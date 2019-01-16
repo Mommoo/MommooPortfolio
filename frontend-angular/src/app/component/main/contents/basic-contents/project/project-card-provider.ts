@@ -1,5 +1,5 @@
 import {ProviderConfig, ProjectCard, serialNumberListNeedToWide} from './project.types';
-import {WebClient} from '../../../../server/webclient/web-client-types';
+import {WebClient} from '../../../../../server/webclient/web-client-types';
 
 export class ProjectCardProvider {
 
@@ -22,11 +22,11 @@ export class ProjectCardProvider {
       = description.length > preciseMaxLimitTextLength;
 
     const preferredDescription = isTooLongDescription ?
-      description.substring(0, preciseMaxLimitTextLength) : description;
+      description.substring(0, preciseMaxLimitTextLength) + "..." : description;
 
     return {
       serialNumber: basicProject.serialNumber,
-      name: basicProject.title,
+      title: basicProject.title,
       previewImage: basicProject.previewBannerImage,
       columnSpan: 1,
       description: preferredDescription,
@@ -35,7 +35,7 @@ export class ProjectCardProvider {
   }
 
   private createOrderedProjectCardList() {
-    const basicProjectList = this.config.basicProjectList;
+    const basicProjectList = [...this.config.basicProjectList];
 
     const cloneSerialNumberListNeedToWide = [...serialNumberListNeedToWide];
 
@@ -75,7 +75,6 @@ export class ProjectCardProvider {
   }
 
   public getOrderedCardList(isWideMode: boolean) {
-
     const columnSpan = isWideMode ? this.config.wideCardColumnSpan : this.config.normalCardColumnSpan;
 
     this.orderedProjectCardList
