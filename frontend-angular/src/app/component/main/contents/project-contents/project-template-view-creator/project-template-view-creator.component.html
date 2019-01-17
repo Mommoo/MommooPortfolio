@@ -1,0 +1,30 @@
+<ng-template #textViewTemplate let-texts="texts">
+  <text-view [texts]="texts" class="break-word-text-view"></text-view>
+</ng-template>
+
+<ng-template #hyperLinkTextViewTemplate let-href="href" let-description="description" let-icon="icon">
+  <mommoo-chip-view [icon]="icon" class="chip-view" [style.marginTop]="0">
+    <a [href]="href" class="break-word-text-view" target="_blank">{{description}}</a>
+  </mommoo-chip-view>
+</ng-template>
+
+<ng-template #chipViewGroupViewTemplate let-chipViewInfos="chipViewInfos">
+  <div class="chip-view-wrapper">
+    <mommoo-chip-view
+      *ngFor="let chipViewInfo of chipViewInfos"
+      [icon]="chipViewInfo.iconPath"
+      class="chip-view">
+      <div class="break-word-text-view">{{chipViewInfo.description}}</div>
+    </mommoo-chip-view>
+  </div>
+</ng-template>
+
+<ng-template #youtubeViewTemplate let-youtubeToken="youtubeToken">
+  <youtube-view [youtubeToken]="youtubeToken"></youtube-view>
+</ng-template>
+
+<ng-template #projectFeatureGroupTemplate let-projectFeatureInfos="projectFeatureInfos">
+  <ng-container *ngFor="let featureInfo of projectFeatureInfos">
+    <project-feature [projectFeatureInfo]="featureInfo" class="project-feature"></project-feature>
+  </ng-container>
+</ng-template>

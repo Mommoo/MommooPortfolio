@@ -1,0 +1,18 @@
+<image-banner [bannerInfo]="bannerInfo"></image-banner>
+<div id="section-wrapper">
+  <div *ngFor="let sectionInfo of sectionInfos" class="guide-section" #guideSection>
+    <div class="heading">{{sectionInfo.heading}}</div>
+    <div *ngFor="let content of sectionInfo.contents" class="section-content-wrapper">
+      <div *ngIf="content.title" class="section-content-title">{{content.title}}</div>
+      <div [class.if-absent-section-content-title]="!content.title" class="section-content">
+        <ng-container
+          [ngTemplateOutlet]="content.templateRef"
+          [ngTemplateOutletContext]="content.templateContext">
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<project-template-view-creator></project-template-view-creator>

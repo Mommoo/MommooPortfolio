@@ -1,0 +1,39 @@
+@import "~src/styles";
+
+$gutter: 16px;
+
+:host {
+  display: block;
+}
+
+#feature-image-wrapper {
+  text-align: center;
+}
+
+#feature-image {
+  max-width: 100%;
+}
+
+.explanation-contents {
+  margin: 0 $gutter $gutter $gutter;
+  padding-bottom: $gutter;
+  border-bottom: 1px solid #f0f0f0;
+
+  &:nth-last-child(1) {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+}
+
+.explanation-heading {
+  font-size: 1.2vw;
+  font-weight: bold;
+  color: $primaryTextColor;
+  padding-bottom: $gutter/2;
+}
+
+.explanation-description {
+  color: $secondaryTextColor;
+  font-size: 1vw;
+}

@@ -1,0 +1,15 @@
+@import "~src/styles";
+
+:host {
+  display: block;
+}
+
+.common-text-view {
+  @include break-word;
+  line-height: 160% !important;
+  padding-bottom: 16px;
+
+  &:nth-last-child(1) {
+    padding-bottom: 0;
+  }
+}

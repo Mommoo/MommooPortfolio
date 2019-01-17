@@ -1,0 +1,34 @@
+@import '~src/styles';
+
+$gutter: 16px;
+
+.chip-view-wrapper {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-top: -$gutter; //in order to set gutter
+}
+
+.chip-view {
+  margin-right: $gutter;
+  margin-top: $gutter;
+  font-weight: bold;
+  padding: 6px;
+
+  &:nth-last-child(1) {
+    margin-right: 0;
+  }
+}
+
+.project-feature {
+  margin-bottom: 16px;
+
+  &:nth-last-child(1) {
+    margin-bottom:0;
+  }
+}
+
+.break-word-text-view {
+  display: inline-block;
+  @include break-word;
+}

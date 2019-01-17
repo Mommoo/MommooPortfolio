@@ -1,0 +1,109 @@
+@import '~src/styles';
+@import '~src/mommoo-library/handler/window/size/window-size-handler';
+
+:host {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding-bottom: 56%;
+}
+
+#fixed-wrapper {
+  position: fixed;
+}
+
+%fill {
+  position: absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  top:0;
+}
+
+%flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#image-pane {
+  width: 100%;
+  padding-bottom: 56%;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+#glass-pane {
+  @extend %fill;
+  color: white;
+  flex-direction: column;
+  background-color: rgba(50,50,50,.9);
+}
+
+#program-heading {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  box-sizing: border-box;
+
+  #title {
+    font-size: 6vw;
+    overflow: hidden;
+    font-weight: 500;
+  }
+
+  #sub-title {
+    overflow: hidden;
+  }
+}
+
+#program-type {
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 16px;
+}
+
+@include basic-large-media-query {
+  #program-heading {
+    padding: 5%;
+  }
+
+  #sub-title {
+    font-size: 2vw;
+  }
+
+  #fixed-wrapper {
+    width: calc(100% - 300px);
+  }
+}
+
+@include basic-medium-media-query {
+  #program-heading {
+    padding: 6%;
+  }
+
+  #sub-title {
+    font-size: 2vw;
+  }
+
+  #fixed-wrapper {
+    width: 100%;
+  }
+}
+
+@include basic-small-media-query {
+  #program-heading {
+    padding: 7%;
+  }
+
+  #sub-title {
+    font-size: 3vw;
+  }
+
+  #fixed-wrapper {
+    width: 100%;
+  }
+}

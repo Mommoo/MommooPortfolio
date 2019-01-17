@@ -1,0 +1,14 @@
+<mommoo-card>
+  <mommoo-card-title>{{title}}</mommoo-card-title>
+  <div id="feature-image-wrapper">
+    <img id="feature-image"
+         *ngIf="isExistFeatureImage()"
+         [src]="backgroundImageURL"/>
+  </div>
+  <mommoo-card-contents>
+    <div *ngFor="let explanation of explanations" class="explanation-contents">
+      <div class="explanation-heading">{{explanation.heading}}</div>
+      <text-view [texts]="explanation.descriptions" class="explanation-description"></text-view>
+    </div>
+  </mommoo-card-contents>
+</mommoo-card>

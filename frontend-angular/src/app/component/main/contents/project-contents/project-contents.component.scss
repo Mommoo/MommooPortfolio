@@ -1,0 +1,95 @@
+@import '~src/styles';
+@import '~src/mommoo-library/handler/window/size/window-size-handler';
+
+$gutter: 16px;
+
+:host {
+  display: block;
+}
+
+#section-wrapper {
+  position: relative;
+  background-color:white;
+}
+
+.heading {
+  padding-bottom: $gutter;
+  font-weight: 900;
+  color: $primaryTextColor;
+  border-bottom: 1px solid #eaeaea;
+}
+
+.if-absent-section-content-title {
+  padding-top: $gutter * 1.5;
+}
+
+.section-content-wrapper {
+  padding-bottom: $gutter;
+
+  &:nth-last-child(1) {
+    padding-bottom: 0;
+  }
+}
+
+.section-content-title {
+  padding: $gutter;
+  font-weight: 400;
+  color: $secondaryTextColor;
+}
+
+.guide-section {
+  padding-bottom: $gutter * 3;
+}
+
+@mixin set-padding-by-ratio($ratio) {
+  #section-wrapper {
+    padding: $gutter * $ratio;
+  }
+
+  .section-content {
+    padding-left: max($gutter * ($ratio - 1), $gutter);
+    padding-right: max($gutter * ($ratio - 1), $gutter);
+  }
+}
+
+@include basic-large-media-query {
+  @include set-padding-by-ratio(3);
+
+  .heading {
+    font-size: 2vw
+  }
+}
+
+@include basic-medium-media-query {
+  @include set-padding-by-ratio(2);
+
+  .heading {
+    font-size: 5vw
+  }
+
+  .section-content-title {
+    font-size: 3vw;
+  }
+
+  .section-content {
+    font-size: 2.8vw;
+  }
+}
+
+@include basic-small-media-query {
+  @include set-padding-by-ratio(1);
+
+  .heading {
+    font-size: 7vw
+  }
+
+  .section-content-title {
+    font-size: 3.7vw;
+  }
+
+  .section-content {
+    font-size: 3.5vw;
+  }
+}
+
+
