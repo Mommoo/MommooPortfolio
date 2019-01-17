@@ -5,7 +5,7 @@
          *ngIf="isExistFeatureImage()"
          [src]="backgroundImageURL"/>
   </div>
-  <mommoo-card-contents>
+  <mommoo-card-contents class="card-contents">
     <div *ngFor="let explanation of explanations" class="explanation-contents">
       <div class="explanation-heading">{{explanation.heading}}</div>
       <text-view [texts]="explanation.descriptions" class="explanation-description"></text-view>

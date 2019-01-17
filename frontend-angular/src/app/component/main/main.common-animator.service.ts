@@ -1,6 +1,6 @@
 import {ElementRef, Injectable, OnDestroy} from '@angular/core';
 import {KeyframeAnimator} from '../../../mommoo-library/handler/animation/keyframe/keyframe-animator';
-import {AnimationKeyframe} from '../../../mommoo-library/handler/animation/keyframe/types';
+import {AnimationKeyframe, KeyframeAnimationConfig} from '../../../mommoo-library/handler/animation/keyframe/types';
 import {AnimationType} from './main.types';
 import {FrameAnimationConfig} from '../../../mommoo-library/handler/animation/request-frame/types';
 import {RequestFrameAnimator} from '../../../mommoo-library/handler/animation/request-frame/request-frame-animator';
@@ -21,13 +21,18 @@ import {MainComponentLayoutDetector} from './main.component-layout-detector.serv
 @Injectable()
 export class MainCommonAnimator implements OnDestroy {
   private static readonly fadeInAnimationName = 'common-fade-in-keyframe-animation';
-  private static readonly animationConfig: FrameAnimationConfig = {
+  private static readonly frameAnimationConfig: FrameAnimationConfig = {
     duration: 500,
     easing: 'easeInOutCubic'
   };
+  private static readonly keyframeAnimationConfig: KeyframeAnimationConfig = {
+    duration: '400ms',
+    timingFunction: 'ease-in-out',
+    fillMode: 'forwards'
+  };
 
   private keyframeAnimator = new KeyframeAnimator();
-  private readonly requestFrameAnimator = new RequestFrameAnimator(MainCommonAnimator.animationConfig);
+  private readonly requestFrameAnimator = new RequestFrameAnimator(MainCommonAnimator.frameAnimationConfig);
 
   public constructor(private mainComponentLayoutDetector: MainComponentLayoutDetector) {
     this.keyframeAnimator.addKeyframe(MainCommonAnimator.createFadeInAnimationKeyframe());
@@ -36,6 +41,7 @@ export class MainCommonAnimator implements OnDestroy {
   private static createFadeInAnimationKeyframe(): AnimationKeyframe {
     return {
       animationName: MainCommonAnimator.fadeInAnimationName,
+      commonConfig: this.keyframeAnimationConfig,
       keyframe: {
         from: {
           opacity: 0
@@ -47,16 +53,19 @@ export class MainCommonAnimator implements OnDestroy {
     };
   }
 
-  private scrollAt(elementRef: ElementRef<HTMLElement>) {
+  private scrollTo(elementRef: ElementRef<HTMLElement>) {
     const headerLayout = this.mainComponentLayoutDetector.getHeaderLayout();
-    const extraTop = headerLayout.isCollapseMode ? headerLayout.collapseHeaderHeight : 0;
+    // if in collapsed header mode, the result of scrolling to element's position is overlapped by header
+    // we want prevent overlapping contents
+    const overlappedTop = headerLayout.isCollapseMode ? headerLayout.collapseHeaderHeight : 0;
+    const extraTop = 10;
     const currentTop = window.pageYOffset;
-    const elementTop = elementRef.nativeElement.offsetTop;
-    const destinationTop = elementTop - extraTop;
+    const elementTop = window.pageYOffset + Math.floor(elementRef.nativeElement.getBoundingClientRect().top);
+    const destinationTop = elementTop - extraTop - overlappedTop;
     const moveDistance = destinationTop - currentTop;
 
     this.requestFrameAnimator.startAnimation(state => {
-      const computeTop = currentTop + ( state.progress * moveDistance );
+      const computeTop = currentTop + (state.progress * moveDistance);
       window.scrollTo(0, computeTop);
     });
   }
@@ -67,8 +76,9 @@ export class MainCommonAnimator implements OnDestroy {
         this.keyframeAnimator.startAnimation(MainCommonAnimator.fadeInAnimationName, elementRef);
         break;
 
-      case AnimationType.SCROLL_AT:
-        this.scrollAt(elementRef);
+      case AnimationType.SCROLL_TO:
+        this.scrollTo(elementRef);
+        break;
     }
   }
 

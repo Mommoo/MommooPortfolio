@@ -1,53 +1,58 @@
-/* You can add global styles to this file, and also import other style files */
-html, body{
-  padding : 0;
-  margin : 0;
-  background-color : #f9f9f9;
-}
-
-$NotoSansKR: 'Noto+Sans+KR:100,300';
-$NanumGhotic: 'Nanum+Gothic';
-$Teko: 'Teko:400,500,600,700';
-$Exo2: 'Exo+2:500';
-$Baloo: 'Baloo+Bhaijaan';
+$NotoSansKR: 'Noto+Sans+KR:100,300,400,500,700';
 $ZCOOL: 'ZCOOL+QingKe+HuangYou';
+$Dosis: 'Dosis';
+
 //Font
-@import url('https://fonts.googleapis.com/css?family=#{$NotoSansKR}|#{$NanumGhotic}|#{$Teko}|#{$Exo2}|#{$Baloo}|#{$ZCOOL}');
-
-@mixin TekoFont {
-  font-family: 'Teko', 'sans-serif';
-}
-
-@mixin NanumGhothicFont {
-  font-family: 'Nanum Gothic', sans-serif;
-}
+@import url('https://fonts.googleapis.com/css?family=#{$NotoSansKR}|#{$ZCOOL}|#{$Dosis}');
 
 @mixin NotoSansKRFont {
   font-family: 'Noto Sans KR', sans-serif;
-}
-
-@mixin BalooFont {
-  font-family: 'Baloo Bhaijaan', cursive;
-}
-
-@mixin Exo2Font {
-  font-family: 'Exo 2', cursive;
 }
 
 @mixin ZCOOLFont {
   font-family: 'ZCOOL QingKe HuangYou', cursive;
 }
 
-//MediaQuery
+@mixin Dosis {
+  font-family: 'Dosis', sans-serif;
+}
 
-$headerWidthInDesktopMediaQuery: 300px;
+$primaryTextColor: rgba(0, 0, 0, .87);
+$secondaryTextColor: rgba(0, 0, 0, .6);
 
 // common function
 
 @mixin break-word {
   /* For IE */
   word-wrap: break-word;
+  word-break: break-all;
 
   /* For Chrome */
-  word-break: break-word;
+  word-break: break-word; // ie not supported
+}
+
+
+
+/* You can add global styles to this file, and also import other style files */
+html, body{
+  padding : 0;
+  margin : 0;
+  -webkit-font-smoothing: antialiased;
+  backface-visibility: hidden;
+}
+
+body {
+  background-color : #f9f9f9;
+
+  &:lang(ko) {
+    @include NotoSansKRFont;
+  }
+
+  &:lang(en) {
+    @include Dosis;
+  }
+}
+
+div {
+  backface-visibility: hidden;
 }

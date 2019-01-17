@@ -2,69 +2,49 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {WebClient} from './web-client-types';
 import {RestAPIUrl} from '../rest-api-url';
+import {fromPromise} from 'rxjs/internal-compatibility';
 
 /**
- * This {@link WebClientDataLoader} have a responsibility
+ * This {@link WebClientHttpClient} have a responsibility
  * that communication with server REST API designed as `WebClient`
  *
  * To implementation of communication with server,
  * this class use the HttpClient API. {@link HttpClient}
  *
- * To provide WebClient communication API,
- * class design divided into several class as to WebClient's sub topics
- * {@link WebClientIntroduction}, {@link WebClientProject}, {@link WebClientImage}
- *
- * The result of communicated with server be made with the promise object
+ * The result of communicated with server be made with the observer object
  *
  * @author mommoo
  */
 
 @Injectable()
-export class WebClientDataLoader {
-  public readonly introductionLoader: WebClientIntroduction;
-  public readonly projectLoader: WebClientProject;
-  public readonly imageLoader: WebClientImage;
+export class WebClientHttpClient {
+  private readonly imageLoader: WebClientImage;
 
   public constructor(private httpClient: HttpClient) {
-    this.introductionLoader = new WebClientIntroduction(httpClient);
-    this.projectLoader = new WebClientProject(httpClient);
     this.imageLoader = new WebClientImage(httpClient);
   }
-}
 
-class WebClientIntroduction {
-  public constructor(private httpClient: HttpClient) {
-
-  }
-
-  public async getProfileAsync() {
+  @ExecutorInspector()
+  public getIntroduction() {
     return this.httpClient
-      .get<WebClient.Introduction.Profile>(RestAPIUrl.WebClient.profileURL())
-      .toPromise();
+      .get<WebClient.Introduction>(RestAPIUrl.WebClient.introductionURL());
   }
 
-  public async getLanguageTechsAsync() {
+  @ExecutorInspector()
+  public getAllBasicProjects() {
     return this.httpClient
-      .get<WebClient.Introduction.LanguageTech[]>(RestAPIUrl.WebClient.languageTechsURL())
-      .toPromise();
-  }
-}
-
-class WebClientProject {
-  public constructor(private httpClient: HttpClient) {
-
+      .get<WebClient.Project.Basic[]>(RestAPIUrl.WebClient.allBasicProjectsURL());
   }
 
-  public async getAllBasicProjects() {
+  @ExecutorInspector()
+  public getNormalProject(title: string) {
     return this.httpClient
-      .get<WebClient.Project.Basic[]>(RestAPIUrl.WebClient.allBasicProjectsURL())
-      .toPromise();
+      .get<WebClient.Project.Normal>(RestAPIUrl.WebClient.normalProjectByTitleURL(title));
   }
 
-  public async getNormalProject(serialNumber: number) {
-    return this.httpClient
-      .get<WebClient.Project.Normal>(RestAPIUrl.WebClient.normalProjectBySerialNumberURL(serialNumber))
-      .toPromise();
+  @ExecutorInspector()
+  public getImagePath<T>(...imageNames: string[]) {
+    return this.imageLoader.getImagePaths<T>(...imageNames);
   }
 }
 
@@ -82,7 +62,7 @@ class WebClientImage {
     return imageNames.filter(imageName => !this.cachedImageFinder.has(imageName));
   }
 
-  public async getFindImagePaths(...imageNames: string[]) {
+  private async findImagePaths<T>(...imageNames: string[]) {
     const newImageNamesToFind = this.filterNewImageNamesToFind(...imageNames);
 
     if (newImageNamesToFind.length > 0) {
@@ -97,6 +77,23 @@ class WebClientImage {
         .forEach(imageName => this.cachedImageFinder.set(imageName, imageFilePathObject[imageName]));
     }
 
-    return new Map<string, string>(this.cachedImageFinder);
+    const entries = [];
+    imageNames.forEach(imageName => entries.push([imageName, this.cachedImageFinder.get(imageName)]));
+    return new Map<T, string>(entries);
   }
+
+  public getImagePaths<T>(...imageNames: string[]) {
+    return fromPromise(this.findImagePaths<T>(...imageNames));
+  }
+}
+
+function ExecutorInspector() {
+  return function(target: any, propName: string, descriptor: PropertyDescriptor) {
+    const originalFunction: Function = descriptor.value;
+    descriptor.value = function() {
+      console.log(`${propName} method is invoked`);
+      return originalFunction.apply(this, arguments);
+    };
+    return descriptor;
+  };
 }

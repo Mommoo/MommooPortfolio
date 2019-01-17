@@ -1,8 +1,8 @@
 export class RestAPIUrl {
   private static readonly serverMetaData = {
     protocol: 'http',
-    hostName: '192.168.0.10',
-    // hostName: 'localhost',
+    // hostName: '192.168.0.10',
+    hostName: 'localhost',
     portNumber: '8080',
     contextPath: '/mommoo-portfolio'
   };
@@ -15,12 +15,11 @@ export class RestAPIUrl {
   }
 
   public static get WebClient() {
-    const webClientDataURI = `${RestAPIUrl.fullHostURL}/webclient`;
+    const webClientDataURI = `${RestAPIUrl.fullHostURL}/data/webclient`;
     return {
-      profileURL: () => `${webClientDataURI}/introduction/profile`,
-      languageTechsURL: () => `${webClientDataURI}/introduction/languageTechs`,
+      introductionURL: () => `${webClientDataURI}/introduction`,
       allBasicProjectsURL: () => `${webClientDataURI}/project/basic/all`,
-      normalProjectBySerialNumberURL: (serialNumber: number) => `${webClientDataURI}/project/normal/${serialNumber}`,
+      normalProjectByTitleURL: (title: string) => `${webClientDataURI}/project/normal/${title}`,
       findImagePathURL: () => `${webClientDataURI}/image`
     };
   }

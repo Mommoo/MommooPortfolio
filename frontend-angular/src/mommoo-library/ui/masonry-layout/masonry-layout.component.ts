@@ -1,7 +1,7 @@
 import {
   AfterContentChecked,
   AfterViewInit,
-  ChangeDetectionStrategy, ChangeDetectorRef,
+  ChangeDetectionStrategy,
   Component,
   ContentChildren,
   ElementRef,
@@ -10,8 +10,7 @@ import {
   OnDestroy,
   OnInit,
   QueryList,
-  SimpleChanges,
-  ViewChild
+  SimpleChanges
 } from '@angular/core';
 import {MommooMasonryTile} from './masonry-tile/masonry-tile.component';
 import {DomUtils} from '../../util/dom';
@@ -48,9 +47,13 @@ export class MommooMasonryLayout implements OnInit, AfterViewInit, AfterContentC
       this.isFirstChanged = false;
       return;
     }
-    
-    this.paintMasonryTiles();
-    this.layoutMasonryTiles();
+
+    const masonryTileArray = this.masonryTileQueryList.toArray();
+    if (masonryTileArray) {
+      this.masonryRenderer.initialize(this.masonryTileQueryList.toArray(), this.maxColumnNum, this.gutterSize);
+      this.paintMasonryTiles();
+      this.layoutMasonryTiles();
+    }
   }
 
   public ngOnInit(): void {
@@ -65,12 +68,19 @@ export class MommooMasonryLayout implements OnInit, AfterViewInit, AfterContentC
       this.paintMasonryTiles();
       this.layoutMasonryTiles();
     }, 400, true);
+
+    this.masonryTileQueryList.changes.subscribe((value) => {
+      this.ngAfterContentChecked();
+      this.paintMasonryTiles();
+      this.layoutMasonryTiles();
+    });
   }
 
   public ngAfterContentChecked(): void {
     if ( !this.masonryTileQueryList ) {
       return;
     }
+
     this.masonryRenderer.initialize(this.masonryTileQueryList.toArray(), this.maxColumnNum, this.gutterSize);
     this.masonryTileQueryList
       .toArray()

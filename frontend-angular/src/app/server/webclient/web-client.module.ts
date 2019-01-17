@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {WebClientDataLoader} from './web-client-resource.service';
+import {WebClientHttpClient} from './web-client-resource.service';
 import {HttpClientModule} from '@angular/common/http';
 
 @NgModule({
@@ -9,7 +9,7 @@ import {HttpClientModule} from '@angular/common/http';
     HttpClientModule
   ],
   providers: [
-    WebClientDataLoader
+    WebClientHttpClient
   ],
   declarations: []
 })

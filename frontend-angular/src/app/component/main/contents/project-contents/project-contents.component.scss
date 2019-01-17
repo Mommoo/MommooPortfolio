@@ -41,7 +41,7 @@ $gutter: 16px;
   padding-bottom: $gutter * 3;
 }
 
-@mixin set-padding-by-ratio($ratio) {
+@mixin setPaddingByRatio($ratio) {
   #section-wrapper {
     padding: $gutter * $ratio;
   }
@@ -52,44 +52,33 @@ $gutter: 16px;
   }
 }
 
-@include basic-large-media-query {
-  @include set-padding-by-ratio(3);
-
+@mixin setSectionFontSize($headingFontSize, $contentsFontSize) {
   .heading {
-    font-size: 2vw
+    font-size: $headingFontSize;
   }
+
+  .section-content-title {
+    font-size: $contentsFontSize * 1.1;
+  }
+
+  .section-content {
+    font-size: $contentsFontSize;
+  }
+}
+
+@include basic-large-media-query {
+  @include setPaddingByRatio(3);
+  @include setSectionFontSize(2vw, 1.2vw);
 }
 
 @include basic-medium-media-query {
-  @include set-padding-by-ratio(2);
-
-  .heading {
-    font-size: 5vw
-  }
-
-  .section-content-title {
-    font-size: 3vw;
-  }
-
-  .section-content {
-    font-size: 2.8vw;
-  }
+  @include setPaddingByRatio(2);
+  @include setSectionFontSize(4vw, 2.6vw);
 }
 
 @include basic-small-media-query {
-  @include set-padding-by-ratio(1);
-
-  .heading {
-    font-size: 7vw
-  }
-
-  .section-content-title {
-    font-size: 3.7vw;
-  }
-
-  .section-content {
-    font-size: 3.5vw;
-  }
+  @include setPaddingByRatio(1);
+  @include setSectionFontSize(7vw, 4vw);
 }
 
 

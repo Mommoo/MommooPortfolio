@@ -6,19 +6,22 @@
  * This module indicate data type of server's data named WebClient
  */
 export module WebClient {
-  export module Introduction {
-    export interface Profile {
-      readonly name: string;
-      readonly lastTwoOfBirthYear: string;
-      readonly age: number;
-      readonly degree: string[];
-    }
+  export interface Introduction {
+    readonly profile: Profile;
+    readonly languageTechs: LanguageTech[];
+  }
 
-    export interface LanguageTech {
-      readonly name: string;
-      readonly image: string;
-      readonly briefings: string[];
-    }
+  export interface Profile {
+    readonly name: string;
+    readonly lastTwoOfBirthYear: string;
+    readonly age: number;
+    readonly degree: string[];
+  }
+
+  export interface LanguageTech {
+    readonly name: string;
+    readonly image: string;
+    readonly briefings: string[];
   }
 
   export module Project {

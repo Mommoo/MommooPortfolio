@@ -22,6 +22,7 @@ $chipViewImgSize: 30px;
   background-position: center center;
   background-size: contain;
   background-repeat: no-repeat;
+  flex-shrink: 0;
 }
 
 #content-wrapper {

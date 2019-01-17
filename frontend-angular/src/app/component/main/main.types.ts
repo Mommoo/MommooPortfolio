@@ -1,6 +1,6 @@
 export enum AnimationType {
   FADE_IN,
-  SCROLL_AT
+  SCROLL_TO
 }
 
 export interface ColumnItemWidth {

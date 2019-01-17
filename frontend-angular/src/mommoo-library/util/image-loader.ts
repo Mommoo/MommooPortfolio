@@ -3,10 +3,16 @@ import {ImageDimension} from './types';
 export class ImageLoader {
   private constructor() {}
 
+  public static isLoadedImage(imagePath: string) {
+    const imageO = new Image();
+    imageO.src = imagePath;
+    return imagePath && imageO.naturalWidth > 0;
+  }
+
   public static promiseLoadImage(imagePath: string) {
     return new Promise<ImageDimension>((resolve, reject) => {
       if (!imagePath) {
-        reject();
+        reject('invalid image path');
         return;
       }
 
@@ -14,8 +20,13 @@ export class ImageLoader {
       imageO.src = imagePath;
 
       imageO.onload = () => resolve(ImageLoader.createImageDimension(imageO));
-      imageO.onerror = () => reject();
+      imageO.onerror = () => reject('error image load');
     });
+  }
+
+  public static async promiseLoadImages(...imagePaths: string[]) {
+    return await Promise.all(imagePaths
+      .map(imagePath => this.promiseLoadImage(imagePath)));
   }
 
   private static createImageDimension(imageO: HTMLImageElement): ImageDimension {

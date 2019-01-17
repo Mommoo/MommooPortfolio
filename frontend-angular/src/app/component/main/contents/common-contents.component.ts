@@ -3,7 +3,7 @@ import {ElementRef, Injector, OnDestroy} from '@angular/core';
 import {MainCommonAnimator} from '../main.common-animator.service';
 import {AnimationType} from '../main.types';
 import {ResolveKey} from '../../../app.types';
-import {ActivatedRoute, Router, Scroll} from '@angular/router';
+import {ActivatedRoute, NavigationEnd, Router, Scroll} from '@angular/router';
 import {filter, map} from 'rxjs/operators';
 import {ViewportScroller} from '@angular/common';
 
@@ -40,15 +40,16 @@ export abstract class CommonContentsComponent implements OnDestroy {
 
   /* Because that restoring scroll position is completed after rendering views,
    * user can see afterimage of views.
-   * Also since existing of async loaded element, not precisely scroll located
-   * So we solve them by providing fade-in animation for hiding unnecessary things */
+   * Also since existing of async loaded element,
+   * not precisely scroll located in AfterViewInit life-cycle
+   * So we solve them by providing fade-in animation for hiding unnecessary things
+   * after ending of event using by setTimeout */
   private restoreScrollPosition(hostElementRef: ElementRef<HTMLElement>,
                                 router: Router,
                                 viewportScroller: ViewportScroller) {
 
     hostElementRef.nativeElement.style.opacity = '0';
     const routerScrollEvent$ = router.events.pipe(
-      // tap(console.log),
       filter(event => event instanceof Scroll),
       map(event => (event as Scroll).position),
     );

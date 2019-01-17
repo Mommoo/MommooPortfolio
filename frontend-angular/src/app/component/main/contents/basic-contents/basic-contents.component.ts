@@ -1,4 +1,12 @@
-import {ChangeDetectionStrategy, Component, ElementRef, Injector, OnInit, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  Injector,
+  OnInit,
+  ViewChild
+} from '@angular/core';
 import {BasicContentsData, BasicMenuType, BasicMenuTypeValues} from './basic-contents.types';
 import {CommonContentsComponent} from '../common-contents.component';
 import {WelcomeComponent} from './welcome/welcome.component';

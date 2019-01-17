@@ -3,6 +3,8 @@ import {WindowSizeEventHandler} from '../../../mommoo-library/handler/window/siz
 import {BasicViewportSizeState} from '../../../mommoo-library/handler/window/size/window-size-handler.type';
 import {DomUtils} from '../../../mommoo-library/util/dom';
 import {MainComponentLayoutDetector} from './main.component-layout-detector.service';
+import {ActivatedRoute} from '@angular/router';
+import {AppIconPathFinder, ResolveKey} from '../../app.types';
 
 /**
  * This class have role of manage component layout.
@@ -34,30 +36,23 @@ export class MainComponent implements AfterViewInit, OnDestroy {
   @ViewChild('fakeHeader', {read: ElementRef})
   private fakeHeaderElementRef: ElementRef<HTMLElement>;
 
-  public constructor(private contentsLayoutDetector: MainComponentLayoutDetector) { }
+  public constructor(private contentsLayoutDetector: MainComponentLayoutDetector,
+                     private route: ActivatedRoute) {
+  }
 
   private enrollFooterWhereToAppendEvent() {
     return WindowSizeEventHandler
       .addBasicViewportSizeStateChangeEvent(viewportSizeState => {
-        let whereAppendedArea, footerStyle;
+        let whereAppendedArea;
 
         if (viewportSizeState === BasicViewportSizeState.LARGE) {
           whereAppendedArea = this.headerAreaElementRef;
-          footerStyle = {
-            width: `${DomUtils.offset(this.headerAreaElementRef).width}px`,
-            position: 'fixed',
-            bottom: '0'
-          };
         } else {
           whereAppendedArea = this.contentsAreaElementRef;
-          footerStyle = {
-            width: `100%`,
-            position: 'static'
-          };
         }
 
         DomUtils.append(whereAppendedArea, this.footerAreaElementRef);
-        DomUtils.applyStyle(this.footerAreaElementRef, footerStyle);
+        DomUtils.applyStyle(this.footerAreaElementRef, {width: `100%`});
       }, true);
   }
 
@@ -91,5 +86,9 @@ export class MainComponent implements AfterViewInit, OnDestroy {
 
   public ngOnDestroy(): void {
     WindowSizeEventHandler.removeEvents(...this.windowSizeEventIDs);
+  }
+
+  public get appIconPathFinder(): AppIconPathFinder {
+    return this.route.snapshot.data[ResolveKey.APP_ICON];
   }
 }

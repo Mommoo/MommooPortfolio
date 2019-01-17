@@ -16,16 +16,14 @@
   <푸터 컴포넌트>
 </div>
  -->
-<div id="header-area" #headerArea>
-  <div id="fixed-header-wrapper">
-    <view-header></view-header>
+<div id="header-area">
+  <div id="header-area-viewport" #headerArea>
+    <view-header [appIconPathFinder]="appIconPathFinder"></view-header>
   </div>
   <!-- Fixed 구조 때문에 요소의 모양을 유지 할 수 없다. 블록 구조를 취하기 위해, block 구조를 살린 view-header 위치 -->
-  <view-header #fakeHeader></view-header>
+  <view-header [appIconPathFinder]="appIconPathFinder" #fakeHeader></view-header>
 </div>
 <div id="contents-area" #contentsArea>
     <router-outlet></router-outlet>
 </div>
-<div #footerArea>
-  <view-footer></view-footer>
-</div>
+<view-footer [appIconPathFinder]="appIconPathFinder" #footerArea></view-footer>
