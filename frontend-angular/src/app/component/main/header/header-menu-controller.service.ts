@@ -20,6 +20,7 @@ export class HeaderMenuController {
   private menuNames: string[];
   private isBackButtonVisible = false;
   private onMenuClickEventListener: OnMenuClickEventListener;
+  private onBackButtonClickEventListener: () => void;
   private onHeaderMenuEventChangeListeners: OnHeaderMenuEventChangeListener[] = [];
 
   public constructor() {
@@ -29,6 +30,12 @@ export class HeaderMenuController {
   public notifyMenuNameClickEvent(menuName: string) {
     if ( this.onMenuClickEventListener ) {
       this.onMenuClickEventListener(menuName);
+    }
+  }
+
+  public notifyBackButtonClickEvent() {
+    if ( this.onBackButtonClickEventListener ) {
+      this.onBackButtonClickEventListener();
     }
   }
 
@@ -65,8 +72,12 @@ export class HeaderMenuController {
     this.setMenuNames([]);
   }
 
-  public setOnMenuItemClickListener(menuItemClickEventListener: OnMenuClickEventListener) {
-    this.onMenuClickEventListener = menuItemClickEventListener;
+  public setOnMenuItemClickListener(onMenuItemClickEventListener: OnMenuClickEventListener) {
+    this.onMenuClickEventListener = onMenuItemClickEventListener;
+  }
+
+  public setBackButtonClickListener(onBackButtonClickEventListener: () => void) {
+    this.onBackButtonClickEventListener = onBackButtonClickEventListener;
   }
 
   public setBackButtonVisible(backButtonVisible: boolean) {

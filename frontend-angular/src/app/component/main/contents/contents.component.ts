@@ -3,9 +3,11 @@ import {ElementRef, Injector, OnDestroy} from '@angular/core';
 import {MainCommonAnimator} from '../main.common-animator.service';
 import {AnimationType} from '../main.types';
 import {ResolveKey} from '../../../app.types';
-import {ActivatedRoute, NavigationEnd, Router, Scroll} from '@angular/router';
+import {ActivatedRoute, Router, Scroll} from '@angular/router';
 import {filter, map} from 'rxjs/operators';
-import {ViewportScroller} from '@angular/common';
+import {Location, ViewportScroller} from '@angular/common';
+import {ContentsHistoryTacker} from './contents.history-tacker.service';
+import {ContentsSection} from './contents.types';
 
 /**
  * This class provides common feature of contentsComponent.
@@ -14,7 +16,7 @@ import {ViewportScroller} from '@angular/common';
  * Second, contents should can load resolver data which transferred by ResolveGuard.
  * Last, contents should be restored previous scroll position for user ux.
  */
-export abstract class CommonContentsComponent implements OnDestroy {
+export abstract class ContentsComponent implements OnDestroy {
   private static isAppliedBugFixViewportScroller = false;
   private readonly headerMenuController: HeaderMenuController;
   private readonly mainCommonAnimator: MainCommonAnimator;
@@ -25,17 +27,34 @@ export abstract class CommonContentsComponent implements OnDestroy {
     this.mainCommonAnimator = injector.get(MainCommonAnimator);
     this.route = injector.get(ActivatedRoute);
 
-    const hostElementRef = injector.get(ElementRef);
-    const router = injector.get(Router);
     const viewportScroller = injector.get(ViewportScroller);
 
-    if ( !CommonContentsComponent.isAppliedBugFixViewportScroller ) {
+    if ( !ContentsComponent.isAppliedBugFixViewportScroller ) {
       bugFixViewportScrollIfInIE(viewportScroller);
-      CommonContentsComponent.isAppliedBugFixViewportScroller = true;
+      ContentsComponent.isAppliedBugFixViewportScroller = true;
     }
 
-    this.initializeHeaderMenu(this.headerMenuController);
+    const commonHistoryTracker = injector.get(ContentsHistoryTacker);
+    const router = injector.get(Router);
+    const location = injector.get(Location);
+    this.setHeaderBackButtonConfig(commonHistoryTracker, router, location);
+
+    const hostElementRef = injector.get(ElementRef);
     this.restoreScrollPosition(hostElementRef, router, viewportScroller);
+  }
+
+  private setHeaderBackButtonConfig(commonHistoryTracker: ContentsHistoryTacker, router: Router, location: Location) {
+    const isBackButtonVisible = this.getGoBackURLIfAbsentHistoryStack() !== undefined;
+    this.headerMenuController.setBackButtonVisible(isBackButtonVisible);
+
+    const isExistPreviousPage = commonHistoryTracker.isExistPreviousHistory();
+    this.headerMenuController.setBackButtonClickListener(() => {
+      if ( isExistPreviousPage ) {
+        location.back();
+      } else {
+        router.navigateByUrl(this.getGoBackURLIfAbsentHistoryStack());
+      }
+    });
   }
 
   /* Because that restoring scroll position is completed after rendering views,
@@ -65,21 +84,30 @@ export abstract class CommonContentsComponent implements OnDestroy {
     });
   }
 
-  private initializeHeaderMenu(headerMenuController: HeaderMenuController) {
-    headerMenuController.setOnMenuItemClickListener(menuName => this.onMenuItemClickListener(menuName));
-    headerMenuController.setBackButtonVisible(this.isBackButtonVisible());
-  }
+  /*
+   * When user direct connect to specific page, the location history stack is empty.
+   * So, if user click to back button at header-menu the function isn't work properly.
+   * To prevent this UX, we decided that each contents component need to declaring specific url
+   * for go back page when history stack absent.
+   * In conclusion, if there is no history stack, when user click to header's back button,
+   * program will be navigating to url which declared by each contents component.
+   */
+  protected abstract getGoBackURLIfAbsentHistoryStack(): string | undefined;
 
-  protected abstract onMenuItemClickListener(menuName: string);
-
-  protected abstract isBackButtonVisible(): boolean;
-
-  protected setMenuNames(menuNames: string[]) {
+  /**
+   * The Contents Component provides navigating scroll position to element's offset when user menu item click.
+   */
+  protected setContentsSections(contentsSections: ContentsSection[]) {
+    const menuNames = contentsSections.map(contentsSection => contentsSection.menuName);
     this.headerMenuController.setMenuNames(menuNames);
-  }
 
-  public scrollAt(elementRef: ElementRef) {
-    this.mainCommonAnimator.startAnimation(AnimationType.SCROLL_TO, elementRef);
+    this.headerMenuController.setOnMenuItemClickListener(menuName => {
+      const targetElementRef = contentsSections
+        .find(contentsSection => contentsSection.menuName === menuName)
+        .elementRef;
+
+      this.mainCommonAnimator.startAnimation(AnimationType.SCROLL_TO, targetElementRef);
+    });
   }
 
   public getResolveData(resolveKey: ResolveKey) {

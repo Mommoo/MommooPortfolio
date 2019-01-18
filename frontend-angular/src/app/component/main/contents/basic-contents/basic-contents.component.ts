@@ -8,12 +8,13 @@ import {
   ViewChild
 } from '@angular/core';
 import {BasicContentsData, BasicMenuType, BasicMenuTypeValues} from './basic-contents.types';
-import {CommonContentsComponent} from '../common-contents.component';
+import {ContentsComponent} from '../contents.component';
 import {WelcomeComponent} from './welcome/welcome.component';
 import {ProfileComponent} from './profile/profile.component';
 import {AboutComponent} from './about/about.component';
 import {ProjectComponent} from './project/project.component';
 import {AppIconPathFinder, ResolveKey} from '../../../../app.types';
+import {ContentsSection} from '../contents.types';
 
 @Component({
   selector: 'basic-contents',
@@ -21,7 +22,7 @@ import {AppIconPathFinder, ResolveKey} from '../../../../app.types';
   styleUrls: ['./basic-contents.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class BasicContentsComponent extends CommonContentsComponent implements OnInit {
+export class BasicContentsComponent extends ContentsComponent implements OnInit {
   @ViewChild(WelcomeComponent, {read: ElementRef})
   private welcomeElementRef: ElementRef<HTMLElement>;
 
@@ -39,32 +40,17 @@ export class BasicContentsComponent extends CommonContentsComponent implements O
   }
 
   public ngOnInit(): void {
-    this.setMenuNames(BasicMenuTypeValues);
+    const contentsSections: ContentsSection[] = [
+      {menuName: BasicMenuType.WELCOME, elementRef: this.welcomeElementRef},
+      {menuName: BasicMenuType.PROFILE, elementRef: this.profileElementRef},
+      {menuName: BasicMenuType.ABOUT, elementRef: this.aboutElementRef},
+      {menuName: BasicMenuType.PROJECT, elementRef: this.projectElementRef}
+    ];
+    this.setContentsSections(contentsSections);
   }
 
-  protected onMenuItemClickListener(menuName: string) {
-    let targetElementRef: ElementRef<HTMLElement>;
-
-    switch (menuName as BasicMenuType) {
-      case BasicMenuType.WELCOME:
-        targetElementRef = this.welcomeElementRef;
-        break;
-      case BasicMenuType.PROFILE:
-        targetElementRef = this.profileElementRef;
-        break;
-      case BasicMenuType.ABOUT:
-        targetElementRef = this.aboutElementRef;
-        break;
-      case BasicMenuType.PROJECT:
-        targetElementRef = this.projectElementRef;
-        break;
-    }
-
-    this.scrollAt(targetElementRef);
-  }
-
-  protected isBackButtonVisible(): boolean {
-    return false;
+  protected getGoBackURLIfAbsentHistoryStack(): string | undefined {
+    return undefined;
   }
 
   public get basicContentsData(): BasicContentsData {

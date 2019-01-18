@@ -8,7 +8,6 @@ import {
   OnInit,
   ViewChild
 } from '@angular/core';
-import {Location} from '@angular/common';
 import {MenuButtonComponent} from './menu-button/menu-button.component';
 import {MenuListComponent} from './menu-list/menu-list.component';
 import {WindowSizeEventHandler} from '../../../../mommoo-library/handler/window/size/window-size-handler';
@@ -56,7 +55,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   private appIconPathFinder: AppIconPathFinder;
 
   public constructor(private headerMenuController: HeaderMenuController,
-                     private location: Location,
                      private changeDetector: ChangeDetectorRef,
                      private router: Router,
                      private sanitizer: DomSanitizer) {
@@ -125,7 +123,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public afterBackButtonClickEvent() {
     this.triggerHeaderCollapseIfInCollapseMode();
-    this.location.back();
+    this.headerMenuController.notifyBackButtonClickEvent();
   }
 
   public doHeaderLogoClick() {
