@@ -16,27 +16,34 @@ ul {
 li {
   display : block;
   position : relative;
-  font-size : 0.8rem;
-  cursor : pointer;
+  font-weight: normal;
+  font-size: 14px;
   -webkit-tap-highlight-color: transparent;
+}
 
-  &:hover{
-    font-size : 0.9rem;
-    font-weight : 600;
-    color : #e91e63;
+.menu-item {
+  $padding: 16px;
+  display: inline-block;
+  position: relative;
+  cursor : pointer;
+  padding: $padding;
+
+  &:after {
+    content: '';
+    position: absolute;
+    left:$padding;
+    right:$padding;
+    bottom:0;
+    height: 2px;
+    background-color: black;
+    transform: scaleX(0);
   }
 
-  &:first-child {
-    margin-top:0;
-  }
-
-  &:nth-child(n) {
-    margin-top: 0.5rem;
-  }
-
-  .li-text-contents {
-    width: 100%;
-    text-align : center;
-    padding : 10px 0;
+  &:hover {
+    font-weight: bold;
+    &:after {
+      transform: scaleX(1);
+      transition: all 0.2s ease-in-out;
+    }
   }
 }

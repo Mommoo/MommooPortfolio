@@ -1,9 +1,10 @@
 <ul>
   <ng-container *ngFor="let menuItemName of menuNames;">
     <li>
-      <div mommooRipple (click)="menuItemClickEvent(menuItemName)" class="li-text-contents">
+      <span (click)="menuItemClickEvent(menuItemName)"
+            class="menu-item">
         {{menuItemName | uppercase}}
-      </div>
+      </span>
     </li>
   </ng-container>
 </ul>
