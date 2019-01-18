@@ -1,16 +1,10 @@
-export class RestAPIUrl {
-  private static readonly serverMetaData = {
-    protocol: 'http',
-    // hostName: '192.168.0.10',
-    hostName: 'localhost',
-    portNumber: '8080',
-    contextPath: '/mommoo-portfolio'
-  };
+import {environment} from '../../environments/environment';
 
+export class RestAPIUrl {
   private static get fullHostURL() {
-    const protocol = `${RestAPIUrl.serverMetaData.protocol}://`;
-    const host = `${RestAPIUrl.serverMetaData.hostName}:${RestAPIUrl.serverMetaData.portNumber}`;
-    const contextPath = `${RestAPIUrl.serverMetaData.contextPath}`;
+    const protocol = `${environment.serverMetaData.protocol}://`;
+    const host = `${environment.serverMetaData.hostName}:${environment.serverMetaData.portNumber}`;
+    const contextPath = `${environment.serverMetaData.contextPath}`;
     return `${protocol}${host}${contextPath}`;
   }
 
