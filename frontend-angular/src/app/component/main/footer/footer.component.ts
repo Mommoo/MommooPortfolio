@@ -51,7 +51,7 @@ export class FooterComponent implements OnInit {
         icon: this.appIconPathFinder.get(AppIconType.MAIL),
         text: 'dv.Mommoo@gmail.com',
         onClick() {
-
+          location.href = `mailto:${this.text}`;
         }
       }
     ];

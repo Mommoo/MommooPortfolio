@@ -18,6 +18,7 @@ import {BasicViewportSizeState} from '../../../../mommoo-library/handler/window/
 import {DomSanitizer} from '@angular/platform-browser';
 import {HeaderMenuController} from './header-menu-controller.service';
 import {AppIconPathFinder, AppIconType} from '../../../app.types';
+import {Router} from '@angular/router';
 
 /**
  * This class is mediator class
@@ -57,6 +58,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   public constructor(private headerMenuController: HeaderMenuController,
                      private location: Location,
                      private changeDetector: ChangeDetectorRef,
+                     private router: Router,
                      private sanitizer: DomSanitizer) {
 
   }
@@ -124,6 +126,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   public afterBackButtonClickEvent() {
     this.triggerHeaderCollapseIfInCollapseMode();
     this.location.back();
+  }
+
+  public doHeaderLogoClick() {
+    this.router.navigate(['main']);
   }
 
   public get isBackButtonVisible() {
