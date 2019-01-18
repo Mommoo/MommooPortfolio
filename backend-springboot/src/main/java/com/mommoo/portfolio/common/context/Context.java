@@ -23,7 +23,6 @@ public class Context {
     private final String contextPath;
     private final String absoluteWebDirectoryPath;
     private final Assets assets;
-    private final String themeColor;
 
     /**
      * This class is provides directory paths that involved assets resources.

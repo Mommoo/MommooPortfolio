@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- *
  * This class provides function of find image file name through only file name.
  * {@link ImageResourceFinder#findAbsoluteImageFilePath(String)}
  * Range of finding image file is decided by took several absolute directory path passed by constructor.
@@ -48,6 +47,10 @@ public class ImageResourceFinder {
     }
 
     private static Stream<Path> flatPathStream(Path path) {
+        if ( Files.notExists(path) ) {
+            return Stream.empty();
+        }
+
         if ( Files.isDirectory(path) ) {
             try {
                 return Files

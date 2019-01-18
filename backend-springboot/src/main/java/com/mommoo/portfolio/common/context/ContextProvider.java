@@ -1,10 +1,12 @@
 package com.mommoo.portfolio.common.context;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ResourceUtils;
 
+import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.regex.Matcher;
@@ -24,21 +26,25 @@ import java.util.regex.Matcher;
  */
 @Component
 public class ContextProvider {
-    private static final String CONTEXT_PATH_PROPERTY_KEY = "server.servlet.context-path";
-    private static final String STATIC_RESOURCE_LOCATION_KEY = "spring.resources.static-locations";
-    private static final String ASSETS_DIRECTORY_NAME_KEY = "resource.assets-directory-name";
-    private static final String IMAGE_DIRECTORY_NAME_KEY = "resource.assets.image-directory-name";
-    private static final String THEME_COLOR_PROPERTY_KEY = "theme.color";
-    private Environment environment;
+    @Value("${server.servlet.context-path}")
+    private String contextPath;
+
+    @Value("${spring.resources.static-locations}")
+    private String resourceLocation;
+
+    @Value("${resource.assets-directory-name}")
+    private String assetsDirectoryName;
+
+    @Value("${resource.assets.image-directory-name}")
+    private String imageDirectoryName;
 
     private Context cachedContext;
 
-    @Autowired
-    public ContextProvider(Environment environment) {
-        this.environment = environment;
+    @PostConstruct
+    private void postConstruct() {
         this.cachedContext = getLatestContext();
     }
-
+    
     /** update context data  */
     public void update() {
         this.cachedContext = getLatestContext();
@@ -50,10 +56,9 @@ public class ContextProvider {
 
     public Context getLatestContext() {
         this.cachedContext = Context.builder()
-                .contextPath(this.environment.getProperty(CONTEXT_PATH_PROPERTY_KEY))
+                .contextPath(contextPath)
                 .absoluteWebDirectoryPath(getAbsoluteWebDirectoryPath())
                 .assets(createContextAssets())
-                .themeColor(this.environment.getProperty(THEME_COLOR_PROPERTY_KEY))
                 .build(); 
         
         return cachedContext;
@@ -75,9 +80,8 @@ public class ContextProvider {
     }
 
     private String getRelativeWebDirectoryPath() {
-        String staticResourceLocations = this.environment.getProperty(STATIC_RESOURCE_LOCATION_KEY);
+        String staticResourceLocations = this.resourceLocation;
         String classPathPrefix = "classpath:/";
-
         String path = staticResourceLocations;
         if ( staticResourceLocations.startsWith(classPathPrefix) ) {
             path = staticResourceLocations.substring(classPathPrefix.length());
@@ -89,7 +93,7 @@ public class ContextProvider {
     }
 
     private String getRelativeAssetsDirectoryPath() {
-        return this.environment.getProperty(ASSETS_DIRECTORY_NAME_KEY);
+        return this.assetsDirectoryName;
     }
 
     private String getAbsoluteAssetsDirectoryPath() {
@@ -103,12 +107,12 @@ public class ContextProvider {
     }
 
     private String getAbsoluteImageDirectoryPath() {
-        String imageDirectoryName = this.environment.getProperty(IMAGE_DIRECTORY_NAME_KEY);
+        String imageDirectoryName = this.imageDirectoryName;
         return getAbsoluteAssetsDirectoryPath() + File.separator + imageDirectoryName;
     }
 
     private String getRelativeImageDirectoryPath() {
-        String imageDirectoryName = this.environment.getProperty(IMAGE_DIRECTORY_NAME_KEY);
+        String imageDirectoryName = this.imageDirectoryName;
         return getRelativeAssetsDirectoryPath()+ File.separator + imageDirectoryName;
     }
 }
