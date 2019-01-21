@@ -1,6 +1,7 @@
 package com.mommoo.portfolio.domain.webclient;
 
 import com.mommoo.portfolio.common.resource.ResourceFinder;
+import org.apache.logging.log4j.util.Strings;
 
 /**
  * This class is providing way of
@@ -36,8 +37,12 @@ public class WebClientResource {
     }
 
     public String findImageResourcePath(String imageName) {
-        String resourcePath = resourceFinder
-                .findImageResourcePath(imageName, this.startResourcePaths);
-        return domainPath + resourcePath;
+        String resourcePath
+                = resourceFinder.findImageResourcePath(imageName, this.startResourcePaths);
+        if (Strings.isNotEmpty(resourcePath)) {
+            return domainPath + resourcePath;
+        }
+
+        return "";
     }
 }

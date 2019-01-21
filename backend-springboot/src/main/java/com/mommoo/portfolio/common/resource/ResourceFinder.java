@@ -55,13 +55,18 @@ public class ResourceFinder {
     }
 
     public String findImageResourcePath(String resourceName, String[] startResourcePaths) {
+        if (Strings.isEmpty(resourceName)) {
+            return "";
+        }
+
         int resourceLocationNameLen = getResourceLocationName().length();
         String imageRepositoryPath = getImageRepositoryPath();
         return Arrays.stream(startResourcePaths)
+                .filter(Strings::isNotEmpty)
                 .map(path -> imageRepositoryPath+"/"+path)
                 .map(path -> this.resourceInspector.findResourceRelativePath(path, resourceName))
                 .filter(Strings::isNotEmpty)
-                .map(sPath -> sPath.substring(resourceLocationNameLen))
+                .map(imagePath -> imagePath.substring(resourceLocationNameLen))
                 .findFirst()
                 .orElse("");
     }

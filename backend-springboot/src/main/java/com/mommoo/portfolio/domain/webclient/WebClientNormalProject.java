@@ -71,7 +71,7 @@ public class WebClientNormalProject extends WebClientBasicProject {
         private WebClientExample(Example example) {
             this.github = new WebClientURLExample("github", example.getGithubURL());
             this.youtube = new WebClientYoutubeExample("youtube", example.getYoutubeToken());
-            this.googleApp = new WebClientURLExample("google_play", convertToGoogleAppDownloadURL(example.getGoogleAppPackageName()));
+            this.googleApp = new WebClientURLExample("googleplay", convertToGoogleAppDownloadURL(example.getGoogleAppPackageName()));
             this.sample = new WebClientURLExample("program", example.getSampleURL());
             this.blog = new WebClientURLExample("blog", example.getBlogURL());
         }
