@@ -246,6 +246,12 @@ class ProjectExampleContentContextRepository extends SectionContentContextReposi
         value: example.github.url,
         description: 'GitHub Repository',
         title: '깃허브 저장소 URL'
+      })
+      .set(example.googleApp, {
+        type: 'url',
+        value: example.googleApp.url,
+        description: 'GooglePlay App',
+        title: '구글플레이 앱 URL'
       });
 
     return exampleMap;
