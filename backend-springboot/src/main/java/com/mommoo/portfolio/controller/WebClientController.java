@@ -1,10 +1,10 @@
 package com.mommoo.portfolio.controller;
 
+import com.mommoo.portfolio.common.DomainPath;
 import com.mommoo.portfolio.domain.webclient.WebClientFactory;
 import com.mommoo.portfolio.domain.webclient.WebClientResource;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,36 +22,27 @@ public class WebClientController {
         this.webClientFactory = webClientFactory;
     }
 
-    @RequestMapping(value = "/project/basic/all", method=RequestMethod.GET)
-    private Object getWebClientBasicProjectList(HttpServletRequest httpServletRequest) {
-        return webClientFactory.createWebClientBasicProjectList(computeDomainPath(httpServletRequest));
+    @GetMapping(value = "/project/basic/all")
+    private Object getWebClientBasicProjectList(@DomainPath String domainPath) {
+        return webClientFactory.createWebClientBasicProjectList(domainPath);
     }
 
-    @RequestMapping(value = "/project/normal/{title}", method = RequestMethod.GET)
-    private Object getWebClientNormalProject(@PathVariable String title, HttpServletRequest httpServletRequest) {
-        return webClientFactory.createWebClientNormalProjectByTitle(title, computeDomainPath(httpServletRequest));
+    @GetMapping(value = "/project/normal/{title}")
+    private Object getWebClientNormalProject(@PathVariable String title, @DomainPath String domainPath) {
+        return webClientFactory.createWebClientNormalProjectByTitle(title, domainPath);
     }
 
-    @RequestMapping(value = "/introduction")
-    private Object getWebClientProfile(HttpServletRequest httpServletRequest) {
-        return webClientFactory.createWebClientIntroduction(computeDomainPath(httpServletRequest));
+    @GetMapping(value = "/introduction")
+    private Object getWebClientProfile(@DomainPath String domainPath) {
+        return webClientFactory.createWebClientIntroduction(domainPath);
     }
 
-    @RequestMapping(value = "/image", method = RequestMethod.POST)
-    private Object findWebClientImagePath(HttpServletRequest httpServletRequest, @RequestBody List<String> imageNameList) {
-        WebClientResource webClientResource = webClientFactory.createWebClientResource(computeDomainPath(httpServletRequest));
+    @PostMapping(value = "/image")
+    private Object findWebClientImagePath(@DomainPath String domainPath, @RequestBody List<String> imageNameList) {
+        WebClientResource webClientResource = webClientFactory.createWebClientResource(domainPath);
 
         return imageNameList
                 .stream()
                 .collect(Collectors.toMap(name -> name, webClientResource::findImageResourcePath));
-    }
-
-    private static String computeDomainPath(HttpServletRequest httpServletRequest) {
-        String protocol = httpServletRequest.getScheme();
-        String host = httpServletRequest.getServerName();
-        String port = Integer.toString(httpServletRequest.getServerPort());
-        String contextPath = httpServletRequest.getContextPath();
-
-        return protocol+"://"+host+":" + port + contextPath;
     }
 }

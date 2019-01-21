@@ -1,15 +1,18 @@
 package com.mommoo.portfolio;
 
+import com.mommoo.portfolio.common.DomainPathControllerArgumentResolver;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.resource.PathResourceResolver;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * @author mommoo
@@ -45,5 +48,10 @@ public class MommooWebMvcConfigurer implements WebMvcConfigurer {
                         return isExistAnyURLMapped ? requestResource : new ClassPathResource("/static/index.html");
                     }
                 });
+    }
+
+    @Override
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
+        resolvers.add(new DomainPathControllerArgumentResolver());
     }
 }

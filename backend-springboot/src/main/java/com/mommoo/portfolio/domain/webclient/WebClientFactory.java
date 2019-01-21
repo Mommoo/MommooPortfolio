@@ -9,6 +9,7 @@ import com.mommoo.portfolio.mongo.repository.IntroductionMongoRepository;
 import com.mommoo.portfolio.mongo.repository.NormalProjectMongoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,7 +30,6 @@ public class WebClientFactory {
     private NormalProjectMongoRepository normalProjectMongoRepository;
     private IntroductionMongoRepository introductionMongoRepository;
 
-    @Autowired
     private WebClientFactory(ResourceFinder resourceFinder,
                              BasicProjectMongoRepository basicProjectMongoRepository,
                              NormalProjectMongoRepository normalProjectMongoRepository,
@@ -41,6 +41,7 @@ public class WebClientFactory {
         this.introductionMongoRepository = introductionMongoRepository;
     }
 
+    @Transactional(readOnly = true)
     public List<WebClientBasicProject> createWebClientBasicProjectList(String domainPath) {
         return basicProjectMongoRepository
                 .findAll()
@@ -52,12 +53,14 @@ public class WebClientFactory {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public WebClientNormalProject createWebClientNormalProjectByTitle(String title, String domainPath) {
         NormalProject foundProject = normalProjectMongoRepository.findByTitle(title);
         WebClientResource webClientResource = new WebClientResource(resourceFinder, domainPath, foundProject.getTitle());
         return new WebClientNormalProject(foundProject, webClientResource);
     }
 
+    @Transactional(readOnly = true)
     public WebClientIntroduction createWebClientIntroduction(String domainPath) {
         Introduction introduction = introductionMongoRepository.findFirstBy();
         WebClientResource webClientResource = createWebClientResource(domainPath);
