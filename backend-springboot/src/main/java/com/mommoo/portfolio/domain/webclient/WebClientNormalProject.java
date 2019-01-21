@@ -29,7 +29,7 @@ public class WebClientNormalProject extends WebClientBasicProject {
 
     WebClientNormalProject(NormalProject project, WebClientResource webClientResource) {
         super(project, webClientResource);
-        this.UIImage = webClientResource.findImageFile(project.getUIImage());
+        this.UIImage = webClientResource.findImageResourcePath(project.getUIImage());
         this.programType = project.getProgramType();
         this.subTitle = project.getSubTitle();
         this.plannings = project.getPlannings();
@@ -49,7 +49,7 @@ public class WebClientNormalProject extends WebClientBasicProject {
         return NormalProject.Feature
                 .builder()
                 .title(feature.getTitle())
-                .image(this.webClientResource.findImageFile(feature.getImage()))
+                .image(webClientResource.findImageResourcePath(feature.getImage()))
                 .explanations(feature.getExplanations())
                 .build();
     }
@@ -99,7 +99,7 @@ public class WebClientNormalProject extends WebClientBasicProject {
                     return;
                 }
 
-                this.image = webClientResource.findImageFile(imageName);
+                this.image = webClientResource.findImageResourcePath(imageName);
                 this.url = URL;
             }
         }
@@ -115,7 +115,7 @@ public class WebClientNormalProject extends WebClientBasicProject {
                     this.image = this.token = "";
                     return;
                 }
-                this.image = webClientResource.findImageFile(imageName);
+                this.image = webClientResource.findImageResourcePath(imageName);
                 this.token = token;
             }
         }

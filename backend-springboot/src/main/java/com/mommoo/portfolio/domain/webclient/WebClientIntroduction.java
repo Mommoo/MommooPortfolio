@@ -72,7 +72,7 @@ class WebClientIntroduction {
 
         private WebClientLanguageTech(Introduction.LanguageTech languageTech, WebClientResource webClientResource) {
             this.name = languageTech.getName();
-            this.image = webClientResource.findImageFile(languageTech.getImage());
+            this.image = webClientResource.findImageResourcePath(languageTech.getImage());
             this.briefings = languageTech.getBriefings();
         }
     }

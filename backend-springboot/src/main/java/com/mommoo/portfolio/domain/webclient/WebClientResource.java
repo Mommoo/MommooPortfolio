@@ -1,98 +1,43 @@
 package com.mommoo.portfolio.domain.webclient;
 
-import com.mommoo.portfolio.common.context.Context;
-import com.mommoo.portfolio.common.resource.ImageResourceFinder;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
+import com.mommoo.portfolio.common.resource.ResourceFinder;
 
 /**
- * This class is basic resource of creating WebClientData.
- * WebClientData should have image path that can request to this server.
- * So, there is a function of finding image path.
- * {@link #findImageFile(String)}, {@link WebClientImageResourceFinder}
- * The target directory path of image file is a two paths.
+ * This class is providing way of
+ * finding image file path using by resource-finder. {@link ResourceFinder}
  *
- * One is a common directory that have images for public use.
- * The other is a specific project directory that have images for using only specific project.
+ * The image path will be packed for web paths. {@link #findImageResourcePath(String)}
  *
- * Basically, it is provides class factory method.
- * {@link WebClientResource#of(Context, String, String...)}
- * It is also provides another class factory method
- * that find common directory resource in cached object for performance.
- * {@link WebClientResource#ofDefaultCached(Context, String, String...)}
+ * When finding image path for WebClient, the image resource start path is need to one or two.
  *
- * common and specific project's directory name will be decided by
- * {@link #getEntireDirectoryNamesToFind(String...)}, {@link #defaultFileNamesToFind}
+ * The WebClientProject {@link WebClientBasicProject}, {@link WebClientNormalProject} is need to
+ * the common image resource path and the project image resource path.
+ *
+ * The other WebClient is need to only common image resource path.
  *
  * @author mommoo
  */
 public class WebClientResource {
-    private static final String[] defaultFileNamesToFind = {"common"};
-    private static ImageResourceFinder cachedDefaultFileFinder;
+    private static final String commonStartResourcePath = "common";
+    private final ResourceFinder resourceFinder;
     private final String domainPath;
-    private final WebClientImageResourceFinder imageResourceFinder;
+    private final String[] startResourcePaths;
 
-    private WebClientResource(Context context, String domainPath, ImageResourceFinder... imageResourceFinders) {
+    WebClientResource(ResourceFinder resourceFinder, String domainPath) {
+        this.resourceFinder = resourceFinder;
         this.domainPath = domainPath;
-        this.imageResourceFinder = new WebClientImageResourceFinder(context.getAbsoluteWebDirectoryPath(), imageResourceFinders);
+        this.startResourcePaths = new String[]{commonStartResourcePath};
     }
 
-    static WebClientResource of(Context context, String domainPath, String... additionalDirectoryPath) {
-        String absoluteImageDirectoryPath = context.getAssets().getAbsoluteImageDirectoryPath();
-        cachedDefaultFileFinder = createImageResourceFinder(absoluteImageDirectoryPath, defaultFileNamesToFind);
-
-        String[] entireDirectoryPathsToFind = getEntireDirectoryNamesToFind(additionalDirectoryPath);
-        ImageResourceFinder entireResourceFinder = createImageResourceFinder(absoluteImageDirectoryPath, entireDirectoryPathsToFind);
-
-        return new WebClientResource(context, domainPath, entireResourceFinder);
+    WebClientResource(ResourceFinder resourceFinder, String domainPath, String projectTitle) {
+        this.resourceFinder = resourceFinder;
+        this.domainPath = domainPath;
+        this.startResourcePaths = new String[]{commonStartResourcePath, projectTitle};
     }
 
-    static WebClientResource ofDefaultCached(Context context, String domainPath, String... additionalDirectoryPath) {
-        String absoluteImageDirectoryPath = context.getAssets().getAbsoluteImageDirectoryPath();
-
-        if ( cachedDefaultFileFinder == null ) {
-            cachedDefaultFileFinder = createImageResourceFinder(absoluteImageDirectoryPath, defaultFileNamesToFind);
-        }
-
-        ImageResourceFinder additionalFileFinder
-                = createImageResourceFinder(absoluteImageDirectoryPath, additionalDirectoryPath);
-
-        return new WebClientResource(context, domainPath, cachedDefaultFileFinder, additionalFileFinder);
-    }
-
-    public String findImageFile(String imageName) {
-        String relativeImageFilePath = this.imageResourceFinder.findRelativeImageFile(imageName);
-
-        if (relativeImageFilePath.equals("")) {
-            return "";
-        } else {
-            return this.domainPath + "/" + relativeImageFilePath;
-        }
-    }
-
-    private static ImageResourceFinder createImageResourceFinder(String absoluteImageDirectoryPath, String... resourceDirectoryNames) {
-
-        String[] resourceDirectoryPathsToFind = Arrays.stream(resourceDirectoryNames)
-                .map(directoryName-> absoluteImageDirectoryPath + File.separator + directoryName)
-                .collect(Collectors.toList())
-                .toArray(new String[resourceDirectoryNames.length]);
-
-        return ImageResourceFinder
-                .builder()
-                .absoluteDirectoryPaths(resourceDirectoryPathsToFind)
-                .build();
-    }
-
-    private static String[] getEntireDirectoryNamesToFind(String... imageDirectoryNames) {
-        List<String> directoryNameList = new ArrayList<>();
-        directoryNameList.addAll(Arrays.asList(imageDirectoryNames));
-        directoryNameList.addAll(Arrays.asList(defaultFileNamesToFind));
-
-        int size = directoryNameList.size();
-        return directoryNameList.toArray(new String[size]);
+    public String findImageResourcePath(String imageName) {
+        String resourcePath = resourceFinder
+                .findImageResourcePath(imageName, this.startResourcePaths);
+        return domainPath + resourcePath;
     }
 }

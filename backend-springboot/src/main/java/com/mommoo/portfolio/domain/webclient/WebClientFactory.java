@@ -1,7 +1,6 @@
 package com.mommoo.portfolio.domain.webclient;
 
-import com.mommoo.portfolio.common.context.Context;
-import com.mommoo.portfolio.common.context.ContextProvider;
+import com.mommoo.portfolio.common.resource.ResourceFinder;
 import com.mommoo.portfolio.domain.introduction.Introduction;
 import com.mommoo.portfolio.domain.project.BasicProject;
 import com.mommoo.portfolio.domain.project.NormalProject;
@@ -25,57 +24,47 @@ import java.util.stream.Collectors;
  */
 @Service
 public class WebClientFactory {
-    private ContextProvider contextProvider;
+    private ResourceFinder resourceFinder;
     private BasicProjectMongoRepository basicProjectMongoRepository;
     private NormalProjectMongoRepository normalProjectMongoRepository;
     private IntroductionMongoRepository introductionMongoRepository;
 
     @Autowired
-    private WebClientFactory(ContextProvider contextProvider,
+    private WebClientFactory(ResourceFinder resourceFinder,
                              BasicProjectMongoRepository basicProjectMongoRepository,
                              NormalProjectMongoRepository normalProjectMongoRepository,
                              IntroductionMongoRepository introductionMongoRepository) {
 
-        this.contextProvider = contextProvider;
+        this.resourceFinder = resourceFinder;
         this.basicProjectMongoRepository = basicProjectMongoRepository;
         this.normalProjectMongoRepository = normalProjectMongoRepository;
         this.introductionMongoRepository = introductionMongoRepository;
     }
 
     public List<WebClientBasicProject> createWebClientBasicProjectList(String domainPath) {
-        contextProvider.update();
         return basicProjectMongoRepository
                 .findAll()
                 .stream()
                 .map(project-> {
-                    WebClientResource resource
-                            = createWebClientResourceUsingByCached(domainPath, project.getTitle());
+                    WebClientResource resource = new WebClientResource(resourceFinder, domainPath, project.getTitle());
                     return new WebClientBasicProject(project, resource);
                 })
                 .collect(Collectors.toList());
     }
 
-    public WebClientNormalProject createWebClientNormalProjectBySerialNumber(int serialNumber, String domainPath) {
-        contextProvider.update();
-        NormalProject foundProject = normalProjectMongoRepository.findBySerialNumber(serialNumber);
-        WebClientResource webClientResource = createWebClientResourceUsingByCached(domainPath, foundProject.getTitle());
+    public WebClientNormalProject createWebClientNormalProjectByTitle(String title, String domainPath) {
+        NormalProject foundProject = normalProjectMongoRepository.findByTitle(title);
+        WebClientResource webClientResource = new WebClientResource(resourceFinder, domainPath, foundProject.getTitle());
         return new WebClientNormalProject(foundProject, webClientResource);
     }
 
     public WebClientIntroduction createWebClientIntroduction(String domainPath) {
-        contextProvider.update();
         Introduction introduction = introductionMongoRepository.findFirstBy();
-        WebClientResource webClientResource = createWebClientResourceUsingByCached(domainPath);
+        WebClientResource webClientResource = createWebClientResource(domainPath);
         return new WebClientIntroduction(introduction, webClientResource);
     }
 
-    public WebClientResource createWebClientResource(Context context, String domainPath, String... additionalDirectoryPath) {
-        return WebClientResource.of(context, domainPath, additionalDirectoryPath);
-    }
-
-    /** use cached data */
-    private WebClientResource createWebClientResourceUsingByCached(String domainPath, String... additionalDirectoryPath) {
-        Context context = this.contextProvider.getContext();
-        return WebClientResource.ofDefaultCached(context, domainPath, additionalDirectoryPath);
+    public WebClientResource createWebClientResource(String domainPath) {
+        return new WebClientResource(resourceFinder, domainPath);
     }
 }

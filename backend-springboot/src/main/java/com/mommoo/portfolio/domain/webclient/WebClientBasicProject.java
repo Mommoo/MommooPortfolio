@@ -36,7 +36,7 @@ public class WebClientBasicProject {
 
         this.serialNumber = project.getSerialNumber();
         this.title = project.getTitle();
-        this.previewBannerImage = webClientResource.findImageFile(project.getPreviewBannerImage());
+        this.previewBannerImage = webClientResource.findImageResourcePath(project.getPreviewBannerImage());
         this.descriptions = project.getDescriptions();
         this.spec = createWebClientSpec(project.getSpec());
         this.skills = project.getSkills();
@@ -64,7 +64,7 @@ public class WebClientBasicProject {
         return SpecItem
                 .builder()
                 .name(specItem.getName())
-                .image(webClientResource.findImageFile(specItem.getImage()))
+                .image(webClientResource.findImageResourcePath(specItem.getImage()))
                 .build();
     }
 }
