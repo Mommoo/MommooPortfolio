@@ -1,7 +1,7 @@
 package com.mommoo.portfolio.common.resource;
 
+import com.mommoo.portfolio.common.context.ContextEnvironment;
 import org.apache.logging.log4j.util.Strings;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import java.net.URI;
@@ -10,7 +10,7 @@ import java.util.Arrays;
 
 /**
  * This class provides way of finding resource file where the project module.
- * The resource's source location is declared at the application properties file.
+ * The resource's source location is provided project context data. {@link ContextEnvironment}
  * The way of inspecting that the resource is exist
  * or getting the resource path is different by project uri policy.
  * so to deal with it, we should use proper resource inspector. {@link ResourceInspector}
@@ -19,15 +19,11 @@ import java.util.Arrays;
  */
 @Component
 public class ResourceFinder {
-    private static final String resourceLocationKey = "spring.resources.static-locations";
-    private static final String getAssetsDirectoryNameKey = "resource.assets-directory-name";
-    private static final String getImageDirectoryNameKey = "resource.assets.image-directory-name";
-
-    private Environment environment;
+    private ContextEnvironment contextEnvironment;
     private ResourceInspector resourceInspector;
 
-    public ResourceFinder(Environment environment) {
-        this.environment = environment;
+    public ResourceFinder(ContextEnvironment contextEnvironment) {
+        this.contextEnvironment= contextEnvironment;
         this.resourceInspector
                 = isJarProject() ? new JarFileResourceInspector() : new DefaultFileResourceInspector();
     }
@@ -42,25 +38,13 @@ public class ResourceFinder {
         }
     }
 
-    private String getResourceLocationName() {
-        return environment
-                .getProperty(resourceLocationKey)
-                .substring("classpath:/".length());
-    }
-
-    private String getImageRepositoryPath() {
-        return getResourceLocationName() + "/" +
-                environment.getProperty(getAssetsDirectoryNameKey) + "/" +
-                environment.getProperty(getImageDirectoryNameKey);
-    }
-
     public String findImageResourcePath(String resourceName, String[] startResourcePaths) {
         if (Strings.isEmpty(resourceName)) {
             return "";
         }
 
-        int resourceLocationNameLen = getResourceLocationName().length();
-        String imageRepositoryPath = getImageRepositoryPath();
+        int resourceLocationNameLen = contextEnvironment.getResourceLocationName().length();
+        String imageRepositoryPath = contextEnvironment.getImageRepositoryPath();
         return Arrays.stream(startResourcePaths)
                 .filter(Strings::isNotEmpty)
                 .map(path -> imageRepositoryPath+"/"+path)

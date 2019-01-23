@@ -1,8 +1,8 @@
 package com.mommoo.portfolio;
 
-import com.mommoo.portfolio.common.DomainPathControllerArgumentResolver;
+import com.mommoo.portfolio.common.ImageDomainPathArgumentResolver;
+import com.mommoo.portfolio.common.context.ContextEnvironment;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -19,15 +19,19 @@ import java.util.List;
  */
 @Configuration
 public class MommooWebMvcConfigurer implements WebMvcConfigurer {
+    private ContextEnvironment contextEnvironment;
 
-    /**
-     * In development environment for convenience of using API, open to all origins
-     */
-    @Profile("dev")
+    public MommooWebMvcConfigurer(ContextEnvironment contextEnvironment) {
+        this.contextEnvironment = contextEnvironment;
+    }
+
+    /** In development environment for convenience of using API, open to all origins */
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-                .allowedOrigins("*");
+        if ( contextEnvironment.isDevProfile() ) {
+            registry.addMapping("/**")
+                    .allowedOrigins("*");
+        }
     }
 
     /*
@@ -52,6 +56,6 @@ public class MommooWebMvcConfigurer implements WebMvcConfigurer {
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
-        resolvers.add(new DomainPathControllerArgumentResolver());
+        resolvers.add(new ImageDomainPathArgumentResolver(contextEnvironment));
     }
 }

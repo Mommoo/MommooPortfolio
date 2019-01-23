@@ -29,3 +29,7 @@
 
 # Privacy Files
 **/application.properties
+**/application-dev.properties
+
+# Project Resource
+**/static/

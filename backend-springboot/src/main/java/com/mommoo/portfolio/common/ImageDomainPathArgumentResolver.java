@@ -1,5 +1,6 @@
 package com.mommoo.portfolio.common;
 
+import com.mommoo.portfolio.common.context.ContextEnvironment;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -13,16 +14,26 @@ import javax.servlet.http.HttpServletRequest;
  *
  * @author mommoo
  */
-public class DomainPathControllerArgumentResolver implements HandlerMethodArgumentResolver {
-    @Override
-    public boolean supportsParameter(MethodParameter parameter) {
-        return parameter.hasParameterAnnotation(DomainPath.class);
+public class ImageDomainPathArgumentResolver implements HandlerMethodArgumentResolver {
+    private ContextEnvironment contextEnvironment;
+
+    public ImageDomainPathArgumentResolver(ContextEnvironment contextEnvironment) {
+        this.contextEnvironment = contextEnvironment;
     }
 
     @Override
-    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-        HttpServletRequest httpServletRequest = webRequest.getNativeRequest(HttpServletRequest.class);
-        return computeDomainPath(httpServletRequest);
+    public boolean supportsParameter(MethodParameter parameter) {
+        return parameter.hasParameterAnnotation(ImageDomainPath.class);
+    }
+
+    @Override
+    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
+        if ( this.contextEnvironment.isDevProfile() ) {
+            HttpServletRequest httpServletRequest = webRequest.getNativeRequest(HttpServletRequest.class);
+            return computeDomainPath(httpServletRequest);
+        }
+
+        return this.contextEnvironment.getProductionDomainPath();
     }
 
     private static String computeDomainPath(HttpServletRequest httpServletRequest) {

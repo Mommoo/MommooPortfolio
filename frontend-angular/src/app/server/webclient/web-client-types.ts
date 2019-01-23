@@ -60,7 +60,7 @@ export module WebClient {
     export interface Example {
       readonly github: URLExample;
       readonly youtube: YoutubeExample;
-      readonly googleApp: GoogleAppExample;
+      readonly googleApp: URLExample;
       readonly sample: URLExample;
       readonly blog: URLExample;
     }
@@ -75,10 +75,6 @@ export module WebClient {
 
     export interface YoutubeExample extends IconExample {
       readonly token: string;
-    }
-
-    export interface GoogleAppExample extends IconExample {
-      readonly packageName: string;
     }
 
     export interface Feature {

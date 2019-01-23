@@ -1,6 +1,6 @@
 package com.mommoo.portfolio.controller;
 
-import com.mommoo.portfolio.common.DomainPath;
+import com.mommoo.portfolio.common.ImageDomainPath;
 import com.mommoo.portfolio.domain.webclient.WebClientFactory;
 import com.mommoo.portfolio.domain.webclient.WebClientResource;
 import org.springframework.web.bind.annotation.*;
@@ -23,22 +23,22 @@ public class WebClientController {
     }
 
     @GetMapping(value = "/project/basic/all")
-    private Object getWebClientBasicProjectList(@DomainPath String domainPath) {
+    private Object getWebClientBasicProjectList(@ImageDomainPath String domainPath) {
         return webClientFactory.createWebClientBasicProjectList(domainPath);
     }
 
     @GetMapping(value = "/project/normal/{title}")
-    private Object getWebClientNormalProject(@PathVariable String title, @DomainPath String domainPath) {
+    private Object getWebClientNormalProject(@PathVariable String title, @ImageDomainPath String domainPath) {
         return webClientFactory.createWebClientNormalProjectByTitle(title, domainPath);
     }
 
     @GetMapping(value = "/introduction")
-    private Object getWebClientProfile(@DomainPath String domainPath) {
+    private Object getWebClientProfile(@ImageDomainPath String domainPath) {
         return webClientFactory.createWebClientIntroduction(domainPath);
     }
 
     @PostMapping(value = "/image")
-    private Object findWebClientImagePath(@DomainPath String domainPath, @RequestBody List<String> imageNameList) {
+    private Object findWebClientImagePath(@ImageDomainPath String domainPath, @RequestBody List<String> imageNameList) {
         WebClientResource webClientResource = webClientFactory.createWebClientResource(domainPath);
 
         return imageNameList

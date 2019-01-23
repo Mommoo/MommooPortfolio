@@ -24,25 +24,21 @@ export class WebClientHttpClient {
     this.imageLoader = new WebClientImage(httpClient);
   }
 
-  @ExecutorInspector()
   public getIntroduction() {
     return this.httpClient
       .get<WebClient.Introduction>(RestAPIUrl.WebClient.introductionURL());
   }
 
-  @ExecutorInspector()
   public getAllBasicProjects() {
     return this.httpClient
       .get<WebClient.Project.Basic[]>(RestAPIUrl.WebClient.allBasicProjectsURL());
   }
 
-  @ExecutorInspector()
   public getNormalProject(title: string) {
     return this.httpClient
       .get<WebClient.Project.Normal>(RestAPIUrl.WebClient.normalProjectByTitleURL(title));
   }
 
-  @ExecutorInspector()
   public getImagePath<T>(...imageNames: string[]) {
     return this.imageLoader.getImagePaths<T>(...imageNames);
   }
@@ -85,15 +81,4 @@ class WebClientImage {
   public getImagePaths<T>(...imageNames: string[]) {
     return fromPromise(this.findImagePaths<T>(...imageNames));
   }
-}
-
-function ExecutorInspector() {
-  return function(target: any, propName: string, descriptor: PropertyDescriptor) {
-    const originalFunction: Function = descriptor.value;
-    descriptor.value = function() {
-      console.log(`${propName} method is invoked`);
-      return originalFunction.apply(this, arguments);
-    };
-    return descriptor;
-  };
 }
