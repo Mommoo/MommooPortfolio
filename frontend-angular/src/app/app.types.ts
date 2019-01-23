@@ -1,4 +1,5 @@
 export enum AppIconType {
+  LOGO = 'logo',
   PDF = 'pdf',
   GITHUB = 'github',
   TISTORY = 'tistory',

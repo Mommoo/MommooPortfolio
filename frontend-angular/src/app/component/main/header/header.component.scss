@@ -32,6 +32,11 @@
   cursor: pointer;
 }
 
+#logo {
+  width: 30px;
+  height: 30px;
+}
+
 #back-button{
   margin-top: 16px;
   margin-left: auto;
@@ -50,9 +55,13 @@
 }
 
 @include basic-large-media-query {
+  #header-guide {
+    padding-top: 16px;
+    justify-content: center;
+  }
+
   #title {
-    padding-top: 32px;
-    width: 100%;
+    margin-left: 16px;
     word-wrap: break-word;
     white-space: pre-line;
   }

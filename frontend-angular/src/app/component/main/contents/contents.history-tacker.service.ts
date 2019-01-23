@@ -1,6 +1,6 @@
 import {Injectable, OnDestroy} from '@angular/core';
 import {NavigationEnd, Router} from '@angular/router';
-import {filter, map, tap} from 'rxjs/operators';
+import {filter, map} from 'rxjs/operators';
 import {Subscription} from 'rxjs';
 
 @Injectable()
@@ -11,8 +11,7 @@ export class ContentsHistoryTacker implements OnDestroy {
   public constructor(private router: Router) {
     this.navigationEndURLSubscription = router.events.pipe(
       filter(event => event instanceof NavigationEnd),
-      map(e => (e as NavigationEnd).url),
-      tap(console.log)
+      map(e => (e as NavigationEnd).url)
     ).subscribe(url => this.previousURL = url);
   }
 

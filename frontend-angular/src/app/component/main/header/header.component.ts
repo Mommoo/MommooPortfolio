@@ -86,6 +86,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  private getSecurityImagePath(iconType: AppIconType) {
+    return this.sanitizer
+      .bypassSecurityTrustResourceUrl(`${this.appIconPathFinder.get(iconType)}`);
+  }
+
   public ngOnInit(): void {
     const self = this;
     this.onHeaderMenuControlListener = {
@@ -134,8 +139,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
     return this._isBackButtonVisible;
   }
 
+  public get logoImagePath() {
+    return this.getSecurityImagePath(AppIconType.LOGO);
+  }
+
   public get backButtonImagePath() {
-    return this.sanitizer.bypassSecurityTrustResourceUrl(`${this.appIconPathFinder.get(AppIconType.ARROW_BACK)}`);
+    return this.getSecurityImagePath(AppIconType.ARROW_BACK);
   }
 
   public get menuNames() {
