@@ -1,10 +1,3 @@
-$NotoSansKR: 'Noto+Sans+KR:100,300,400,500,700';
-$ZCOOL: 'ZCOOL+QingKe+HuangYou';
-$Dosis: 'Dosis';
-
-//Font
-@import url('https://fonts.googleapis.com/css?family=#{$NotoSansKR}|#{$ZCOOL}|#{$Dosis}');
-
 @mixin NotoSansKRFont {
   font-family: 'Noto Sans KR', sans-serif;
 }
@@ -31,7 +24,10 @@ $secondaryTextColor: rgba(0, 0, 0, .6);
   word-break: break-word; // ie not supported
 }
 
-
+@mixin inline-break-word {
+  display: inline;
+  @include break-word;
+}
 
 /* You can add global styles to this file, and also import other style files */
 html, body{

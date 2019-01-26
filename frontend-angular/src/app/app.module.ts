@@ -5,7 +5,7 @@ import {AppComponent} from './app.component';
 import {AppRouterModule} from './app-router.module';
 import {MainModule} from './component/main/main.module';
 import {PageNotFoundModule} from './component/page-not-found/page-not-found.module';
-import {AppIconPathDataResolver} from './app-icon-path-data-resolver.service';
+import {AppResourceResolver} from './app-resource-resolver.service';
 
 @NgModule({
   declarations: [
@@ -18,7 +18,7 @@ import {AppIconPathDataResolver} from './app-icon-path-data-resolver.service';
     AppRouterModule
   ],
   providers: [
-    AppIconPathDataResolver
+    AppResourceResolver
   ],
   bootstrap: [AppComponent]
 })

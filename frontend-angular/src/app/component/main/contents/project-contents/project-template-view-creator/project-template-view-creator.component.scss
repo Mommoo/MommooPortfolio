@@ -29,6 +29,5 @@ $gutter: 16px;
 }
 
 .break-word-text-view {
-  display: inline-block;
-  @include break-word;
+  @include inline-break-word;
 }

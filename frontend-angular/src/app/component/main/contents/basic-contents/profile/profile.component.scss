@@ -1,3 +1,5 @@
+@import '~src/styles';
+
 :host{
   display : flex;
   flex-wrap : wrap;
@@ -20,4 +22,8 @@
   display : block;
   height : 100%;
   margin : auto 0;
+}
+
+.inline-break-word {
+  @include inline-break-word;
 }

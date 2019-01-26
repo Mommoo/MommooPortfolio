@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {WebClientHttpClient} from './web-client-resource.service';
+import {WebClientHttpClient} from './webclient/web-client-resource.service';
 import {HttpClientModule} from '@angular/common/http';
+import {ResourceHttpClient} from './resource/resource-httpclient.service';
 
 @NgModule({
   imports: [
@@ -9,8 +10,9 @@ import {HttpClientModule} from '@angular/common/http';
     HttpClientModule
   ],
   providers: [
-    WebClientHttpClient
+    WebClientHttpClient,
+    ResourceHttpClient
   ],
   declarations: []
 })
-export class WebClientModule { }
+export class ServerModule { }

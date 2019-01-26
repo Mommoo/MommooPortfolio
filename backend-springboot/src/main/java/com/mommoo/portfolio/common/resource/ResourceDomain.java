@@ -1,4 +1,4 @@
-package com.mommoo.portfolio.common;
+package com.mommoo.portfolio.common.resource;
 
 import java.lang.annotation.*;
 
@@ -8,5 +8,5 @@ import java.lang.annotation.*;
 @Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface ImageDomainPath {
+public @interface ResourceDomain {
 }

@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
  * This class provides data that is exposed to web client.
  * The data type is similar to {@link NormalProject} Entity.
  * But to enable web client to using it,
- * several data need to be restructured with the help of {@link WebClientResource}.
+ * several data need to be restructured with the help of {@link WebImageResourceBuilder}.
  *
  * @author mommoo
  */
@@ -27,9 +27,9 @@ public class WebClientNormalProject extends WebClientBasicProject {
     private final WebClientExample example;
     private final List<NormalProject.Feature> features;
 
-    WebClientNormalProject(NormalProject project, WebClientResource webClientResource) {
-        super(project, webClientResource);
-        this.UIImage = webClientResource.findImageResourcePath(project.getUIImage());
+    WebClientNormalProject(NormalProject project, WebImageResourceBuilder webImageResourceBuilder) {
+        super(project, webImageResourceBuilder);
+        this.UIImage = webImageResourceBuilder.buildWebImagePath(project.getUIImage());
         this.programType = project.getProgramType();
         this.subTitle = project.getSubTitle();
         this.plannings = project.getPlannings();
@@ -49,7 +49,7 @@ public class WebClientNormalProject extends WebClientBasicProject {
         return NormalProject.Feature
                 .builder()
                 .title(feature.getTitle())
-                .image(webClientResource.findImageResourcePath(feature.getImage()))
+                .image(webImageResourceBuilder.buildWebImagePath(feature.getImage()))
                 .explanations(feature.getExplanations())
                 .build();
     }
@@ -87,6 +87,12 @@ public class WebClientNormalProject extends WebClientBasicProject {
             return "https://play.google.com/store/apps/details?id="+packageName;
         }
 
+        private String buildCommonITIconPath(String imageName) {
+            String relativePath = "common/IT/" + imageName +".svg";
+
+            return webImageResourceBuilder.buildWebImagePath(relativePath);
+        }
+
         @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
         @ToString(callSuper = true)
         private class WebClientURLExample {
@@ -99,7 +105,7 @@ public class WebClientNormalProject extends WebClientBasicProject {
                     return;
                 }
 
-                this.image = webClientResource.findImageResourcePath(imageName);
+                this.image = buildCommonITIconPath(imageName);
                 this.url = URL;
             }
         }
@@ -115,7 +121,8 @@ public class WebClientNormalProject extends WebClientBasicProject {
                     this.image = this.token = "";
                     return;
                 }
-                this.image = webClientResource.findImageResourcePath(imageName);
+
+                this.image = buildCommonITIconPath(imageName);
                 this.token = token;
             }
         }

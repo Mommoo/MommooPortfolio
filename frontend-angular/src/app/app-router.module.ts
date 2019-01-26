@@ -6,7 +6,7 @@ import {BasicContentsComponent} from './component/main/contents/basic-contents/b
 import {ProjectContentsComponent} from './component/main/contents/project-contents/project-contents.component';
 import {BasicContentsDataResolver} from './component/main/contents/basic-contents/basic-contents.resolver.service';
 import {ProjectContentsDataResolver} from './component/main/contents/project-contents/project-contents.resolver.service';
-import {AppIconPathDataResolver} from './app-icon-path-data-resolver.service';
+import {AppResourceResolver} from './app-resource-resolver.service';
 
 const routes: Routes = [
   {
@@ -18,7 +18,7 @@ const routes: Routes = [
     path: 'main',
     component: MainComponent,
     resolve: {
-      appIconData: AppIconPathDataResolver
+      appResourceData: AppResourceResolver
     },
     children: [
       {
@@ -26,7 +26,7 @@ const routes: Routes = [
         component: BasicContentsComponent,
         resolve: {
           'basicContentsData': BasicContentsDataResolver,
-          appIconData: AppIconPathDataResolver
+          appIconData: AppResourceResolver
         }
       },
       {
@@ -46,7 +46,7 @@ const routes: Routes = [
     RouterModule.forRoot(routes, {scrollPositionRestoration: 'enabled'})
   ],
   providers: [
-    AppIconPathDataResolver,
+    AppResourceResolver,
     BasicContentsDataResolver,
     ProjectContentsDataResolver
   ],

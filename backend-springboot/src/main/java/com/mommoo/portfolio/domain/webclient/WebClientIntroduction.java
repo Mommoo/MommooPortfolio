@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 /**
  * This class is decorating data {@link Introduction}
- * that several data be converted to web client data {@link WebClientResource}
+ * that several data be converted to web client data {@link WebImageResourceBuilder}
  *
  * @author mommoo
  */
@@ -21,15 +21,16 @@ class WebClientIntroduction {
     private final WebClientProfile profile;
     private final List<WebClientLanguageTech> languageTechs;
 
-    WebClientIntroduction(Introduction introduction, WebClientResource webClientResource) {
+    WebClientIntroduction(Introduction introduction, WebImageResourceBuilder webImageResourceBuilder) {
         this.profile = new WebClientProfile(introduction.getProfile());
-        this.languageTechs = createWebClientLangTechList(introduction.getLanguageTechs(), webClientResource);
+        this.languageTechs = createWebClientLangTechList(introduction.getLanguageTechs(), webImageResourceBuilder);
     }
 
-    private static List<WebClientLanguageTech> createWebClientLangTechList(List<Introduction.LanguageTech> languageTechList, WebClientResource webClientResource) {
+    private static List<WebClientLanguageTech> createWebClientLangTechList(List<Introduction.LanguageTech> languageTechList,
+                                                                           WebImageResourceBuilder webImageResourceBuilder) {
         return languageTechList
                 .stream()
-                .map(languageTech -> new WebClientLanguageTech(languageTech, webClientResource))
+                .map(languageTech -> new WebClientLanguageTech(languageTech, webImageResourceBuilder))
                 .collect(Collectors.toList());
     }
 
@@ -70,9 +71,10 @@ class WebClientIntroduction {
         private final String image;
         private final List<String> briefings;
 
-        private WebClientLanguageTech(Introduction.LanguageTech languageTech, WebClientResource webClientResource) {
+        private WebClientLanguageTech(Introduction.LanguageTech languageTech,
+                                      WebImageResourceBuilder webImageResourceBuilder) {
             this.name = languageTech.getName();
-            this.image = webClientResource.findImageResourcePath(languageTech.getImage());
+            this.image = webImageResourceBuilder.buildWebImagePath(languageTech.getImage());
             this.briefings = languageTech.getBriefings();
         }
     }

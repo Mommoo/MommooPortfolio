@@ -1,6 +1,6 @@
 package com.mommoo.portfolio;
 
-import com.mommoo.portfolio.common.ImageDomainPathArgumentResolver;
+import com.mommoo.portfolio.common.resource.ResourceDomainArgumentResolver;
 import com.mommoo.portfolio.common.context.ContextEnvironment;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
@@ -28,7 +28,7 @@ public class MommooWebMvcConfigurer implements WebMvcConfigurer {
     /** In development environment for convenience of using API, open to all origins */
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        if ( contextEnvironment.isDevProfile() ) {
+        if ( contextEnvironment.isDevProfile ) {
             registry.addMapping("/**")
                     .allowedOrigins("*");
         }
@@ -42,7 +42,7 @@ public class MommooWebMvcConfigurer implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/**")
-                .addResourceLocations("classpath:/static/")
+                .addResourceLocations(contextEnvironment.resourceLocationPath+"/")
                 .resourceChain(true)
                 .addResolver(new PathResourceResolver(){
                     @Override
@@ -56,6 +56,6 @@ public class MommooWebMvcConfigurer implements WebMvcConfigurer {
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
-        resolvers.add(new ImageDomainPathArgumentResolver(contextEnvironment));
+        resolvers.add(new ResourceDomainArgumentResolver(contextEnvironment));
     }
 }

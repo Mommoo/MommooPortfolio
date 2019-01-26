@@ -1,15 +1,19 @@
 package com.mommoo.portfolio.common.context;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.util.Arrays;
 
 /**
  * This class provides context data of project.
- * The data created by reading properties file through Environment {@link Environment}.
+ * The data loaded by reading properties file.
  *
- * So, this class have to need two properties file default and development.
+ * The project environment have consisted of two parts.
+ * one is default, another is development.
+ *
  * The default properties is basic files ( application.properties ) and,
  * the development properties have to named to "application-{$name}.properties".
  * {@link #devProfileName}
@@ -19,35 +23,33 @@ import java.util.Arrays;
 @Component
 public class ContextEnvironment {
     private static final String devProfileName = "dev";
-    private static final String contextPathKey = "server.servlet.context-path";
-    private static final String resourceLocationKey = "spring.resources.static-locations";
-    private static final String getAssetsDirectoryNameKey = "resource.assets-directory-name";
-    private static final String getImageDirectoryNameKey = "resource.assets.image-directory-name";
-    private static final String domainPathKey = "domain.path";
+
+    @Value("${server.servlet.context-path}")
+    private String contextPath;
+
+    @Value("${spring.resources.static-locations}")
+    public String resourceLocationPath;
+
+    @Value("${resource.domain.path}")
+    public String resourceDomain;
+
+    public String resourceLocationName;
+
+    public boolean isDevProfile;
+
     private Environment environment;
 
     public ContextEnvironment(Environment environment) {
         this.environment = environment;
     }
 
-    public String getResourceLocationName() {
-        return environment
-                .getProperty(resourceLocationKey)
-                .substring("classpath:/".length());
-    }
+    @PostConstruct
+    private void postConstructor() {
+        this.resourceLocationName
+                = this.resourceLocationPath.substring("classpath:/".length());
 
-    public String getImageRepositoryPath() {
-        return getResourceLocationName() + "/" +
-                environment.getProperty(getAssetsDirectoryNameKey) + "/" +
-                environment.getProperty(getImageDirectoryNameKey);
-    }
-
-    public String getProductionDomainPath() {
-        return environment.getProperty(domainPathKey) + environment.getProperty(contextPathKey);
-    }
-
-    public boolean isDevProfile() {
-        String[] profiles = environment.getActiveProfiles();
-        return Arrays.asList(profiles).contains(devProfileName);
+        this.isDevProfile = Arrays
+                .asList(environment.getActiveProfiles())
+                .contains(devProfileName);
     }
 }

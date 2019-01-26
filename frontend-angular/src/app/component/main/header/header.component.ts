@@ -16,8 +16,9 @@ import {CollapsibleBoxComponent} from './collapsible-box/collapsible-box.compone
 import {BasicViewportSizeState} from '../../../../mommoo-library/handler/window/size/window-size-handler.type';
 import {DomSanitizer} from '@angular/platform-browser';
 import {HeaderMenuController} from './header-menu-controller.service';
-import {AppIconPathFinder, AppIconType} from '../../../app.types';
 import {Router} from '@angular/router';
+import {AppResourceFinder} from '../../../app.types';
+import {ImageResourceType} from '../../../server/resource/resource.types';
 
 /**
  * This class is mediator class
@@ -52,7 +53,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   private animationBoxComponent: CollapsibleBoxComponent;
 
   @Input()
-  private appIconPathFinder: AppIconPathFinder;
+  private appResourceFinder: AppResourceFinder;
 
   public constructor(private headerMenuController: HeaderMenuController,
                      private changeDetector: ChangeDetectorRef,
@@ -86,9 +87,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  private getSecurityImagePath(iconType: AppIconType) {
+  private getSecurityImagePath(iconType: ImageResourceType) {
     return this.sanitizer
-      .bypassSecurityTrustResourceUrl(`${this.appIconPathFinder.get(iconType)}`);
+      .bypassSecurityTrustResourceUrl(`${this.appResourceFinder.icon.get(iconType)}`);
   }
 
   public ngOnInit(): void {
@@ -140,11 +141,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public get logoImagePath() {
-    return this.getSecurityImagePath(AppIconType.LOGO);
+    return this.getSecurityImagePath(ImageResourceType.LOGO);
   }
 
   public get backButtonImagePath() {
-    return this.getSecurityImagePath(AppIconType.ARROW_BACK);
+    return this.getSecurityImagePath(ImageResourceType.ARROW_BACK);
   }
 
   public get menuNames() {

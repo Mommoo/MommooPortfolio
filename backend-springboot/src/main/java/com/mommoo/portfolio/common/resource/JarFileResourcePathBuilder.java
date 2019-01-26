@@ -7,17 +7,17 @@ import java.nio.file.*;
 import java.util.Collections;
 
 /**
- * This class implements ResourceInspector's way of finding resource where jar module.
+ * This class implements ResourcePathBuilder's way of finding resource where jar module.
  *
  * @author mommoo
  */
-class JarFileResourceInspector extends ResourceInspector {
+public class JarFileResourcePathBuilder implements ResourcePathBuilder {
     private FileSystem JARFileSystem;
     private String classPath;
 
-    JarFileResourceInspector() {
+    JarFileResourcePathBuilder() {
         try {
-            URL protectionURL = JarFileResourceInspector.class.getProtectionDomain().getCodeSource().getLocation();
+            URL protectionURL = JarFileResourcePathBuilder.class.getProtectionDomain().getCodeSource().getLocation();
             String jarFileClassPath = protectionURL.getPath();
             // get jar file location path;
             String currentJarFileLocationPath = new File("").toURI().getPath();
@@ -46,29 +46,10 @@ class JarFileResourceInspector extends ResourceInspector {
     }
 
     @Override
-    String findResourceRelativePath(String startRelativePath, String resourceName) {
-        Path jarResourcePath = getJarResourcePath(startRelativePath);
-        Path foundResourceAbsolutePath = findResourceAbsolutePath(jarResourcePath, resourceName);
-
-        if (foundResourceAbsolutePath == null) {
-            return "";
-        }
-
-        // convert relative path
-        if (foundResourceAbsolutePath.startsWith(classPath)) {
-            return foundResourceAbsolutePath
-                    .toAbsolutePath()
-                    .toString()
-                    .substring(classPath.length());
-        }
-
-        return "";
-    }
-    
-    private Path getJarResourcePath(String resourceDirectoryPath) {
+    public Path buildToAbsolutePath(String relativePath) {
         if (JARFileSystem == null) {
             return null;
         }
-        return this.JARFileSystem.getPath(classPath + resourceDirectoryPath);
+        return this.JARFileSystem.getPath(classPath + relativePath);
     }
 }

@@ -1,6 +1,7 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {DomSanitizer} from '@angular/platform-browser';
-import {AppIconPathFinder, AppIconType} from '../../../../../app.types';
+import {AppResourceFinder} from '../../../../../app.types';
+import {ImageResourceType} from '../../../../../server/resource/resource.types';
 
 @Component({
   selector: 'welcome',
@@ -10,7 +11,7 @@ import {AppIconPathFinder, AppIconType} from '../../../../../app.types';
 })
 export class WelcomeComponent {
   @Input()
-  private appIconPathFinder: AppIconPathFinder;
+  private appResourceFinder: AppResourceFinder;
 
   public constructor(private sanitizer: DomSanitizer) {
 
@@ -29,6 +30,8 @@ export class WelcomeComponent {
   }
 
   public get PDFImagePath() {
-    return this.sanitizer.bypassSecurityTrustResourceUrl(this.appIconPathFinder.get(AppIconType.PDF));
+    const imageResourcePath = this.appResourceFinder.icon.get(ImageResourceType.PDF);
+
+    return this.sanitizer.bypassSecurityTrustResourceUrl(imageResourcePath);
   }
 }

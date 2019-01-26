@@ -6,7 +6,8 @@ import {
   Input,
   OnDestroy,
   OnInit,
-  QueryList, ViewChild,
+  QueryList,
+  ViewChild,
   ViewChildren
 } from '@angular/core';
 import {MommooCard} from '../../../../../../mommoo-library/ui/card/card.component';
@@ -14,7 +15,7 @@ import {MommooMasonryLayout} from '../../../../../../mommoo-library/ui/masonry-l
 import {MommooCardsLoadCheckerService} from '../../../../../../mommoo-library/ui/card/card-load-checker.service';
 import {Router} from '@angular/router';
 import {MainComponentLayoutDetector} from '../../../main.component-layout-detector.service';
-import {AngularUtils, MultiViewChild} from '../../../../../../mommoo-library/util/angular';
+import {AngularUtils} from '../../../../../../mommoo-library/util/angular';
 import {ProjectCardProvider} from './project-card-provider';
 import {ProjectCard, ProviderConfig} from './project.types';
 import {WebClient} from '../../../../../server/webclient/web-client-types';
@@ -142,8 +143,10 @@ export class ProjectComponent implements OnInit, OnDestroy {
   public get bannerDescriptions(): string[] {
     return ['저는 수 많은 개인 프로젝트를 진행 했습니다.',
       '프로젝트 전부 혼자서 만들었다는 것이 특징입니다.',
-      '기능 구현에만 몰두 하는 것이 아닌,',
-      '프로젝트를 하면서 필요한 내용을 \'공부\' 하여 \'원리\'를 습득 하는것에 집중 하였습니다.',
+      '또한 기능 구현에만 몰두 하는 것이 아닌,',
+      '프로젝트를 하면서 필요한 내용을 "공부" 하여 "원리"를 습득 하는것에 집중 하였습니다.',
+      '프로젝트 진행 기간은 따로 밝히지 않았지만,',
+      '여기에 올라온 프로젝트는 짧게는 3개월 길게는 1년 동안 진행한 프로젝트 들 입니다.',
       '카드를 눌러보시면 더 상세한 정보를 볼 수 있습니다.'];
   }
 }

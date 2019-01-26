@@ -5,5 +5,10 @@
     <mommoo-list-section *ngIf="profile" [sectionTitle]="profile.title">
       <mommoo-list-item *ngFor="let item of profile.items">{{item}}</mommoo-list-item>
     </mommoo-list-section>
+    <mommoo-list-section *ngIf="papers" [sectionTitle]="papers.title">
+      <mommoo-list-item *ngFor="let item of papers.items">
+        <a [href]="item.fileWebPath" [target]="'_blank'">{{item.name}}</a>
+      </mommoo-list-item>
+    </mommoo-list-section>
   </mommoo-list>
 </div>

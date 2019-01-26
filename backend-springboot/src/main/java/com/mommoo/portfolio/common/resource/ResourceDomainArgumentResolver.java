@@ -1,4 +1,4 @@
-package com.mommoo.portfolio.common;
+package com.mommoo.portfolio.common.resource;
 
 import com.mommoo.portfolio.common.context.ContextEnvironment;
 import org.springframework.core.MethodParameter;
@@ -10,30 +10,30 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * This resolver is computing domain path.
+ * This resolver is computing resource path.
  *
  * @author mommoo
  */
-public class ImageDomainPathArgumentResolver implements HandlerMethodArgumentResolver {
+public class ResourceDomainArgumentResolver implements HandlerMethodArgumentResolver {
     private ContextEnvironment contextEnvironment;
 
-    public ImageDomainPathArgumentResolver(ContextEnvironment contextEnvironment) {
+    public ResourceDomainArgumentResolver(ContextEnvironment contextEnvironment) {
         this.contextEnvironment = contextEnvironment;
     }
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return parameter.hasParameterAnnotation(ImageDomainPath.class);
+        return parameter.hasParameterAnnotation(ResourceDomain.class);
     }
 
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
-        if ( this.contextEnvironment.isDevProfile() ) {
+        if ( this.contextEnvironment.isDevProfile ) {
             HttpServletRequest httpServletRequest = webRequest.getNativeRequest(HttpServletRequest.class);
             return computeDomainPath(httpServletRequest);
         }
 
-        return this.contextEnvironment.getProductionDomainPath();
+        return this.contextEnvironment.resourceDomain;
     }
 
     private static String computeDomainPath(HttpServletRequest httpServletRequest) {

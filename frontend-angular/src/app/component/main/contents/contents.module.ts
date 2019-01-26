@@ -12,7 +12,6 @@ import {ContentsHistoryTacker} from './contents.history-tacker.service';
   ],
   providers: [
     ContentsHistoryTacker
-  ],
-  declarations: []
+  ]
 })
 export class ContentsModule { }

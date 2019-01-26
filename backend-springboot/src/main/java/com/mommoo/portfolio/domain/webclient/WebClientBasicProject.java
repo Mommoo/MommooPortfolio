@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
  * This class provides data that is exposed to web client.
  * The data type is similar to {@link BasicProject} Entity.
  * But to enable web client to using it,
- * several data need to be restructured with the help of {@link WebClientResource}.
+ * several data need to be restructured with the help of {@link WebImageResourceBuilder}.
  *
  * @author mommoo
  */
@@ -29,14 +29,14 @@ public class WebClientBasicProject {
     private final List<String> skills;
 
     @JsonIgnore
-    protected WebClientResource webClientResource;
+    protected WebImageResourceBuilder webImageResourceBuilder;
 
-    WebClientBasicProject(BasicProject project, WebClientResource webClientResource) {
-        this.webClientResource = webClientResource;
+    WebClientBasicProject(BasicProject project, WebImageResourceBuilder webImageResourceBuilder) {
+        this.webImageResourceBuilder = webImageResourceBuilder;
 
         this.serialNumber = project.getSerialNumber();
         this.title = project.getTitle();
-        this.previewBannerImage = webClientResource.findImageResourcePath(project.getPreviewBannerImage());
+        this.previewBannerImage = webImageResourceBuilder.buildWebImagePath(project.getPreviewBannerImage());
         this.descriptions = project.getDescriptions();
         this.spec = createWebClientSpec(project.getSpec());
         this.skills = project.getSkills();
@@ -64,7 +64,7 @@ public class WebClientBasicProject {
         return SpecItem
                 .builder()
                 .name(specItem.getName())
-                .image(webClientResource.findImageResourcePath(specItem.getImage()))
+                .image(this.webImageResourceBuilder.buildWebImagePath(specItem.getImage()))
                 .build();
     }
 }

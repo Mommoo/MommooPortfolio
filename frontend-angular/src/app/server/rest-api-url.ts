@@ -13,8 +13,16 @@ export class RestAPIUrl {
     return {
       introductionURL: () => `${webClientDataURI}/introduction`,
       allBasicProjectsURL: () => `${webClientDataURI}/project/basic/all`,
-      normalProjectByTitleURL: (title: string) => `${webClientDataURI}/project/normal/${title}`,
-      findImagePathURL: () => `${webClientDataURI}/image`
+      normalProjectByTitleURL: (title: string) => `${webClientDataURI}/project/normal/${title}`
+    };
+  }
+
+  public static get Resource() {
+    const resourceDataURI = `${RestAPIUrl.fullHostURL}/data/resource/find`;
+
+    return {
+      findResourcePathURL: () => `${resourceDataURI}/path`,
+      findAllPaperPathURL: () => `${resourceDataURI}/file/paper/all`
     };
   }
 

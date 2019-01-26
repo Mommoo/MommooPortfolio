@@ -1,12 +1,11 @@
 package com.mommoo.portfolio.controller;
 
-import com.mommoo.portfolio.common.ImageDomainPath;
+import com.mommoo.portfolio.common.resource.ResourceDomain;
 import com.mommoo.portfolio.domain.webclient.WebClientFactory;
-import com.mommoo.portfolio.domain.webclient.WebClientResource;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.stream.Collectors;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * this class provides processed data as REST API
@@ -23,26 +22,17 @@ public class WebClientController {
     }
 
     @GetMapping(value = "/project/basic/all")
-    private Object getWebClientBasicProjectList(@ImageDomainPath String domainPath) {
+    private Object getWebClientBasicProjectList(@ResourceDomain String domainPath) {
         return webClientFactory.createWebClientBasicProjectList(domainPath);
     }
 
     @GetMapping(value = "/project/normal/{title}")
-    private Object getWebClientNormalProject(@PathVariable String title, @ImageDomainPath String domainPath) {
+    private Object getWebClientNormalProject(@PathVariable String title, @ResourceDomain String domainPath) {
         return webClientFactory.createWebClientNormalProjectByTitle(title, domainPath);
     }
 
     @GetMapping(value = "/introduction")
-    private Object getWebClientProfile(@ImageDomainPath String domainPath) {
+    private Object getWebClientProfile(@ResourceDomain String domainPath) {
         return webClientFactory.createWebClientIntroduction(domainPath);
-    }
-
-    @PostMapping(value = "/image")
-    private Object findWebClientImagePath(@ImageDomainPath String domainPath, @RequestBody List<String> imageNameList) {
-        WebClientResource webClientResource = webClientFactory.createWebClientResource(domainPath);
-
-        return imageNameList
-                .stream()
-                .collect(Collectors.toMap(name -> name, webClientResource::findImageResourcePath));
     }
 }

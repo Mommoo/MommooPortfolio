@@ -1,57 +1,55 @@
 package com.mommoo.portfolio.common.resource;
 
-import com.mommoo.portfolio.common.context.ContextEnvironment;
 import org.apache.logging.log4j.util.Strings;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Arrays;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * This class provides way of finding resource file where the project module.
- * The resource's source location is provided project context data. {@link ContextEnvironment}
  * The way of inspecting that the resource is exist
  * or getting the resource path is different by project uri policy.
- * so to deal with it, we should use proper resource inspector. {@link ResourceInspector}
+ * so to deal with it, we should use proper resource builder. {@link ResourcePathBuilder}
  *
  * @author mommoo
  */
-@Component
+@Service
 public class ResourceFinder {
-    private ContextEnvironment contextEnvironment;
-    private ResourceInspector resourceInspector;
+    private ResourcePathBuilder resourcePathBuilder;
 
-    public ResourceFinder(ContextEnvironment contextEnvironment) {
-        this.contextEnvironment= contextEnvironment;
-        this.resourceInspector
-                = isJarProject() ? new JarFileResourceInspector() : new DefaultFileResourceInspector();
+    public ResourceFinder() {
+        this.resourcePathBuilder = ResourceBuilderFactory.createResourceInspector();
     }
 
-    private static boolean isJarProject() {
+    public List<String> findResourcesInDirectory(String relativePath) {
+        if (Strings.isEmpty(relativePath)) {
+            return Collections.emptyList();
+        }
+
+        Path absolutePath = this.resourcePathBuilder.buildToAbsolutePath(relativePath);
+
+        if (absolutePath == null) {
+            return Collections.emptyList();
+        }
+
+        if (Files.notExists(absolutePath) || !Files.isDirectory(absolutePath)) {
+            return Collections.emptyList();
+        }
+
         try {
-            URI domainURI = ResourceFinder.class.getProtectionDomain().getCodeSource().getLocation().toURI();
-            return domainURI.getScheme().equals("jar");
-        } catch (URISyntaxException e) {
+            return Files.list(absolutePath)
+                    .filter(path -> !Files.isDirectory(path))
+                    .map(Path::toAbsolutePath)
+                    .map(Path::toString)
+                    .collect(Collectors.toList());
+        } catch (IOException e) {
             e.printStackTrace();
-            return false;
+            return Collections.emptyList();
         }
-    }
-
-    public String findImageResourcePath(String resourceName, String[] startResourcePaths) {
-        if (Strings.isEmpty(resourceName)) {
-            return "";
-        }
-
-        int resourceLocationNameLen = contextEnvironment.getResourceLocationName().length();
-        String imageRepositoryPath = contextEnvironment.getImageRepositoryPath();
-        return Arrays.stream(startResourcePaths)
-                .filter(Strings::isNotEmpty)
-                .map(path -> imageRepositoryPath+"/"+path)
-                .map(path -> this.resourceInspector.findResourceRelativePath(path, resourceName))
-                .filter(Strings::isNotEmpty)
-                .map(imagePath -> imagePath.substring(resourceLocationNameLen))
-                .findFirst()
-                .orElse("");
     }
 }

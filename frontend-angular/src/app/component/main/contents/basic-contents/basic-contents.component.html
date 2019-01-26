@@ -1,4 +1,4 @@
-<welcome [appIconPathFinder]="appIconPathFinder"></welcome>
-<profile [profile]="basicContentsData.profile"></profile>
+<welcome [appResourceFinder]="appResourceFinder"></welcome>
+<profile [profile]="basicContentsData.profile" [papers]="appResourceFinder.papers"></profile>
 <about [languageTechs]="basicContentsData.languageTechs"></about>
 <project [basicProjects]="basicContentsData.basicProjects"></project>

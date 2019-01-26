@@ -4,7 +4,7 @@ import {BasicViewportSizeState} from '../../../mommoo-library/handler/window/siz
 import {DomUtils} from '../../../mommoo-library/util/dom';
 import {MainComponentLayoutDetector} from './main.component-layout-detector.service';
 import {ActivatedRoute} from '@angular/router';
-import {AppIconPathFinder, ResolveKey} from '../../app.types';
+import {AppResourceFinder, ResolveKey} from '../../app.types';
 
 /**
  * This class have role of manage component layout.
@@ -88,7 +88,7 @@ export class MainComponent implements AfterViewInit, OnDestroy {
     WindowSizeEventHandler.removeEvents(...this.windowSizeEventIDs);
   }
 
-  public get appIconPathFinder(): AppIconPathFinder {
-    return this.route.snapshot.data[ResolveKey.APP_ICON];
+  public get appResourceFinder(): AppResourceFinder {
+    return this.route.snapshot.data[ResolveKey.APP_RESOURCE];
   }
 }

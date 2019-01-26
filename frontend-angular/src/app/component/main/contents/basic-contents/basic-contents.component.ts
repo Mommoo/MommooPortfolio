@@ -1,19 +1,11 @@
-import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  Component,
-  ElementRef,
-  Injector,
-  OnInit,
-  ViewChild
-} from '@angular/core';
-import {BasicContentsData, BasicMenuType, BasicMenuTypeValues} from './basic-contents.types';
+import {ChangeDetectionStrategy, Component, ElementRef, Injector, OnInit, ViewChild} from '@angular/core';
+import {BasicContentsData, BasicMenuType} from './basic-contents.types';
 import {ContentsComponent} from '../contents.component';
 import {WelcomeComponent} from './welcome/welcome.component';
 import {ProfileComponent} from './profile/profile.component';
 import {AboutComponent} from './about/about.component';
 import {ProjectComponent} from './project/project.component';
-import {AppIconPathFinder, ResolveKey} from '../../../../app.types';
+import {AppResourceFinder, ResolveKey} from '../../../../app.types';
 import {ContentsSection} from '../contents.types';
 
 @Component({
@@ -57,7 +49,7 @@ export class BasicContentsComponent extends ContentsComponent implements OnInit 
     return this.getResolveData(ResolveKey.BASIC_CONTENTS);
   }
 
-  public get appIconPathFinder(): AppIconPathFinder {
-    return this.getResolveData(ResolveKey.APP_ICON);
+  public get appResourceFinder(): AppResourceFinder {
+    return this.getResolveData(ResolveKey.APP_RESOURCE);
   }
 }

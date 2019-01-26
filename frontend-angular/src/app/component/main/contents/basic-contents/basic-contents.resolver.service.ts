@@ -1,11 +1,10 @@
 import {ActivatedRouteSnapshot, RouterStateSnapshot} from '@angular/router';
-import {forkJoin, Observable, of} from 'rxjs';
+import {forkJoin} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 import {WebClientHttpClient} from '../../../../server/webclient/web-client-resource.service';
 import {BasicContentsData} from './basic-contents.types';
 import {CacheResolver} from '../../../../common/cache-resolver';
-import {AppIconPathDataResolver} from '../../../../app-icon-path-data-resolver.service';
 import {ResolveProxy} from '../../../../common/common.types';
 
 /**

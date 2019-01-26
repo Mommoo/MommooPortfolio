@@ -1,5 +1,5 @@
 <div id="header-guide">
-  <img id="logo" [src]="logoImagePath" />
+  <img id="logo" [src]="logoImagePath" (click)="doHeaderLogoClick()" />
   <div id="title" (click)="doHeaderLogoClick()">Mommoo Portfolio</div>
 
   <header-menu-button id="menu-button"

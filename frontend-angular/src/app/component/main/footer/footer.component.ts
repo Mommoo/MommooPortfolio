@@ -1,6 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FooterContents} from './footer.types';
-import {AppIconPathFinder, AppIconType} from '../../../app.types';
+import {AppResourceFinder} from '../../../app.types';
+import {ImageResourceType} from '../../../server/resource/resource.types';
 
 @Component({
   selector: 'view-footer',
@@ -11,7 +12,7 @@ export class FooterComponent implements OnInit {
   private static readonly developBeginYear = 2018;
 
   @Input()
-  private appIconPathFinder: AppIconPathFinder;
+  private appResourceFinder: AppResourceFinder;
 
   private footerContents: FooterContents[];
 
@@ -34,21 +35,21 @@ export class FooterComponent implements OnInit {
   public ngOnInit() {
     this.footerContents = [
       {
-        icon: this.appIconPathFinder.get(AppIconType.GITHUB),
+        icon: this.appResourceFinder.icon.get(ImageResourceType.GITHUB),
         text: 'https://github.com/Mommoo',
         onClick() {
           FooterComponent.openNewPage(this.text);
         }
       },
       {
-        icon: this.appIconPathFinder.get(AppIconType.TISTORY),
+        icon: this.appResourceFinder.icon.get(ImageResourceType.TISTORY),
         text: 'https://mommoo.tistory.com',
         onClick() {
           FooterComponent.openNewPage(this.text);
         }
       },
       {
-        icon: this.appIconPathFinder.get(AppIconType.MAIL),
+        icon: this.appResourceFinder.icon.get(ImageResourceType.MAIL),
         text: 'dv.Mommoo@gmail.com',
         onClick() {
           location.href = `mailto:${this.text}`;
