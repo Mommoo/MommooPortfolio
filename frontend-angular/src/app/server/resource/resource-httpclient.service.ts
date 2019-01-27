@@ -2,13 +2,8 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {RestAPIUrl} from '../rest-api-url';
 import {Observable} from 'rxjs';
-import {
-  FileResourceType,
-  ImageResourceType,
-  MommooPaper,
-  WebResourcePath
-} from './resource.types';
-import {map, share, tap} from 'rxjs/operators';
+import {FileResourceType, ImageResourceType, MommooPaper, WebResourcePath} from './resource.types';
+import {map, share} from 'rxjs/operators';
 
 /**
  * This service provides rest communication with server about finding resource path
