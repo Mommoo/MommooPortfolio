@@ -25,7 +25,7 @@ public class ContextEnvironment {
     private static final String devProfileName = "dev";
 
     @Value("${server.servlet.context-path}")
-    private String contextPath;
+    public String contextPath;
 
     @Value("${spring.resources.static-locations}")
     public String resourceLocationPath;

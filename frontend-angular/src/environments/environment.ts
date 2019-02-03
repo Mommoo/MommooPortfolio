@@ -8,7 +8,7 @@ export const environment: Environment = {
   production: false,
   serverMetaData: {
     protocol: 'http',
-    hostName: 'localhost',
+    hostName: '192.168.0.10',
     portNumber: '8080',
     ...commonServerMetaData
   }

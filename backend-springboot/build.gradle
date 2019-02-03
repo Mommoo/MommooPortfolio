@@ -16,7 +16,7 @@ apply plugin: 'io.spring.dependency-management'
 
 group = 'com.mommoo.web.mommoo-portfolio'
 archivesBaseName = 'mommoo-portfolio' //name of jar
-version = '2.0.0' //version of jar
+version = '2.1.0' //version of jar
 sourceCompatibility = 1.8
 
 repositories {

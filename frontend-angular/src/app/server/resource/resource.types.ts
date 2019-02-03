@@ -13,7 +13,7 @@ export enum ImageResourceType {
 }
 
 export enum FileResourceType {
-  MOMMOO_PORTFOLIO = 'test.pdf',
+  MOMMOO_PORTFOLIO = 'MommooPortfolio.pdf',
 }
 
 export interface MommooPaper {

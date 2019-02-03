@@ -35,8 +35,6 @@ export class ProjectComponent implements OnInit, OnDestroy {
   };
 
   private static readonly maxLimitTextLength = 100;
-  private static readonly wideCardColumnSpan = 2;
-  private static readonly normalCardColumnSpan = 1;
 
   @ViewChildren(MommooCard)
   private mommooCardQueryList: QueryList<MommooCard>;
@@ -64,8 +62,6 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   private static createProviderConfig(basicProjectList: WebClient.Project.Basic[]): ProviderConfig {
     return {
-      wideCardColumnSpan: this.wideCardColumnSpan,
-      normalCardColumnSpan: this.normalCardColumnSpan,
       descriptionMaxLimitTextLength: this.maxLimitTextLength,
       basicProjectList: basicProjectList
     };
@@ -76,11 +72,9 @@ export class ProjectComponent implements OnInit, OnDestroy {
     return new ProjectCardProvider(providerConfig);
   }
 
-  private enrollMasonryColumnChangeEvent(projectCardProvider: ProjectCardProvider) {
+  private enrollMasonryColumnChangeEvent() {
     return this.contentsColumnDetector.subscribeContentsColumnChange(ProjectComponent.columnItemWidth, columnLayout => {
       this._masonryColumnLength = columnLayout.count;
-      const isWideMode = this._masonryColumnLength > 1 && columnLayout.width < 400;
-      this._projectCardList = projectCardProvider.getOrderedCardList(isWideMode);
       this.changeDetector.detectChanges();
       if (this.isInitMasonryLayout) {
         this.isInitMasonryLayout = false;
@@ -101,7 +95,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
       = ProjectComponent.createProjectCardProvider(basicProjects);
 
     /** Need to first drawing to calculate */
-    this._projectCardList = projectCardProvider.getOrderedCardList(false);
+    this._projectCardList = projectCardProvider.getProjectCards();
     this.changeDetector.detectChanges();
 
     /** Waiting for all of card loaded */
@@ -110,7 +104,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
       .then(() => {
         this.renderMasonryLayout();
         this.masonryColumnChangeEventID
-          = this.enrollMasonryColumnChangeEvent(projectCardProvider);
+          = this.enrollMasonryColumnChangeEvent();
       });
   }
 

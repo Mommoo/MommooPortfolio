@@ -33,7 +33,7 @@ public class ResourceDomainArgumentResolver implements HandlerMethodArgumentReso
             return computeDomainPath(httpServletRequest);
         }
 
-        return this.contextEnvironment.resourceDomain;
+        return this.contextEnvironment.resourceDomain + this.contextEnvironment.contextPath;
     }
 
     private static String computeDomainPath(HttpServletRequest httpServletRequest) {

@@ -3,7 +3,7 @@
                        [style.padding]="'0'"
                        [maxColumnNum]="masonryColumnLength">
   <mommoo-masonry-tile *ngFor="let projectCard of projectCardList"
-                       [colSpan]="projectCard.columnSpan"
+                       [colSpan]="1"
                        (click)="onCardClickListener(projectCard.title)"
                        [style.cursor]="'pointer'">
     <mommoo-card [cardWidth]="'fit'" [cardHeight]="'wrap'">

@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {DomSanitizer} from '@angular/platform-browser';
 import {AppResourceFinder} from '../../../../../app.types';
-import {ImageResourceType} from '../../../../../server/resource/resource.types';
+import {FileResourceType, ImageResourceType} from '../../../../../server/resource/resource.types';
 
 @Component({
   selector: 'welcome',
@@ -33,5 +33,11 @@ export class WelcomeComponent {
     const imageResourcePath = this.appResourceFinder.icon.get(ImageResourceType.PDF);
 
     return this.sanitizer.bypassSecurityTrustResourceUrl(imageResourcePath);
+  }
+
+  public viewPDFPortfolio() {
+    const pdfPortfolioFilePath
+      = this.appResourceFinder.file.get(FileResourceType.MOMMOO_PORTFOLIO);
+    window.open(pdfPortfolioFilePath, "_blank");
   }
 }
